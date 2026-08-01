@@ -1,45 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useTranslation } from "react-i18next";
-import { LayoutGrid } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { BatenteWordmark } from "@/components/shared/BatenteLogo";
+import { SidebarNav } from "@/components/shared/SidebarNav";
+import { SidebarUserMenu } from "@/components/shared/SidebarUserMenu";
 
-const navItems = [{ href: "/resources", labelKey: "title", ns: "resource" as const }];
-
+/** Casca de navegação do painel — 246px fixos a partir de `md`. */
 export function Sidebar() {
-  const pathname = usePathname();
-  const { t } = useTranslation(["resource", "common"]);
-
   return (
-    <aside className="hidden w-64 shrink-0 border-r border-border/80 bg-card/40 md:block">
-      <div className="flex h-16 items-center border-b border-border/80 px-6">
-        <Link href="/resources" className="font-display text-lg font-bold tracking-tight">
-          {t("common:appName")}
+    <aside className="hidden w-[246px] shrink-0 flex-col border-r border-border bg-gun-950 md:flex">
+      <div className="border-b border-border px-5 py-5">
+        <Link href="/inicio" className="inline-flex">
+          <BatenteWordmark
+            markSize={24}
+            className="gap-2.5"
+            textClassName="text-base tracking-[0.01em]"
+          />
         </Link>
       </div>
-      <nav className="space-y-1 p-4">
-        {navItems.map((item) => {
-          const isActive =
-            pathname === item.href || pathname.startsWith(`${item.href}/`);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors",
-                isActive
-                  ? "bg-accent text-accent-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
-              )}
-            >
-              <LayoutGrid className="h-4 w-4" />
-              {t(`${item.ns}:${item.labelKey}`)}
-            </Link>
-          );
-        })}
-      </nav>
+
+      <div className="flex-1 overflow-y-auto px-3 py-4">
+        <SidebarNav />
+      </div>
+
+      <div className="border-t border-border">
+        <SidebarUserMenu />
+      </div>
     </aside>
   );
 }

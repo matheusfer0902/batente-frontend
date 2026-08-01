@@ -23,6 +23,8 @@ const buttonVariants = cva(
           "rounded-sm border border-moon bg-transparent text-linen font-display type-action uppercase tracking-[0.06em] hover:bg-n800",
         quiet:
           "rounded-sm border border-moon/40 bg-transparent text-n400 font-display type-action uppercase tracking-[0.06em] hover:border-moon hover:text-linen",
+        "danger-outline":
+          "rounded-sm border border-cherry/50 bg-transparent text-linen font-display type-action uppercase tracking-[0.06em] hover:bg-cherry/12",
         // Ação indisponível: comunica o estado pela cor, sem apagar o rótulo.
         inert:
           "rounded-sm bg-n700 text-n400 font-display type-action uppercase tracking-[0.06em] disabled:opacity-100",

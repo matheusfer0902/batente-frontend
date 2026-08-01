@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { isProtectedPath } from "@/lib/navigation";
 import { AuthService } from "@/services/AuthService";
 import { AUTH_ROLE_COOKIE, AUTH_TOKEN_COOKIE } from "@/types/api";
 
-const protectedPaths = ["/resources", "/inicio", "/portaria"];
 const authPaths = ["/login", "/register"];
 
 export function middleware(request: NextRequest) {
@@ -11,12 +11,10 @@ export function middleware(request: NextRequest) {
   const role = request.cookies.get(AUTH_ROLE_COOKIE)?.value;
   const { pathname } = request.nextUrl;
 
-  const isProtected = protectedPaths.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`),
-  );
   const isAuthRoute = authPaths.some((path) => pathname.startsWith(path));
 
-  if (isProtected && !token) {
+  // Rotas do painel vêm de `lib/navigation` — uma lista só, sem duplicar aqui.
+  if (isProtectedPath(pathname) && !token) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("from", pathname);
     return NextResponse.redirect(loginUrl);
@@ -32,11 +30,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/resources/:path*",
-    "/inicio/:path*",
-    "/portaria/:path*",
-    "/login",
-    "/register",
-  ],
+  // Tudo que não for asset: a decisão de proteger fica no código, não aqui.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

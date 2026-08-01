@@ -1,0 +1,25 @@
+{
+  "title": "Início",
+  "pending": {
+    "title": "Pendências de ponto",
+    "unit": "dias precisam de decisão",
+    "unitEmpty": "nada a resolver",
+    "blocking_one": "{{count}} deles impede o fechamento de {{period}}.",
+    "blocking_other": "{{count}} deles impedem o fechamento de {{period}}.",
+    "clear": "{{period}} pode ser fechado assim que o período terminar.",
+    "action": "Resolver pendências",
+    "actionEmpty": "Ver fechamento"
+  },
+  "adjustments": {
+    "title": "Ajustes aguardando",
+    "unit": "pedidos de correção",
+    "oldest_one": "O mais antigo espera há {{count}} dia.",
+    "oldest_other": "O mais antigo espera há {{count}} dias.",
+    "clear": "Nenhum pedido na fila.",
+    "action": "Analisar ajustes"
+  },
+  "blockError": {
+    "title": "Não foi possível carregar",
+    "description": "O servidor não respondeu a este bloco. Os demais dados da tela estão atualizados."
+  }
+}

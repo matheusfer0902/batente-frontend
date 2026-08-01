@@ -17,7 +17,7 @@ Entregar uma **base replicável** — não um domínio específico. Cada feature
 | Server state | Redux Toolkit + RTK Query |
 | UI state global | Redux slices + React Context (estado de UI leve) |
 | i18n | `i18next` + `react-i18next` |
-| Tema | `next-themes` (dark/light) |
+| Tema | `next-themes` (escuro fixo — ver "Tema e identidade visual") |
 | Forms | React Hook Form + Zod |
 | Ícones | `lucide-react` |
 | Toasts | `sonner` |
@@ -29,15 +29,15 @@ Backend **stubado** via `lib/mock/` — sem integração real neste boilerplate.
 ```
 src/
 ├── app/                    # Roteamento, layouts e composição de páginas
-│   ├── (auth)/             # Área de entrada (sempre escura): login, register, 403
-│   ├── (dashboard)/        # Rotas protegidas: CRUD, listagens
+│   ├── (auth)/             # Área de entrada: login, register, 403
+│   ├── (dashboard)/        # Painel protegido: início, monitor, acessos, módulos
 │   ├── layout.tsx          # RootLayout + Providers
 │   └── globals.css         # Tailwind v4 @theme + tokens BATENTE
 ├── components/
 │   ├── ui/                 # Átomos (Button, Input, Dialog…) — sem domínio
 │   ├── auth/               # LoginForm, ProtectedRoute, AuthHydrator
-│   ├── <feature>/          # Componentes de domínio (ex.: resource/)
-│   └── shared/             # Header, Sidebar, Footer, Providers
+│   ├── <feature>/          # Componentes de domínio (access/, dashboard/, device/)
+│   └── shared/             # Sidebar, PageHeader, estados de tela, Providers
 ├── redux/
 │   ├── store.ts
 │   ├── hooks.ts            # useAppDispatch, useAppSelector (tipados)
@@ -204,14 +204,19 @@ Detalhes em [auth.md](./auth.md).
 ## Internacionalização
 
 - Textos **nunca** hardcoded na UI — usar `t()` com namespaces
-- Namespaces: `common`, `auth`, `resource` (+ novos por feature)
+- Namespaces: `common`, `auth`, `resource`, `nav`, `dashboard`, `device`,
+  `access` (+ novos por feature)
 - Arquivos: `src/locales/{pt,en}/<namespace>.json`
+- Services puros devolvem **chave + valores** (`TranslatableLabel`), nunca
+  texto pronto — quem traduz é o componente
 
 ## Tema e identidade visual
 
 - Tokens BATENTE em `globals.css` (`@theme inline`)
-- Dark mode via classe `.dark` (`next-themes`)
-- Fontes: IBM Plex Sans, Archivo, IBM Plex Mono (`next/font`)
+- **Escuro fixo**: `forcedTheme="dark"` em `Providers`. Entrada e painel só
+  têm design escuro; o `ThemeProvider` continua no lugar para quando existir
+  um tema claro
+- Fontes: IBM Plex Sans, Archivo (variável, eixo `wdth`), IBM Plex Mono
 
 ## Convenções de nomenclatura
 

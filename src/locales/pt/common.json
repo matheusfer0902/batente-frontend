@@ -15,21 +15,48 @@
     "system": "Sistema"
   },
   "language": {
+    "label": "Idioma",
     "pt": "Português",
     "en": "English"
   },
   "footer": {
     "copyright": "© {{year}} BATENTE. Boilerplate frontend."
   },
+  "time": {
+    "secondsAgo_one": "há {{count}}s",
+    "secondsAgo_other": "há {{count}}s",
+    "minutesAgo_one": "há {{count}}min",
+    "minutesAgo_other": "há {{count}}min",
+    "hoursAgo_one": "há {{count}} hora",
+    "hoursAgo_other": "há {{count}} horas",
+    "daysAgo_one": "há {{count}} dia",
+    "daysAgo_other": "há {{count}} dias"
+  },
+  "states": {
+    "empty": {
+      "title": "Nada cadastrado ainda",
+      "description": "Comece cadastrando o primeiro registro desta tela.",
+      "action": "Cadastrar"
+    },
+    "filtered": {
+      "title": "Nenhum resultado para este filtro",
+      "description": "Existem {{count}} registros na base — só não com esta combinação.",
+      "action": "Limpar filtros"
+    },
+    "error": {
+      "title": "O servidor não respondeu",
+      "description": "Nada foi perdido. Tente de novo em instantes.",
+      "retry": "Tentar de novo"
+    },
+    "forbidden": {
+      "pageTitle": "Sem permissão",
+      "title": "Não disponível para você",
+      "description": "Fale com o administrador do sistema."
+    }
+  },
   "placeholder": {
     "kicker": "Em construção",
-    "inicio": {
-      "title": "Início",
-      "description": "Destino de ADMIN e RH após o login. O conteúdo chega no Bloco 2 — Painel."
-    },
-    "portaria": {
-      "title": "Portaria",
-      "description": "Destino do OPERADOR após o login. O conteúdo chega no Bloco 3 — Pessoas."
-    }
+    "title": "Esta tela ainda não existe",
+    "description": "A rota já faz parte do sistema; o conteúdo chega em um próximo bloco."
   }
 }

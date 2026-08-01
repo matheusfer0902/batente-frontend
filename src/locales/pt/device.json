@@ -1,0 +1,17 @@
+{
+  "status": {
+    "online": "Totem online",
+    "offline": "Totem offline"
+  },
+  "card": {
+    "title": "Totem · {{location}}",
+    "openDevice": "Ver dispositivo →",
+    "offlineExplanation": "Sem contato desde {{time}}. A portaria continua liberando: o totem decide sozinho e envia os registros quando a rede voltar."
+  },
+  "metrics": {
+    "lastContact": "Último contato",
+    "clockDrift": "Desvio do relógio",
+    "pendingUploads": "Não enviados",
+    "approximate": "≈{{value}}"
+  }
+}

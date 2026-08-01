@@ -64,10 +64,14 @@ Regras de segurança e conteúdo:
 
 | Camada | Arquivo | Função |
 |--------|---------|--------|
-| Edge | `middleware.ts` | Redireciona sem cookie `auth-token`; leva sessão ativa ao destino do papel |
+| Edge | `middleware.ts` | Redireciona sem cookie `auth-token`; leva sessão ativa ao destino do papel. Rotas protegidas vêm de `lib/navigation.ts` |
 | Layout | `ProtectedRoute.tsx` | Guard client-side no `(dashboard)` |
 | Hidratação | `AuthHydrator.tsx` | Restaura Redux a partir do cookie |
+| Papel (tela) | `RoleGuard` | Barra a tela inteira; esconder o item do menu não basta, a URL é digitável |
+| Papel (UI) | `useCanAccess` / `PermissionService` | Itens de menu e blocos por papel |
 | Autorização | `useCanMutate` | Ownership para ações de escrita |
+
+Papéis e telas visíveis estão em [`panel.md`](./panel.md).
 
 ## Cookies
 

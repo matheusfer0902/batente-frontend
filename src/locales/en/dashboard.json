@@ -1,0 +1,25 @@
+{
+  "title": "Start",
+  "pending": {
+    "title": "Timekeeping pending",
+    "unit": "days need a decision",
+    "unitEmpty": "nothing to resolve",
+    "blocking_one": "{{count}} of them blocks closing {{period}}.",
+    "blocking_other": "{{count}} of them block closing {{period}}.",
+    "clear": "{{period}} can be closed as soon as the period ends.",
+    "action": "Resolve pending",
+    "actionEmpty": "View closing"
+  },
+  "adjustments": {
+    "title": "Adjustments waiting",
+    "unit": "correction requests",
+    "oldest_one": "The oldest has waited {{count}} day.",
+    "oldest_other": "The oldest has waited {{count}} days.",
+    "clear": "No requests in the queue.",
+    "action": "Review adjustments"
+  },
+  "blockError": {
+    "title": "Could not load",
+    "description": "The server did not answer this block. The rest of the screen is up to date."
+  }
+}

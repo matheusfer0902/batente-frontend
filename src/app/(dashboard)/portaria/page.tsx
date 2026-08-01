@@ -1,5 +1,5 @@
-import { LandingPlaceholder } from "@/components/shared/LandingPlaceholder";
+import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
 
 export default function PortariaPage() {
-  return <LandingPlaceholder area="portaria" />;
+  return <ModulePlaceholder navKey="portaria" />;
 }

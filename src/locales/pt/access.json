@@ -1,0 +1,149 @@
+{
+  "subject": {
+    "employee": "{{name}}",
+    "unknownBadge": "Crachá não identificado"
+  },
+  "meta": {
+    "registration": "MAT {{registration}}",
+    "department": "{{department}}",
+    "badge": "CRACHÁ {{badge}}",
+    "noBinding": "sem vínculo no cadastro"
+  },
+  "decision": {
+    "granted": "CONCEDIDO",
+    "denied": "BARRADO"
+  },
+  "denial": {
+    "UNKNOWN_BADGE": "CRACHÁ DESCONHECIDO",
+    "BLOCKED_BADGE": "CRACHÁ BLOQUEADO",
+    "OUT_OF_SCHEDULE": "FORA DA ESCALA"
+  },
+  "mode": {
+    "ONLINE": "ONLINE",
+    "OFFLINE": "OFFLINE"
+  },
+  "outcome": {
+    "doorOpened": "porta aberta · ponto registrado",
+    "doorClosed": "porta não abriu",
+    "syncedOffline": "registrado offline · sincronizado às {{time}}"
+  },
+  "table": {
+    "time": "Hora",
+    "employee": "Colaborador",
+    "badge": "Crachá",
+    "mode": "Modo",
+    "decision": "Decisão",
+    "synced": "sincronizado"
+  },
+  "latest": {
+    "title": "Últimos acessos",
+    "openMonitor": "Abrir o monitor →",
+    "empty": {
+      "title": "Nenhuma passagem registrada",
+      "description": "Os acessos do dia aparecem aqui assim que alguém passar pela portaria."
+    }
+  },
+  "stats": {
+    "today": "Hoje",
+    "granted": "Concedidos",
+    "denied": "Barrados",
+    "offline": "Registrados offline"
+  },
+  "monitor": {
+    "title": "Monitor de acessos",
+    "subtitle": "Atualiza sozinho · última leitura {{elapsed}}",
+    "subtitleIdle": "Atualiza sozinho",
+    "history": "Ver histórico",
+    "feedTitle": "Chegando agora"
+  },
+  "silence": {
+    "offline": {
+      "badge": "Totem offline",
+      "banner": "Sem contato desde {{time}}. O feed está parado porque o painel não recebe — não porque ninguém passou.",
+      "title": "Feed suspenso",
+      "description": "As passagens feitas durante a queda aparecerão aqui, com o horário do totem, assim que a conexão voltar.",
+      "action": "Ver dispositivo"
+    },
+    "idle": {
+      "badge": "Totem online",
+      "banner": "Tudo funcionando. Simplesmente não houve passagem nos últimos minutos.",
+      "title": "Sem movimento agora",
+      "description": "Nenhuma leitura desde {{time}}. O feed volta a preencher sozinho na próxima passagem.",
+      "descriptionNoRead": "Nenhuma leitura ainda hoje. O feed volta a preencher sozinho na próxima passagem.",
+      "footnote_one": "{{count}} acesso hoje",
+      "footnote_other": "{{count}} acessos hoje"
+    }
+  },
+  "detail": {
+    "breadcrumbMonitor": "Monitor de acessos",
+    "breadcrumbCurrent": "Detalhe",
+    "eventId": "EVT {{id}}",
+    "openEmployee": "Abrir colaborador",
+    "openBadge": "Abrir crachá",
+    "reading": {
+      "title": "A leitura",
+      "badge": "Crachá",
+      "registration": "Matrícula",
+      "department": "Departamento",
+      "device": "Dispositivo"
+    },
+    "clocks": {
+      "title": "Os dois relógios",
+      "deviceStamp": "Carimbo do totem",
+      "serverArrival": "Chegada no servidor",
+      "drift": "Desvio do relógio interno no momento"
+    },
+    "immutable": {
+      "title": "Registro imutável",
+      "description": "Um acesso nunca é editado nem apagado. Se o horário registrado estiver errado, a correção é feita no espelho de ponto, por meio de um ajuste — que fica ligado a este evento."
+    },
+    "timeline": {
+      "title": "O que aconteceu"
+    },
+    "notTimeEntry": {
+      "title": "Quando não vira ponto",
+      "description": "Esta etapa exibe o motivo: leitura repetida dentro da janela de bloqueio, colaborador sem escala no dia, ou dia já fechado."
+    }
+  },
+  "timeline": {
+    "badge": {
+      "recognized": {
+        "title": "Crachá reconhecido",
+        "body": "Vínculo ativo com {{name}}. Crachá não está bloqueado."
+      },
+      "unknown": {
+        "title": "Crachá não reconhecido",
+        "body": "O crachá {{badge}} não tem vínculo ativo no cadastro."
+      }
+    },
+    "door": {
+      "opened": {
+        "title": "Porta liberada",
+        "body": "Trava acionada por {{duration}}ms. Decisão tomada no próprio totem."
+      },
+      "blocked": {
+        "title": "Porta não abriu",
+        "body": "A trava não foi acionada. A decisão foi tomada no próprio totem."
+      }
+    },
+    "timeEntry": {
+      "registered": {
+        "title": "Virou ponto",
+        "body": {
+          "ENTRY": "Registrado como entrada de {{date}} na escala {{schedule}}.",
+          "EXIT": "Registrado como saída de {{date}} na escala {{schedule}}."
+        },
+        "link": "Abrir espelho do dia →"
+      },
+      "skipped": {
+        "title": "Não virou ponto",
+        "body": "A leitura não gerou registro de ponto."
+      }
+    },
+    "upload": {
+      "title": "Enviado ao servidor",
+      "online": "Modo online — sem fila de sincronização.",
+      "offline": "Registrado offline e sincronizado às {{time}}."
+    }
+  }
+}

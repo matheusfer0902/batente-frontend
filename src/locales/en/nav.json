@@ -1,0 +1,29 @@
+{
+  "label": "Main navigation",
+  "openMenu": "Open menu",
+  "adminOnly": "ADMIN",
+  "groups": {
+    "people": "People",
+    "timekeeping": "Timekeeping",
+    "system": "System"
+  },
+  "inicio": "Start",
+  "monitor": "Access monitor",
+  "colaboradores": "Employees",
+  "departamentos": "Departments",
+  "crachas": "Badges",
+  "escalas": "Schedules",
+  "pendencias": "Pending",
+  "espelho": "Timesheet",
+  "ajustes": "Adjustments",
+  "fechamento": "Period closing",
+  "bancoDeHoras": "Hour bank",
+  "ausencias": "Absences",
+  "dispositivos": "Devices",
+  "historico": "Access history",
+  "auditoria": "Audit log",
+  "relatorios": "Reports",
+  "usuarios": "Users",
+  "configuracoes": "Settings",
+  "portaria": "Gate"
+}

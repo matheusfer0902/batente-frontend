@@ -1,5 +1,11 @@
-import { LandingPlaceholder } from "@/components/shared/LandingPlaceholder";
+import { Suspense } from "react";
+import { DashboardHome } from "@/components/dashboard/DashboardHome";
 
 export default function InicioPage() {
-  return <LandingPlaceholder area="inicio" />;
+  // Suspense: a tela lê `?cenario=` da URL para as demonstrações do mock.
+  return (
+    <Suspense>
+      <DashboardHome />
+    </Suspense>
+  );
 }

@@ -1,0 +1,29 @@
+{
+  "label": "Navegação principal",
+  "openMenu": "Abrir menu",
+  "adminOnly": "ADMIN",
+  "groups": {
+    "people": "Pessoas",
+    "timekeeping": "Ponto",
+    "system": "Sistema"
+  },
+  "inicio": "Início",
+  "monitor": "Monitor de acessos",
+  "colaboradores": "Colaboradores",
+  "departamentos": "Departamentos",
+  "crachas": "Crachás",
+  "escalas": "Escalas",
+  "pendencias": "Pendências",
+  "espelho": "Espelho de ponto",
+  "ajustes": "Ajustes",
+  "fechamento": "Fechamento",
+  "bancoDeHoras": "Banco de horas",
+  "ausencias": "Ausências",
+  "dispositivos": "Dispositivos",
+  "historico": "Histórico de acessos",
+  "auditoria": "Auditoria",
+  "relatorios": "Relatórios",
+  "usuarios": "Usuários",
+  "configuracoes": "Configurações",
+  "portaria": "Portaria"
+}

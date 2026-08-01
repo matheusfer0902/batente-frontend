@@ -1,8 +1,11 @@
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
-import { Header } from "@/components/shared/Header";
+import { MobileNav } from "@/components/shared/MobileNav";
 import { Sidebar } from "@/components/shared/Sidebar";
-import { Footer } from "@/components/shared/Footer";
 
+/**
+ * Casca do painel: sidebar + conteúdo. Sem rodapé — o design do Bloco 2 não
+ * tem um, e a área vertical é do conteúdo.
+ */
 export default function DashboardLayout({
   children,
 }: {
@@ -10,12 +13,11 @@ export default function DashboardLayout({
 }) {
   return (
     <ProtectedRoute>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen bg-gun text-linen">
         <Sidebar />
-        <div className="flex min-h-screen flex-1 flex-col">
-          <Header />
-          <main className="flex-1 p-4 md:p-6">{children}</main>
-          <Footer />
+        <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+          <MobileNav />
+          <main className="flex min-w-0 flex-1 flex-col">{children}</main>
         </div>
       </div>
     </ProtectedRoute>

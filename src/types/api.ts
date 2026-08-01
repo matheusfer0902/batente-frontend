@@ -18,7 +18,33 @@ export interface ApiError {
   data: ApiErrorData;
 }
 
-export type TagType = "Auth" | "Resource";
+export type TagType =
+  | "Auth"
+  | "Resource"
+  | "Access"
+  | "Device"
+  | "Timekeeping";
+
+/**
+ * Cenários de demonstração do mock. Chegam pela query `?cenario=` da página e
+ * viajam até o mock como query string — um backend real ignora o parâmetro.
+ */
+export const mockScenarios = ["degradado", "offline", "sem-movimento"] as const;
+export type MockScenario = (typeof mockScenarios)[number];
+
+export function isMockScenario(value: unknown): value is MockScenario {
+  return (
+    typeof value === "string" &&
+    (mockScenarios as readonly string[]).includes(value)
+  );
+}
+
+/** Anexa o cenário à URL do mock, quando houver. */
+export function withScenario(url: string, scenario?: string): string {
+  if (!scenario) return url;
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}scenario=${encodeURIComponent(scenario)}`;
+}
 
 export const AUTH_TOKEN_COOKIE = "auth-token";
 /** Papel do usuário — permite ao edge/middleware resolver o destino pós-login. */

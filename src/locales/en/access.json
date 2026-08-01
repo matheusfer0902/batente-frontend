@@ -1,0 +1,149 @@
+{
+  "subject": {
+    "employee": "{{name}}",
+    "unknownBadge": "Unidentified badge"
+  },
+  "meta": {
+    "registration": "ID {{registration}}",
+    "department": "{{department}}",
+    "badge": "BADGE {{badge}}",
+    "noBinding": "no record bound"
+  },
+  "decision": {
+    "granted": "GRANTED",
+    "denied": "DENIED"
+  },
+  "denial": {
+    "UNKNOWN_BADGE": "UNKNOWN BADGE",
+    "BLOCKED_BADGE": "BLOCKED BADGE",
+    "OUT_OF_SCHEDULE": "OUT OF SCHEDULE"
+  },
+  "mode": {
+    "ONLINE": "ONLINE",
+    "OFFLINE": "OFFLINE"
+  },
+  "outcome": {
+    "doorOpened": "door opened · time recorded",
+    "doorClosed": "door stayed shut",
+    "syncedOffline": "recorded offline · synced at {{time}}"
+  },
+  "table": {
+    "time": "Time",
+    "employee": "Employee",
+    "badge": "Badge",
+    "mode": "Mode",
+    "decision": "Decision",
+    "synced": "synced"
+  },
+  "latest": {
+    "title": "Latest access",
+    "openMonitor": "Open the monitor →",
+    "empty": {
+      "title": "No entries recorded",
+      "description": "Today's access events show up here as soon as someone walks through the gate."
+    }
+  },
+  "stats": {
+    "today": "Today",
+    "granted": "Granted",
+    "denied": "Denied",
+    "offline": "Recorded offline"
+  },
+  "monitor": {
+    "title": "Access monitor",
+    "subtitle": "Refreshes on its own · last read {{elapsed}}",
+    "subtitleIdle": "Refreshes on its own",
+    "history": "View history",
+    "feedTitle": "Coming in now"
+  },
+  "silence": {
+    "offline": {
+      "badge": "Terminal offline",
+      "banner": "No contact since {{time}}. The feed is still because the panel is not receiving — not because nobody walked in.",
+      "title": "Feed suspended",
+      "description": "Entries made during the outage will show up here, stamped with the terminal clock, as soon as the connection is back.",
+      "action": "View device"
+    },
+    "idle": {
+      "badge": "Terminal online",
+      "banner": "Everything is working. There simply were no entries in the last few minutes.",
+      "title": "No movement right now",
+      "description": "No reads since {{time}}. The feed fills itself again on the next entry.",
+      "descriptionNoRead": "No reads yet today. The feed fills itself on the next entry.",
+      "footnote_one": "{{count}} access today",
+      "footnote_other": "{{count}} accesses today"
+    }
+  },
+  "detail": {
+    "breadcrumbMonitor": "Access monitor",
+    "breadcrumbCurrent": "Detail",
+    "eventId": "EVT {{id}}",
+    "openEmployee": "Open employee",
+    "openBadge": "Open badge",
+    "reading": {
+      "title": "The read",
+      "badge": "Badge",
+      "registration": "Employee ID",
+      "department": "Department",
+      "device": "Device"
+    },
+    "clocks": {
+      "title": "The two clocks",
+      "deviceStamp": "Terminal stamp",
+      "serverArrival": "Server arrival",
+      "drift": "Internal clock drift at the time"
+    },
+    "immutable": {
+      "title": "Immutable record",
+      "description": "An access event is never edited or deleted. If the recorded time is wrong, the correction happens on the timesheet, through an adjustment — which stays linked to this event."
+    },
+    "timeline": {
+      "title": "What happened"
+    },
+    "notTimeEntry": {
+      "title": "When it does not become a time entry",
+      "description": "This step shows the reason: a repeated read inside the lockout window, an employee with no schedule for the day, or a day already closed."
+    }
+  },
+  "timeline": {
+    "badge": {
+      "recognized": {
+        "title": "Badge recognized",
+        "body": "Active binding with {{name}}. The badge is not blocked."
+      },
+      "unknown": {
+        "title": "Badge not recognized",
+        "body": "Badge {{badge}} has no active binding on record."
+      }
+    },
+    "door": {
+      "opened": {
+        "title": "Door released",
+        "body": "Lock triggered for {{duration}}ms. Decided on the terminal itself."
+      },
+      "blocked": {
+        "title": "Door stayed shut",
+        "body": "The lock was not triggered. Decided on the terminal itself."
+      }
+    },
+    "timeEntry": {
+      "registered": {
+        "title": "Became a time entry",
+        "body": {
+          "ENTRY": "Recorded as clock-in for {{date}} on the {{schedule}} schedule.",
+          "EXIT": "Recorded as clock-out for {{date}} on the {{schedule}} schedule."
+        },
+        "link": "Open the day's timesheet →"
+      },
+      "skipped": {
+        "title": "Did not become a time entry",
+        "body": "The read did not produce a timekeeping record."
+      }
+    },
+    "upload": {
+      "title": "Sent to the server",
+      "online": "Online mode — no sync queue.",
+      "offline": "Recorded offline and synced at {{time}}."
+    }
+  }
+}

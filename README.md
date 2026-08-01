@@ -48,6 +48,7 @@ Documentação completa em [`docs/`](./docs/):
 - [SOLID](./docs/solid-principles.md)
 - [Guia de features](./docs/feature-module-guide.md)
 - [Auth](./docs/auth.md)
+- [Painel](./docs/panel.md) — casca, estados de tela e cenários do mock
 
 Regras para agentes de IA: [`.cursor/rules/`](./.cursor/rules/), [`CLAUDE.md`](./CLAUDE.md), [`AGENTS.md`](./AGENTS.md).
 

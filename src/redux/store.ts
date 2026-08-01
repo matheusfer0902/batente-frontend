@@ -3,6 +3,9 @@ import authReducer from "@/redux/reducers/slices/authSlice";
 import { baseApi } from "@/redux/reducers/queries/baseApi";
 import "@/redux/reducers/queries/authApi";
 import "@/redux/reducers/queries/resourceApi";
+import "@/redux/reducers/queries/accessApi";
+import "@/redux/reducers/queries/deviceApi";
+import "@/redux/reducers/queries/timekeepingApi";
 
 export const makeStore = () =>
   configureStore({

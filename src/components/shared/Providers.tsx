@@ -11,7 +11,9 @@ import { AuthHydrator } from "@/components/auth/AuthHydrator";
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <StoreProvider>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      {/* BATENTE é escuro por identidade: entrada e painel só têm design
+          escuro. O provider fica no lugar para quando existir um tema claro. */}
+      <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
         <I18nextProvider i18n={i18next}>
           <SearchProvider>
             <AuthHydrator />

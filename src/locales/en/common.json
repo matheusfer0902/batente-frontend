@@ -15,21 +15,48 @@
     "system": "System"
   },
   "language": {
+    "label": "Language",
     "pt": "Português",
     "en": "English"
   },
   "footer": {
     "copyright": "© {{year}} BATENTE. Frontend boilerplate."
   },
+  "time": {
+    "secondsAgo_one": "{{count}}s ago",
+    "secondsAgo_other": "{{count}}s ago",
+    "minutesAgo_one": "{{count}}min ago",
+    "minutesAgo_other": "{{count}}min ago",
+    "hoursAgo_one": "{{count}} hour ago",
+    "hoursAgo_other": "{{count}} hours ago",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago"
+  },
+  "states": {
+    "empty": {
+      "title": "Nothing registered yet",
+      "description": "Start by creating the first record on this screen.",
+      "action": "Create"
+    },
+    "filtered": {
+      "title": "No results for this filter",
+      "description": "There are {{count}} records on file — just not with this combination.",
+      "action": "Clear filters"
+    },
+    "error": {
+      "title": "The server did not respond",
+      "description": "Nothing was lost. Try again in a moment.",
+      "retry": "Try again"
+    },
+    "forbidden": {
+      "pageTitle": "No permission",
+      "title": "Not available to you",
+      "description": "Talk to the system administrator."
+    }
+  },
   "placeholder": {
     "kicker": "Under construction",
-    "inicio": {
-      "title": "Start",
-      "description": "Where ADMIN and RH land after signing in. Content arrives in Block 2 — Panel."
-    },
-    "portaria": {
-      "title": "Gate",
-      "description": "Where OPERADOR lands after signing in. Content arrives in Block 3 — People."
-    }
+    "title": "This screen does not exist yet",
+    "description": "The route is already part of the system; the content arrives in a later block."
   }
 }

@@ -1,0 +1,17 @@
+{
+  "status": {
+    "online": "Terminal online",
+    "offline": "Terminal offline"
+  },
+  "card": {
+    "title": "Terminal · {{location}}",
+    "openDevice": "View device →",
+    "offlineExplanation": "No contact since {{time}}. The gate keeps working: the terminal decides on its own and uploads the records once the network is back."
+  },
+  "metrics": {
+    "lastContact": "Last contact",
+    "clockDrift": "Clock drift",
+    "pendingUploads": "Not uploaded",
+    "approximate": "≈{{value}}"
+  }
+}

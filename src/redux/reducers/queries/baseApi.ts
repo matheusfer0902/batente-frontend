@@ -4,6 +4,6 @@ import { mockBaseQuery } from "@/lib/mock/mockBaseQuery";
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: mockBaseQuery,
-  tagTypes: ["Auth", "Resource"],
+  tagTypes: ["Auth", "Resource", "Access", "Device", "Timekeeping"],
   endpoints: () => ({}),
 });
