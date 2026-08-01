@@ -1,6 +1,11 @@
 import type { BaseQueryFn } from "@reduxjs/toolkit/query";
-import type { MockRequestArgs, ApiError } from "@/types/api";
-import type { AuthResponse, RegisterPayload } from "@/types/auth";
+import type { ApiErrorDetailValue, MockRequestArgs, ApiError } from "@/types/api";
+import type {
+  AuthCredentials,
+  AuthResponse,
+  RegisterPayload,
+} from "@/types/auth";
+import { MAX_LOGIN_ATTEMPTS } from "@/types/auth";
 import type {
   CreateResourcePayload,
   Resource,
@@ -8,12 +13,18 @@ import type {
 } from "@/types/resource";
 import type { RootState } from "@/redux/store";
 import {
+  clearLoginAttempts,
   createSession,
   findUserByEmail,
   findUserByToken,
   generateId,
+  getLoginAttempt,
+  isLockActive,
   mockDb,
+  registerFailedLogin,
   revokeSession,
+  simulatesOutage,
+  type LoginAttemptRecord,
 } from "@/lib/mock/mockDb";
 
 const MOCK_LATENCY_MS = 200;
@@ -22,8 +33,23 @@ function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function error(status: number, message: string): { error: ApiError } {
-  return { error: { status, data: { message } } };
+function error(
+  status: number,
+  message: string,
+  code?: string,
+  details?: Record<string, ApiErrorDetailValue>,
+): { error: ApiError } {
+  return { error: { status, data: { message, code, details } } };
+}
+
+function lockedError(record: LoginAttemptRecord): { error: ApiError } {
+  return error(423, "Account temporarily locked", "account_locked", {
+    failedAttempts: record.failedAttempts,
+    remainingAttempts: 0,
+    lockedAt: record.lockedAt,
+    unlockAt: record.unlockAt,
+    occurredAt: new Date().toISOString(),
+  });
 }
 
 function getTokenFromState(state: RootState): string | null {
@@ -54,11 +80,42 @@ async function handleAuthRoute(
   body: unknown,
 ): Promise<{ data: unknown } | { error: ApiError }> {
   if (url === "/auth/login" && method === "POST") {
-    const credentials = body as { email: string; password: string };
+    const credentials = body as AuthCredentials;
+
+    // 1e — infra indisponível: nada é contado como tentativa.
+    if (simulatesOutage(credentials.email)) {
+      return error(503, "Service unavailable", "server_unavailable", {
+        occurredAt: new Date().toISOString(),
+      });
+    }
+
+    // 1d — bloqueio ainda vigente: nem chega a validar a senha.
+    const attempt = getLoginAttempt(credentials.email);
+    if (isLockActive(attempt)) {
+      return lockedError(attempt);
+    }
+    if (attempt.unlockAt) {
+      clearLoginAttempts(credentials.email);
+    }
+
+    // 1c — senha incorreta e e-mail inexistente seguem exatamente o mesmo caminho.
     const user = findUserByEmail(credentials.email);
     if (!user || user.password !== credentials.password) {
-      return error(401, "Invalid credentials");
+      const record = registerFailedLogin(credentials.email);
+      if (isLockActive(record)) {
+        return lockedError(record);
+      }
+      return error(401, "Invalid credentials", "invalid_credentials", {
+        failedAttempts: record.failedAttempts,
+        remainingAttempts: Math.max(
+          MAX_LOGIN_ATTEMPTS - record.failedAttempts,
+          0,
+        ),
+        occurredAt: new Date().toISOString(),
+      });
     }
+
+    clearLoginAttempts(credentials.email);
     const token = createSession(user.id);
     const response: AuthResponse = { user: sanitizeUser(user), token };
     return { data: response };
@@ -73,6 +130,7 @@ async function handleAuthRoute(
       id: generateId("user"),
       email: payload.email,
       name: payload.name,
+      role: "OPERADOR" as const,
       password: payload.password,
     };
     mockDb.users.push(newUser);

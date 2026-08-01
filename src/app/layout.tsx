@@ -9,10 +9,11 @@ const ibmPlexSans = IBM_Plex_Sans({
   weight: ["400", "500", "600"],
 });
 
+// Fonte variável: o eixo `wdth` é parte da identidade (wordmark, títulos, ações).
 const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
-  weight: ["400", "700", "800"],
+  axes: ["wdth"],
 });
 
 const ibmPlexMono = IBM_Plex_Mono({

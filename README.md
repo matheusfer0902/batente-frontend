@@ -19,7 +19,17 @@ npm run dev
 
 Acesse [http://localhost:3000](http://localhost:3000).
 
-**Credenciais demo:** `owner@batente.dev` / `password123`
+**Credenciais demo** (senha `password123` para todas):
+
+| Email | Papel | Destino após login |
+|-------|-------|--------------------|
+| `owner@batente.dev` | ADMIN | `/inicio` |
+| `rh@construtoravale.com.br` | RH | `/inicio` |
+| `viewer@batente.dev` | OPERADOR | `/portaria` |
+
+Para ver os estados de erro da tela de entrada: senha errada repetida bloqueia
+a conta após 5 falhas; qualquer e-mail começando com `offline` simula servidor
+fora do ar. Detalhes em [`docs/auth.md`](./docs/auth.md).
 
 ## Scripts
 
@@ -48,8 +58,8 @@ src/
 ├── app/           # Rotas (auth + dashboard)
 ├── components/    # UI, auth, resource, shared
 ├── redux/         # Store, slices, RTK Query APIs
-├── services/      # Lógica pura (ResourceService)
-├── hooks/         # useAuth, useResource, useCanMutate
+├── services/      # Lógica pura (AuthService, ResourceService)
+├── hooks/         # useAuth, useResource, useCanMutate, useCountdown
 ├── contexts/      # SearchContext
 ├── types/         # Contratos TypeScript
 ├── lib/           # utils, i18n, schemas, mock

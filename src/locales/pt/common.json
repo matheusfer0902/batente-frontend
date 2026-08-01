@@ -20,5 +20,16 @@
   },
   "footer": {
     "copyright": "© {{year}} BATENTE. Boilerplate frontend."
+  },
+  "placeholder": {
+    "kicker": "Em construção",
+    "inicio": {
+      "title": "Início",
+      "description": "Destino de ADMIN e RH após o login. O conteúdo chega no Bloco 2 — Painel."
+    },
+    "portaria": {
+      "title": "Portaria",
+      "description": "Destino do OPERADOR após o login. O conteúdo chega no Bloco 3 — Pessoas."
+    }
   }
 }

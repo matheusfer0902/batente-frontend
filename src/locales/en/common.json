@@ -20,5 +20,16 @@
   },
   "footer": {
     "copyright": "© {{year}} BATENTE. Frontend boilerplate."
+  },
+  "placeholder": {
+    "kicker": "Under construction",
+    "inicio": {
+      "title": "Start",
+      "description": "Where ADMIN and RH land after signing in. Content arrives in Block 2 — Panel."
+    },
+    "portaria": {
+      "title": "Gate",
+      "description": "Where OPERADOR lands after signing in. Content arrives in Block 3 — People."
+    }
   }
 }

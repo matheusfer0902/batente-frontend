@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useAppDispatch } from "@/redux/hooks";
 import { setCredentials, setToken, logout } from "@/redux/reducers/slices/authSlice";
 import { useLazyGetMeQuery } from "@/redux/reducers/queries/authApi";
-import { AUTH_TOKEN_COOKIE } from "@/types/api";
+import { AUTH_ROLE_COOKIE, AUTH_TOKEN_COOKIE } from "@/types/api";
 
 function getCookie(name: string): string | null {
   if (typeof document === "undefined") return null;
@@ -33,6 +33,7 @@ export function AuthHydrator() {
       } catch {
         dispatch(logout());
         document.cookie = `${AUTH_TOKEN_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
+        document.cookie = `${AUTH_ROLE_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
       }
     })();
   }, [dispatch, fetchMe]);

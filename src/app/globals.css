@@ -85,8 +85,18 @@
   --color-ring: var(--ring);
   --color-warning: var(--sun);
   --color-gun: var(--gun);
+  --color-gun-950: var(--gun-950);
+  --color-n800: var(--n800);
+  --color-n700: var(--n700);
+  --color-n600: var(--n600);
   --color-moon: var(--moon);
+  --color-n400: var(--n400);
+  --color-n300: var(--n300);
+  --color-linen: var(--linen);
   --color-chart: var(--chart);
+  --color-sun: var(--sun);
+  --color-cherry: var(--cherry);
+  --breakpoint-entry: 53.75rem;
   --font-sans: var(--font-ibm-plex-sans);
   --font-display: var(--font-archivo);
   --font-mono: var(--font-ibm-plex-mono);
@@ -113,5 +123,71 @@
   h2,
   h3 {
     font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  }
+}
+
+/* Eixos variáveis da Archivo — identidade BATENTE. */
+@utility type-wordmark {
+  font-variation-settings: "wdth" 116, "wght" 800;
+}
+
+@utility type-display {
+  font-variation-settings: "wdth" 96, "wght" 700;
+}
+
+@utility type-title {
+  font-variation-settings: "wght" 700;
+}
+
+@utility type-action {
+  font-variation-settings: "wdth" 104, "wght" 800;
+}
+
+/* Malha de fundo das telas de entrada (independente do tema claro/escuro). */
+@utility entry-grid {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--moon) 4.5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--moon) 4.5%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Ripado vertical do painel de marca. */
+@utility scanlines-accent {
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--chart) 10%, transparent) 0 3px,
+    transparent 3px 30px
+  );
+}
+
+@utility scanlines-moon {
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--moon) 14%, transparent) 0 3px,
+    transparent 3px 30px
+  );
+}
+
+@utility scanlines-fine {
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--moon) 10%, transparent) 0 1.5px,
+    transparent 1.5px 30px
+  );
+}
+
+@keyframes batente-bar {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-batente-bar] {
+    animation: none !important;
   }
 }

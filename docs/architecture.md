@@ -29,7 +29,7 @@ Backend **stubado** via `lib/mock/` — sem integração real neste boilerplate.
 ```
 src/
 ├── app/                    # Roteamento, layouts e composição de páginas
-│   ├── (auth)/             # Rotas públicas: login, register
+│   ├── (auth)/             # Área de entrada (sempre escura): login, register, 403
 │   ├── (dashboard)/        # Rotas protegidas: CRUD, listagens
 │   ├── layout.tsx          # RootLayout + Providers
 │   └── globals.css         # Tailwind v4 @theme + tokens BATENTE
@@ -195,6 +195,9 @@ Dupla camada de proteção:
 1. **`middleware.ts`** — lê cookie `auth-token`; bloqueia rotas `(dashboard)` sem token
 2. **`ProtectedRoute`** — guard client-side no layout `(dashboard)`
 3. **`AuthHydrator`** — restaura sessão Redux a partir do cookie no client
+
+Destino pós-login por papel (`ADMIN`/`RH` → `/inicio`, `OPERADOR` → `/portaria`)
+resolvido em `AuthService` — mapa único, sem `if` de papel espalhado.
 
 Detalhes em [auth.md](./auth.md).
 

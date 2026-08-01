@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logout as logoutAction, setCredentials } from "@/redux/reducers/slices/authSlice";
@@ -10,15 +10,23 @@ import {
   useLogoutMutation,
   useRegisterMutation,
 } from "@/redux/reducers/queries/authApi";
-import type { AuthCredentials, RegisterPayload } from "@/types/auth";
-import { AUTH_TOKEN_COOKIE } from "@/types/api";
+import { AuthService } from "@/services/AuthService";
+import type {
+  AuthCredentials,
+  LoginFailure,
+  RegisterPayload,
+} from "@/types/auth";
+import { AUTH_ROLE_COOKIE, AUTH_TOKEN_COOKIE } from "@/types/api";
+import type { UserRole } from "@/types/auth";
 
-function setAuthCookie(token: string) {
+function setAuthCookies(token: string, role: UserRole) {
   document.cookie = `${AUTH_TOKEN_COOKIE}=${token}; path=/; max-age=86400; SameSite=Lax`;
+  document.cookie = `${AUTH_ROLE_COOKIE}=${role}; path=/; max-age=86400; SameSite=Lax`;
 }
 
-function clearAuthCookie() {
+function clearAuthCookies() {
   document.cookie = `${AUTH_TOKEN_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
+  document.cookie = `${AUTH_ROLE_COOKIE}=; path=/; max-age=0; SameSite=Lax`;
 }
 
 export function useAuth() {
@@ -34,13 +42,24 @@ export function useAuth() {
     skip: !token,
   });
 
+  const landingRoute = AuthService.resolveLandingRoute(user?.role);
+
+  /**
+   * Não lança em falha: a tela de login trata os estados 1c/1d/1e a partir de
+   * `loginFailure`, que é derivado do erro mantido pelo RTK Query.
+   */
   const login = useCallback(
-    async (credentials: AuthCredentials) => {
-      const result = await loginMutation(credentials).unwrap();
-      dispatch(setCredentials(result));
-      setAuthCookie(result.token);
-      router.push("/resources");
-      return result;
+    async (credentials: AuthCredentials): Promise<boolean> => {
+      const result = await loginMutation(credentials);
+
+      if ("error" in result) {
+        return false;
+      }
+
+      dispatch(setCredentials(result.data));
+      setAuthCookies(result.data.token, result.data.user.role);
+      router.push(AuthService.resolveLandingRoute(result.data.user.role));
+      return true;
     },
     [dispatch, loginMutation, router],
   );
@@ -49,8 +68,8 @@ export function useAuth() {
     async (payload: RegisterPayload) => {
       const result = await registerMutation(payload).unwrap();
       dispatch(setCredentials(result));
-      setAuthCookie(result.token);
-      router.push("/resources");
+      setAuthCookies(result.token, result.user.role);
+      router.push(AuthService.resolveLandingRoute(result.user.role));
       return result;
     },
     [dispatch, registerMutation, router],
@@ -65,15 +84,31 @@ export function useAuth() {
       }
     }
     dispatch(logoutAction());
-    clearAuthCookie();
+    clearAuthCookies();
     router.push("/login");
   }, [dispatch, logoutMutation, router, token]);
+
+  const loginFailure = useMemo<LoginFailure | null>(
+    () =>
+      loginState.error ? AuthService.parseLoginFailure(loginState.error) : null,
+    [loginState.error],
+  );
+
+  const clearLoginFailure = useCallback(() => {
+    if (loginState.error) {
+      loginState.reset();
+    }
+  }, [loginState]);
 
   return {
     user,
     token,
     isAuthenticated: Boolean(user && token),
     isLoading: loginState.isLoading || registerState.isLoading || isMeLoading,
+    isSubmitting: loginState.isLoading,
+    loginFailure,
+    clearLoginFailure,
+    landingRoute,
     login,
     register,
     logout,

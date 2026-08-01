@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { AUTH_TOKEN_COOKIE } from "@/types/api";
+import { AuthService } from "@/services/AuthService";
+import { AUTH_ROLE_COOKIE, AUTH_TOKEN_COOKIE } from "@/types/api";
 
-const protectedPaths = ["/resources"];
+const protectedPaths = ["/resources", "/inicio", "/portaria"];
 const authPaths = ["/login", "/register"];
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get(AUTH_TOKEN_COOKIE)?.value;
+  const role = request.cookies.get(AUTH_ROLE_COOKIE)?.value;
   const { pathname } = request.nextUrl;
 
   const isProtected = protectedPaths.some(
@@ -21,12 +23,20 @@ export function middleware(request: NextRequest) {
   }
 
   if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL("/resources", request.url));
+    return NextResponse.redirect(
+      new URL(AuthService.resolveAuthenticatedRoute(role), request.url),
+    );
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/resources/:path*", "/login", "/register"],
+  matcher: [
+    "/resources/:path*",
+    "/inicio/:path*",
+    "/portaria/:path*",
+    "/login",
+    "/register",
+  ],
 };
