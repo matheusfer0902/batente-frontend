@@ -17,7 +17,7 @@ Estender via `baseApi.injectEndpoints()`, variantes `cva`, novos métodos em ser
 
 ## L — Liskov Substitution
 
-Contratos (`types/`, `BaseQueryFn`) substituíveis: mock → API real sem quebrar consumidores.
+Contratos (`types/`, `BaseQueryFn`) substituíveis: `mockBaseQuery` ↔ `fetchBaseQuery`+MSW — provado em `test/contracts/basequery.substitution.test.ts` (H1).
 
 ## I — Interface Segregation
 
@@ -32,3 +32,4 @@ Componentes → hooks → abstrações (RTK Query, services). Nunca: `services �
 - Preferir composição sobre classes/componentes monolíticos
 - Extrair lógica para hook ou service quando componente cresce
 - Manter `services/` testáveis sem React
+- Testes: mockar rede (MSW), nunca hooks — ver `docs/testing.md`

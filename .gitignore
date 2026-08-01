@@ -10,9 +10,17 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
+# testing — Vitest
 /coverage
 *.lcov
+.vitest
+
+# testing — Playwright
+/playwright-report/
+/playwright/.cache/
+/test-results/
+/blob-report/
+/playwright/.auth/
 
 # next.js
 /.next/

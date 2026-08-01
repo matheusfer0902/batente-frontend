@@ -131,9 +131,29 @@ Centralizado em:
 
 ## Migrar para backend real
 
-1. Substituir `mockBaseQuery` por `fetchBaseQuery` em `baseApi.ts`
-2. Implementar `prepareHeaders` para JWT
+Com **Plano B** (implementado), testes já usam `fetchBaseQuery` + MSW. Passos para produção:
+
+1. Substituir `mockBaseQuery` por `createFetchBaseQuery()` em `baseApi.ts` (fora de Vitest também)
+2. `prepareHeaders` já injeta JWT — ver `fetchBaseQuery.ts`
 3. Tratar `401` com re-auth (limpar slice + cookie + redirect `/login`)
 4. Devolver `code`/`details` nos erros de login — `AuthService.parseLoginFailure`
    já aceita `FETCH_ERROR`/`TIMEOUT_ERROR` como indisponibilidade
 5. Manter mesma interface de `authApi` e `useAuth` — componentes intactos
+6. Desligar MSW em produção; handlers MSW servem como contrato de referência
+
+Contrato LSP mock ↔ fetch: `test/contracts/basequery.substitution.test.ts`.
+
+## Testes (Fase 3 — roadmap)
+
+Regras testáveis densas — prioridade P0. Matriz completa em [`testing.md`](./testing.md).
+
+| ID | Regra | Tipo |
+|---|---|---|
+| E1 | Seis estados da tela de entrada | component + integration |
+| E2 | **RN-1.5** — senha errada = e-mail inexistente (texto, contador, latência) | integration |
+| E7 | `login` não lança — `parseLoginFailure` | unit |
+| E9 | `resolveLandingRoute` — mapa único por papel | unit |
+| E12 | middleware redireciona sem token | unit + e2e |
+| F1 | `canMutate` — matriz owner/não-owner | unit |
+
+Handlers MSW de auth: `test/mocks/handlers/auth.handlers.ts`. Helpers: `authState('ADMIN'|'RH'|'OPERADOR')`.

@@ -1,0 +1,61 @@
+---
+description: Testes automatizados — Vitest, MSW, RTL, Playwright e convenções
+globs: "**/*.test.ts,**/*.test.tsx,**/*.spec.ts,test/**,vitest.config.ts,playwright.config.ts"
+alwaysApply: false
+---
+
+# Testes — BATENTE Frontend
+
+Leia [`docs/testing.md`](../../docs/testing.md) antes de escrever ou modificar testes.
+
+## Decisões fixas
+
+- **Runner:** Vitest (D-01)
+- **Plano B (D-02):** `mockBaseQuery` em dev; **todos os testes** usam `fetchBaseQuery` + MSW
+- Em Vitest, `baseApi` troca automaticamente via `process.env.VITEST`
+
+## Onde colocar
+
+| Tipo | Local |
+|---|---|
+| Unit (service, schema) | `src/**/*.test.ts` ao lado do código |
+| Component | `src/**/*.test.tsx` |
+| Hook | `src/hooks/**/*.test.tsx` |
+| Integration | `test/integration/**/*.test.tsx` |
+| Contract | `test/contracts/**/*.test.ts` |
+| E2E | `test/e2e/*.spec.ts` (extensão diferente!) |
+| Infra compartilhada | `test/setup/`, `test/helpers/`, `test/mocks/` |
+
+## Obrigatório
+
+- `renderWithProviders` + `makeTestStore` — store **novo por teste**
+- MSW handlers em `test/mocks/handlers/` — `onUnhandledRequest: 'error'`
+- Mockar **rede** (MSW), nunca hook orquestrador (`useResource`, `useAuth`)
+- `authState('ADMIN'|'RH'|'OPERADOR')` para sessão autenticada
+- `userEvent` + `findBy*` / `waitFor` — zero `setTimeout` arbitrário
+- `it` em português; referenciar `RN-*` quando aplicável
+- axe (`expectNoA11yViolations`) em componentes de `ui/` e feature
+
+## Proibido
+
+- Mockar `fetch` global
+- Assertar `dispatch`, actions ou cache interno RTK
+- String traduzida literal em teste de feature (usar role/label)
+- Snapshot de DOM inteiro
+- `data-testid` quando role/label resolve
+
+## Novo handler MSW
+
+1. Criar `test/mocks/handlers/<feature>.handlers.ts`
+2. Registrar em `test/mocks/handlers/index.ts`
+3. Adicionar cenário em `test/mocks/scenarios.ts` se necessário
+4. Contract test validando response com Zod
+
+## Verificação
+
+```bash
+npm run test:unit && npm run test:component   # mínimo antes de PR
+npm run typecheck
+```
+
+Referência canônica: módulo `resource` — ver tabela em `docs/testing.md`.

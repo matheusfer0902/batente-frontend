@@ -65,15 +65,15 @@ Adicionar `toSelectOptions()` em `ResourceService` sem mudar `sortByUpdatedAt`.
 
 Contratos devem ser **substituíveis** sem quebrar consumidores.
 
-### Mock → API real
+### Mock → API real (Plano B)
 
-`mockBaseQuery` implementa `BaseQueryFn` — trocar por `fetchBaseQuery` não exige mudar hooks/componentes:
+`mockBaseQuery` e `createFetchBaseQuery()` implementam o mesmo contrato `BaseQueryFn<MockRequestArgs, unknown, ApiError>` via [`createBaseApi`](../src/redux/reducers/queries/createBaseApi.ts):
 
-```typescript
-// store/baseApi — trocar implementação, manter contrato
-baseQuery: mockBaseQuery, // dev
-// baseQuery: fetchBaseQuery({ baseUrl: … }), // prod
-```
+- **Dev:** `mockBaseQuery` — handlers in-memory, sem HTTP
+- **Vitest:** `fetchBaseQuery` + MSW — caminho HTTP real, JWT via `prepareHeaders`
+- **Prova LSP:** `test/contracts/basequery.substitution.test.ts` (H1)
+
+Trocar implementação não exige mudar hooks/componentes — apenas a origem dos dados muda.
 
 ### Tipos compartilhados
 
@@ -144,12 +144,19 @@ ResourceService.sortByUpdatedAt(data);
 
 ## Testabilidade (consequência de SOLID)
 
-| Camada | Como testar |
-|--------|-------------|
-| `services/` | Testes unitários puros (Jest/Vitest) |
-| `redux/queries/` | Testes de integração com store mock |
-| `hooks/` | `@testing-library/react` + wrapper Redux |
-| `components/ui/` | Testes de acessibilidade e render |
-| `components/<feature>/` | Testes com hooks mockados |
+Documentação completa: [testing.md](./testing.md).
 
-Priorize testes em `services/` e regras de negócio pura — maior ROI.
+| Camada | Como testar | Onde |
+|--------|-------------|------|
+| `services/` | Vitest puro — sem render | `src/**/*.test.ts` |
+| `lib/schemas/` | Vitest + `expectTypeOf` | `src/**/*.test.ts` |
+| `hooks/` | `renderHook` + store real + MSW | `src/hooks/**/*.test.tsx` |
+| `components/ui/` | RTL + axe | `src/**/*.test.tsx` |
+| `components/<feature>/` | `renderWithProviders` + MSW — **sem mock de hook** | `src/**/*.test.tsx` |
+| Integração | Página completa, MSW | `test/integration/` |
+| Contrato | MSW × Zod; LSP baseQuery | `test/contracts/` |
+| E2E | Playwright, build de produção | `test/e2e/*.spec.ts` |
+
+**Regra central:** mockar a **rede** (MSW), nunca hooks orquestradores. Priorize testes em `services/` e regras de negócio pura — maior ROI.
+
+Referência canônica: módulo `resource` (Fase 0 ✅).

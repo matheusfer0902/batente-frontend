@@ -7,7 +7,24 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --project unit --project component",
+    "test:watch": "vitest",
+    "test:unit": "vitest run --project unit",
+    "test:component": "vitest run --project component",
+    "test:hook": "vitest run --project hook",
+    "test:int": "vitest run --project integration",
+    "test:contract": "vitest run --project contract",
+    "test:arch": "vitest run --project arch",
+    "test:i18n": "vitest run --project i18n",
+    "test:types": "tsc --noEmit && vitest run --typecheck.only",
+    "test:a11y": "vitest run --project component --grep a11y",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:visual": "playwright test --project chromium --grep @visual",
+    "test:size": "size-limit",
+    "test:all": "npm run test:arch && npm run test:i18n && npm run test:types && npm run test && npm run test:contract && npm run test:int && npm run test:e2e",
+    "test:cov": "vitest run --coverage"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.5.7",
@@ -34,13 +51,30 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.5.0",
+    "@playwright/test": "^1.62.1",
+    "@size-limit/preset-app": "^13.0.3",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.0.5",
+    "@vitest/coverage-v8": "^4.1.10",
+    "axe-core": "^4.12.1",
+    "dependency-cruiser": "^18.1.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
+    "jsdom": "^30.0.1",
+    "msw": "^2.15.0",
+    "size-limit": "^13.0.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.10",
+    "vitest-axe": "^0.1.0",
+    "zod-to-json-schema": "^3.25.2"
   }
 }

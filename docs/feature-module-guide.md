@@ -15,6 +15,7 @@ flowchart LR
     E --> F[Componentes]
     F --> G[Páginas app/]
     G --> H[locales i18n]
+    H --> I[testes]
 ```
 
 ## 1. Tipos — `src/types/<feature>.ts`
@@ -86,7 +87,7 @@ Adicionar tag em `baseApi.ts`:
 tagTypes: ["Auth", "Resource", "Order"],
 ```
 
-Estender `mockBaseQuery` com rotas `/orders` (ou preparar `fetchBaseQuery` real).
+Estender `mockBaseQuery` com rotas `/orders` (dev) **e** handler MSW em `test/mocks/handlers/` (testes). Ver [testing.md](./testing.md).
 
 ## 4. Service — `src/services/OrderService.ts`
 
@@ -147,6 +148,37 @@ Estender `middleware.ts`:
 const protectedPaths = ["/resources", "/orders"];
 ```
 
+## 11. Testes — molde `resource`
+
+Para cada feature nova, replicar a cobertura do módulo `resource`. Documentação completa: [testing.md](./testing.md).
+
+| Camada | Arquivo | Obrigatório |
+|--------|---------|-------------|
+| Unit | `src/services/<Feature>Service.test.ts` | ✅ |
+| Unit | `src/lib/schemas/<feature>Schema.test.ts` | ✅ |
+| MSW | `test/mocks/handlers/<feature>.handlers.ts` | ✅ |
+| Hook | `src/hooks/use<Feature>.test.tsx` | ✅ |
+| Component | `src/components/<feature>/*.test.tsx` | ✅ por componente principal |
+| Integration | `test/integration/<feature>-list.test.tsx` | ✅ listagem |
+| Contract | validação Zod no handler MSW | ✅ |
+
+```typescript
+// Exemplo — unit ao lado do service
+describe('OrderService', () => {
+  it('RN-X · ordena por updatedAt', () => { … });
+});
+
+// Exemplo — component com renderWithProviders
+import { renderWithProviders } from '../../../test/helpers/render';
+import { authState } from '../../../test/helpers/auth';
+
+renderWithProviders(<OrderList />, {
+  preloadedState: authState('ADMIN'),
+});
+```
+
+**Regras:** mockar rede (MSW), nunca `useOrder`. Store novo por teste. Referência: arquivos `*resource*` em `src/` e `test/`.
+
 ## Ownership (autorização)
 
 Reutilizar padrão de `useCanMutate` — criar helper genérico se necessário:
@@ -174,3 +206,8 @@ Use o módulo `resource` como implementação canônica:
 - `src/hooks/useResource.ts`
 - `src/components/resource/*`
 - `src/app/(dashboard)/resources/*`
+- `src/services/ResourceService.test.ts` — unit
+- `src/components/resource/ResourceCard.test.tsx` — component
+- `src/hooks/useResource.test.tsx` — hook
+- `test/integration/resource-list.test.tsx` — integration
+- `test/contracts/api.contract.test.ts` — contract

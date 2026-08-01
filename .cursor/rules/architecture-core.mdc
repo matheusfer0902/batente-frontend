@@ -5,7 +5,7 @@ alwaysApply: true
 
 # Arquitetura BATENTE Frontend
 
-Leia `docs/architecture.md` antes de implementar features.
+Leia `docs/architecture.md` e `docs/testing.md` antes de implementar features.
 
 ## Camadas (dependência unidirecional)
 
@@ -25,10 +25,17 @@ services → types apenas (sem React, sem Redux)
 6. **i18n** — textos via `t()`. Proibido strings hardcoded na UI.
 7. **Tipos** — strict, zero `any`. Forms: inferir de Zod (`z.infer<typeof schema>`).
 8. **UI atômica** — `components/ui/` sem conhecimento de domínio. Classes via `cn()`.
+9. **Testes** — mockar rede (MSW), nunca hooks orquestradores. Ver `docs/testing.md`.
 
 ## Novo módulo de feature
 
-Seguir molde `resource` — ver `docs/feature-module-guide.md`.
+Seguir molde `resource` — ver `docs/feature-module-guide.md` (passo 11: testes).
+
+## Verificação
+
+```bash
+npm run typecheck && npm run build && npm run test
+```
 
 ## Nomenclatura
 

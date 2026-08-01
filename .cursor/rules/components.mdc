@@ -28,3 +28,10 @@ Layout shell: Header, Sidebar, Footer, Providers. Sem regra de negócio de featu
 - Lógica de ordenação/filtro complexa (mover para service)
 - Strings hardcoded (usar i18n)
 - `any` nos props
+
+## Testes de componente
+
+- Usar `renderWithProviders` de `test/helpers/render`
+- axe (`expectNoA11yViolations`) em átomos de `ui/`
+- Não mockar hooks orquestradores — mockar MSW
+- Referência: `ResourceCard.test.tsx`, `Button.test.tsx`

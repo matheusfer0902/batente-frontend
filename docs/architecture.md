@@ -21,8 +21,9 @@ Entregar uma **base replicável** — não um domínio específico. Cada feature
 | Forms | React Hook Form + Zod |
 | Ícones | `lucide-react` |
 | Toasts | `sonner` |
+| **Testes** | **Vitest**, Testing Library, MSW 2, Playwright, axe-core |
 
-Backend **stubado** via `lib/mock/` — sem integração real neste boilerplate.
+Backend **stubado** via `lib/mock/` em dev — testes usam `fetchBaseQuery` + MSW (Plano B). Ver [testing.md](./testing.md).
 
 ## Estrutura de pastas
 
@@ -51,12 +52,24 @@ src/
 ├── types/                  # Interfaces e contratos compartilhados
 ├── lib/                    # utils, i18n, schemas Zod, mock
 └── locales/                # Traduções pt/en por namespace
+
+test/                       # Infraestrutura de testes (ver testing.md)
+├── setup/                  # vitest.setup, MSW, matchers
+├── mocks/                  # handlers MSW, db, scenarios
+├── helpers/                # renderWithProviders, makeTestStore, auth
+├── integration/            # testes de página
+├── contracts/              # contrato API + LSP baseQuery
+├── arch/                   # fronteiras (dependency-cruiser)
+├── i18n/                   # paridade de traduções
+└── e2e/                    # Playwright (*.spec.ts)
 ```
 
 Arquivos na raiz relevantes:
 
 - `middleware.ts` — proteção de rotas por cookie
 - `components.json` — config Shadcn/UI
+- `vitest.config.ts` — projects Vitest (unit, component, hook, …)
+- `playwright.config.ts` — E2E (Fase 7)
 
 ## Diagrama de camadas
 
@@ -132,7 +145,9 @@ export default function ResourcesPage() {
 
 ### `redux/reducers/queries/` — Única porta de server state
 
-- Um `baseApi` central com `createApi` + `mockBaseQuery` (ou futuro `fetchBaseQuery`)
+- Um `baseApi` central via [`createBaseApi`](./../src/redux/reducers/queries/createBaseApi.ts)
+- **Dev:** `mockBaseQuery` (handlers in-memory, sem HTTP)
+- **Vitest:** `fetchBaseQuery` + MSW — mesmo contrato, caminho HTTP real (Plano B)
 - Cada feature: `baseApi.injectEndpoints({ … })`
 - Cache e invalidação via **tags** (`providesTags` / `invalidatesTags`)
 - Endpoints padronizados: `get<Feature>List`, `get<Feature>ById`, `create<Feature>`, `update<Feature>`, `delete<Feature>`
@@ -162,8 +177,25 @@ export default function ResourcesPage() {
 
 ### `lib/mock/`
 
-- Simula backend in-memory para desenvolvimento do boilerplate
-- Substituível por `fetchBaseQuery` real sem mudar componentes/hooks
+- Simula backend in-memory para **desenvolvimento** (`mockBaseQuery`)
+- Handlers espelhados em `test/mocks/handlers/` para testes via MSW
+- Substituível por API real — contrato LSP provado em `test/contracts/basequery.substitution.test.ts`
+
+## Testes automatizados
+
+Suíte Vitest + MSW + Playwright. Documentação completa em [testing.md](./testing.md).
+
+Resumo:
+
+| Camada | Onde | Ferramenta |
+|--------|------|------------|
+| Unit | `src/**/*.test.ts` | Vitest |
+| Component / Hook | `src/**/*.test.tsx` | Vitest + RTL |
+| Integration | `test/integration/` | Vitest + MSW |
+| Contract | `test/contracts/` | Vitest + Zod |
+| E2E | `test/e2e/*.spec.ts` | Playwright |
+
+**Regra central:** mockar a **rede** (MSW), nunca hooks orquestradores. Referência canônica: módulo `resource`.
 
 ## Fluxo de dados (exemplo: listar resources)
 
@@ -246,4 +278,6 @@ import { useResource } from "@/hooks/useResource";
 - [ ] Permissões via `useCanMutate` / helper `canMutate`
 - [ ] Zero `any`; tipos inferidos de Zod e RTK Query
 - [ ] Lógica complexa em `services/`, não em componentes
+- [ ] Testes para código novo (seguir molde `resource` — ver [testing.md](./testing.md))
 - [ ] `npm run typecheck` e `npm run build` passando
+- [ ] `npm run test` passando (unit + component no mínimo)

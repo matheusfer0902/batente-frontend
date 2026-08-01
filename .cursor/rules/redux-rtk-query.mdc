@@ -35,5 +35,12 @@ Apenas estado de UI/sessão (ex.: `authSlice`). Não armazenar listas de entidad
 
 1. Criar `<feature>Api.ts` com injectEndpoints
 2. Import side-effect em `store.ts`
-3. Adicionar tagType em `baseApi.ts`
-4. Estender mock ou fetch base query
+3. Adicionar tagType em `baseApi.ts` (via `API_TAG_TYPES` em `createBaseApi.ts`)
+4. Estender `mockBaseQuery` handler em `src/lib/mock/handlers/` (dev)
+5. Espelhar handler MSW em `test/mocks/handlers/` (testes)
+
+## Dual baseQuery (Plano B)
+
+- **Dev:** `baseApi` usa `mockBaseQuery` — sem HTTP
+- **Vitest:** `baseApi` usa `createFetchBaseQuery()` + MSW — automático via `VITEST=true`
+- Factory: `createBaseApi(baseQuery)` — contrato LSP em `test/contracts/basequery.substitution.test.ts`
