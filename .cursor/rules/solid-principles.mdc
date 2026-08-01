@@ -1,0 +1,34 @@
+---
+description: Princípios SOLID obrigatórios em todo código do projeto
+alwaysApply: true
+---
+
+# SOLID — BATENTE Frontend
+
+Detalhes em `docs/solid-principles.md`.
+
+## S — Single Responsibility
+
+Um arquivo = uma razão para mudar. Separar UI, orquestração (hooks), dados (RTK Query) e transformação (services).
+
+## O — Open/Closed
+
+Estender via `baseApi.injectEndpoints()`, variantes `cva`, novos métodos em services — evitar modificar módulos estáveis.
+
+## L — Liskov Substitution
+
+Contratos (`types/`, `BaseQueryFn`) substituíveis: mock → API real sem quebrar consumidores.
+
+## I — Interface Segregation
+
+Hooks expõem API mínima. Passar view models/props focadas — não objetos gigantes.
+
+## D — Dependency Inversion
+
+Componentes → hooks → abstrações (RTK Query, services). Nunca: `services → redux`, `ui → domain API`, `types → hooks`.
+
+## Ao implementar
+
+- Preferir composição sobre classes/componentes monolíticos
+- Extrair lógica para hook ou service quando componente cresce
+- Manter `services/` testáveis sem React

@@ -1,0 +1,37 @@
+---
+description: App Router — páginas e layouts sem regra de negócio
+globs: src/app/**,middleware.ts
+alwaysApply: false
+---
+
+# App Router
+
+## Responsabilidade
+
+`app/` faz **apenas** roteamento, metadata, layouts e composição.
+
+## Padrão de página
+
+```tsx
+import { FeatureList } from "@/components/feature/FeatureList";
+
+export default function FeaturePage() {
+  return <FeatureList />;
+}
+```
+
+## Grupos de rota
+
+- `(auth)/` — público: login, register
+- `(dashboard)/` — protegido: layout com `ProtectedRoute` + shell
+
+## Middleware
+
+Estender `protectedPaths` ao adicionar rotas protegidas.
+
+## Proibido
+
+- Chamadas de API
+- `useEffect` para server state
+- Transformação de dados de negócio
+- Componentes UI complexos inline (extrair para `components/`)

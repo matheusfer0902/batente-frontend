@@ -1,0 +1,852 @@
+<meta charset="utf-8">
+<title>BATENTE — Manual de Identidade Visual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --gun:#00272C; --gun-950:#00181C; --n800:#0B383E; --n700:#174A54; --n600:#26626E;
+  --moon:#4C9DB0; --n400:#83BAC3; --n300:#AFD2D3; --n200:#D5E7E0; --n100:#E9F2E7;
+  --linen:#F7F9EC; --chart:#E1FF51;
+  --sun:#FFA602; --cherry:#FF5A4E; --cherry-deep:#9A0002;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --disp:'Archivo','IBM Plex Sans',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --hair:1px solid rgba(76,157,176,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--gun); color:var(--n200); font-family:var(--sans);
+  font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  background-image:
+    linear-gradient(rgba(76,157,176,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(76,157,176,.045) 1px,transparent 1px);
+  background-size:56px 56px;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* ---------- tipografia utilitária ---------- */
+.lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--moon)}
+.lbl-dim{color:var(--n600)}
+h2.sec{font-family:var(--disp);font-variation-settings:'wdth' 112,'wght' 800;
+  font-size:clamp(28px,4.4vw,46px);line-height:1;color:var(--linen);letter-spacing:-.015em}
+h3{font-family:var(--disp);font-variation-settings:'wdth' 100,'wght' 700;
+  font-size:17px;color:var(--linen);letter-spacing:.01em;margin-bottom:10px}
+p{max-width:66ch}
+.mono{font-family:var(--mono)}
+.dim{color:var(--n400)}
+.dimmer{color:var(--n600)}
+b,strong{color:var(--linen);font-weight:600}
+code{font-family:var(--mono);font-size:.88em;background:var(--gun-950);
+  border:var(--hair);border-radius:4px;padding:1px 6px;color:var(--chart)}
+
+/* ---------- estrutura ---------- */
+section{padding:96px 0;border-top:var(--hair)}
+.sechead{display:flex;gap:26px;align-items:flex-start;margin-bottom:52px}
+.secnum{font-family:var(--mono);font-size:12px;color:var(--chart);
+  padding-top:8px;letter-spacing:.1em;flex-shrink:0}
+.panel{background:var(--gun-950);border:var(--hair);border-radius:3px;position:relative}
+.panel::before,.panel::after{content:'';position:absolute;width:7px;height:7px;
+  border-color:var(--moon);opacity:.5}
+.panel::before{top:-1px;left:-1px;border-top:1.5px solid;border-left:1.5px solid}
+.panel::after{bottom:-1px;right:-1px;border-bottom:1.5px solid;border-right:1.5px solid}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:860px){.g2,.g3,.g4{grid-template-columns:1fr}.sechead{flex-direction:column;gap:10px}}
+
+/* ---------- hero ---------- */
+.hero{padding:92px 0 84px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-30%;right:-14%;width:620px;height:620px;
+  background:radial-gradient(circle,rgba(225,255,81,.09),transparent 68%);pointer-events:none}
+.heromark{display:flex;align-items:center;gap:30px;margin:38px 0 30px;flex-wrap:wrap}
+.wordmark{font-family:var(--disp);font-variation-settings:'wdth' 118,'wght' 800;
+  font-size:clamp(52px,10.5vw,116px);line-height:.86;color:var(--linen);letter-spacing:-.02em}
+.wordmark em{font-style:normal;color:var(--chart)}
+.tag{font-family:var(--disp);font-variation-settings:'wdth' 88,'wght' 500;
+  font-size:clamp(17px,2.5vw,26px);color:var(--n400);letter-spacing:-.005em}
+.rule{height:1px;background:linear-gradient(90deg,var(--chart),rgba(76,157,176,.3) 42%,transparent);margin:34px 0}
+
+/* ---------- tabelas ---------- */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--moon);text-align:left;padding:10px 14px;border-bottom:1px solid rgba(76,157,176,.3);font-weight:500}
+td{padding:12px 14px;border-bottom:var(--hair);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.rec td{background:rgba(225,255,81,.055)}
+.rec td:first-child{box-shadow:inset 2px 0 0 var(--chart)}
+
+/* ---------- cores ---------- */
+.swatch{border-radius:3px;overflow:hidden;border:var(--hair)}
+.swatch .chip{height:128px;display:flex;align-items:flex-end;padding:14px}
+.swatch .meta{padding:13px 14px;background:var(--gun-950)}
+.swatch .nm{font-family:var(--disp);font-variation-settings:'wght' 700;color:var(--linen);font-size:15px}
+.swatch .hx{font-family:var(--mono);font-size:11.5px;color:var(--n400);margin-top:3px}
+.swatch .use{font-size:11.5px;color:var(--n600);margin-top:7px;line-height:1.5}
+.ramp{display:flex;border-radius:3px;overflow:hidden;border:var(--hair)}
+.ramp div{flex:1;height:72px;display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:7px;font-family:var(--mono);font-size:9px}
+
+/* ---------- logo showcase ---------- */
+.logobox{display:flex;align-items:center;justify-content:center;padding:44px;min-height:172px}
+.cap{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--n600);padding:9px 14px;border-top:var(--hair)}
+
+/* ---------- don'ts ---------- */
+.dont{position:relative;display:flex;align-items:center;justify-content:center;
+  padding:32px;min-height:130px;background:var(--gun-950);border:var(--hair);border-radius:3px}
+.dont .x{position:absolute;top:9px;right:11px;color:var(--cherry);font-family:var(--mono);font-size:15px}
+.dontcap{font-size:12px;color:var(--n600);margin-top:9px;line-height:1.5}
+
+/* ---------- tipografia amostra ---------- */
+.typespec{padding:22px 24px;border-bottom:var(--hair)}
+.typespec:last-child{border-bottom:none}
+
+/* ---------- LCD ---------- */
+.lcd{background:#04222a;border:2px solid var(--n700);border-radius:5px;padding:16px 18px;
+  box-shadow:inset 0 0 34px rgba(0,0,0,.65)}
+.lcdline{font-family:var(--mono);font-size:19px;letter-spacing:.22em;color:var(--chart);
+  text-shadow:0 0 9px rgba(225,255,81,.5);white-space:pre;line-height:1.55}
+
+/* ---------- crachá ---------- */
+.badge{width:100%;aspect-ratio:1.586;border-radius:11px;padding:18px;position:relative;
+  display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+
+/* ---------- app icon ---------- */
+.appicon{width:96px;height:96px;border-radius:22px;display:flex;align-items:center;justify-content:center}
+
+/* ---------- pattern ---------- */
+.pattern{height:150px;border-radius:3px;border:var(--hair);
+  background-image:repeating-linear-gradient(90deg,var(--chart) 0 3px,transparent 3px 30px);
+  background-color:var(--gun-950)}
+
+.token{font-family:var(--mono);font-size:12px;line-height:2;color:var(--n400)}
+.token b{color:var(--chart);font-weight:400}
+.foot{padding:56px 0 80px;border-top:var(--hair);color:var(--n600);font-size:12.5px}
+</style>
+
+<!-- ========= DEFINIÇÕES SVG REUTILIZÁVEIS ========= -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- Símbolo BATENTE: o vão. Moldura em ∏ (os dois batentes + a verga)
+         com a fresta de luz deslocada — a porta entreaberta. -->
+    <g id="sym">
+      <path fill="var(--fc,#F7F9EC)" fill-rule="evenodd" d="
+        M6 58 L6 20 Q6 6 20 6 L44 6 Q58 6 58 20 L58 58 Z
+        M16 58 L16 22.5 Q16 16 22.5 16 L41.5 16 Q48 16 48 22.5 L48 58 Z"/>
+      <rect fill="var(--bc,#E1FF51)" x="33" y="16" width="11" height="42" rx="1.5"/>
+    </g>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="lbl">Manual de Identidade Visual · v1.0 · Julho 2026</div>
+  <div class="heromark">
+    <svg viewBox="0 0 64 64" width="112" height="112" aria-label="Símbolo Batente">
+      <use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/>
+    </svg>
+    <div class="wordmark">BATEN<em>T</em>E</div>
+  </div>
+  <div class="tag">Controle de ponto e acesso que não para quando a rede cai.</div>
+  <div class="rule"></div>
+  <p class="dim" style="max-width:70ch">
+    Sistema de ponto inteligente com fechadura eletrônica. Terminal RFID que decide na borda,
+    carimba com relógio dedicado e sincroniza depois — sem interromper a passagem.
+  </p>
+</div>
+
+<!-- ============ 01 NOME ============ -->
+<section id="nome">
+  <div class="sechead">
+    <div class="secnum">01</div>
+    <div>
+      <h2 class="sec">Nomenclatura</h2>
+      <p class="dim" style="margin-top:14px">
+        O produto vive num lugar muito específico: a soleira da porta, no instante em que
+        alguém chega para trabalhar. Os nomes abaixo foram construídos a partir desse lugar —
+        não a partir de vocabulário genérico de RH ou de segurança.
+      </p>
+    </div>
+  </div>
+
+  <div class="panel" style="overflow:hidden">
+    <table>
+      <thead><tr><th style="width:15%">Nome</th><th style="width:34%">Leitura</th><th>Avaliação</th></tr></thead>
+      <tbody>
+        <tr class="rec">
+          <td><b style="font-size:16px">BATENTE</b><br><span class="lbl" style="color:var(--chart)">Recomendado</span></td>
+          <td>Peça de madeira ou metal onde a porta encosta ao fechar — o marco da porta.</td>
+          <td>
+            <b>Três camadas de sentido que se encaixam com precisão rara.</b>
+            <b>(1)</b> É a peça física exata onde o totem é instalado.
+            <b>(2)</b> Divide raiz com <i>“bater ponto”</i> — a expressão brasileira para o ato que o sistema registra.
+            <b>(3)</b> <i>“Voltar ao batente”</i> significa voltar ao trabalho.
+            Marco, ato e jornada na mesma palavra de sete letras. Sonoridade dura, consoantes secas — soa a hardware, não a planilha.
+          </td>
+        </tr>
+        <tr>
+          <td><b>LIMIAR</b><br><span class="lbl lbl-dim">Vice</span></td>
+          <td>Soleira da porta; também o valor mínimo a partir do qual algo se manifesta.</td>
+          <td>Duplo sentido igualmente bom: a passagem física <i>e</i> o conceito de tolerância, que é literalmente um parâmetro do sistema. Registro mais formal e institucional que Batente. Melhor escolha se o público-alvo for governo ou corporação grande.</td>
+        </tr>
+        <tr>
+          <td><b>SOLEIRA</b></td>
+          <td>A pedra na base do vão da porta.</td>
+          <td>Preciso e pouco explorado. Mais silencioso e material que os anteriores. Perde por não carregar nenhuma referência a tempo ou trabalho.</td>
+        </tr>
+        <tr>
+          <td><b>PULSO</b></td>
+          <td>Batida do coração; pulso elétrico; o punho.</td>
+          <td>Tecnicamente rico — o acionamento da trava <i>é</i> um pulso (<code>lockDurationMs</code>), o dispositivo emite <i>heartbeat</i>, e o crachá fica no punho. Perde por ser palavra muito disputada em software de saúde e monitoramento.</td>
+        </tr>
+        <tr>
+          <td><b>ÁTRIO</b></td>
+          <td>Saguão de entrada; também cavidade do coração.</td>
+          <td>Latino, curto, internacionalizável. Elegante, porém frio — não sugere jornada nem registro. Boa opção caso haja intenção de exportar o produto.</td>
+        </tr>
+        <tr>
+          <td><b>VIGIA</b></td>
+          <td>Quem guarda; escotilha de navio.</td>
+          <td><b>Desaconselhado.</b> Sonoridade forte, mas posiciona o sistema como vigilância sobre o trabalhador. Um produto de ponto já carrega essa tensão — o nome não deve amplificá-la.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid g3" style="margin-top:18px">
+    <div class="panel" style="padding:22px">
+      <div class="lbl">Assinatura verbal</div>
+      <div style="font-family:var(--disp);font-variation-settings:'wght' 700;color:var(--linen);font-size:19px;margin:10px 0 8px">Bate mesmo sem rede.</div>
+      <p style="font-size:12.5px;color:var(--n600)">Linha principal. Enuncia o diferencial técnico e brinca com “bater ponto” ao mesmo tempo. Cinco palavras, nenhuma abstrata.</p>
+    </div>
+    <div class="panel" style="padding:22px">
+      <div class="lbl">Alternativas</div>
+      <div style="color:var(--n300);font-size:14px;margin:10px 0 8px;line-height:1.85">
+        A porta não espera a rede.<br>Todo acesso, todo dia.<br>O registro continua.
+      </div>
+      <p style="font-size:12.5px;color:var(--n600)">Para peças onde o trocadilho não couber.</p>
+    </div>
+    <div class="panel" style="padding:22px">
+      <div class="lbl">Ressalva</div>
+      <p style="font-size:12.5px;color:var(--n400);margin-top:10px">
+        <b>Batente não traduz.</b> Os três sentidos só existem em português. Se houver plano
+        de internacionalização, <b>Limiar</b> ou <b>Átrio</b> sobrevivem melhor. Para o
+        mercado brasileiro, a força local compensa com folga.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 CONCEITO ============ -->
+<section id="conceito">
+  <div class="sechead">
+    <div class="secnum">02</div>
+    <div><h2 class="sec">Conceito de marca</h2></div>
+  </div>
+
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="panel" style="padding:30px">
+      <div class="lbl">Ideia central</div>
+      <div style="font-family:var(--disp);font-variation-settings:'wdth' 96,'wght' 700;
+                  font-size:clamp(24px,3.4vw,34px);color:var(--linen);line-height:1.16;margin:16px 0">
+        A continuidade é o produto.
+      </div>
+      <p style="font-size:13.5px;color:var(--n400)">
+        Todo concorrente registra ponto. O que distingue este sistema é o que acontece quando
+        algo falha: a rede cai, a energia oscila, o servidor não responde — e a porta abre
+        do mesmo jeito, com a hora certa. A marca precisa comunicar <b>firmeza sob falha</b>,
+        não sofisticação tecnológica.
+      </p>
+    </div>
+    <div class="panel" style="padding:30px">
+      <div class="lbl">Atributos</div>
+      <div style="margin-top:18px">
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:var(--hair)">
+          <b>Firme</b><span class="dimmer" style="font-size:12.5px">não sofisticado</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:var(--hair)">
+          <b>Preciso</b><span class="dimmer" style="font-size:12.5px">não burocrático</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:var(--hair)">
+          <b>Cotidiano</b><span class="dimmer" style="font-size:12.5px">não corporativo</span></div>
+        <div style="display:flex;justify-content:space-between;padding:9px 0">
+          <b>Silencioso</b><span class="dimmer" style="font-size:12.5px">não vigilante</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="padding:30px">
+    <div class="lbl">Tom de voz — a regra que governa tudo</div>
+    <div class="grid g3" style="margin-top:20px">
+      <div>
+        <h3>Nunca acuse</h3>
+        <p style="font-size:13px;color:var(--n400)">O sistema fala com quem está chegando para trabalhar. Mensagem de negação informa o motivo, não repreende.
+        <br><br><span style="color:var(--chart)">✓</span> <code>CRACHA BLOQUEADO</code><br>
+        <span style="color:var(--cherry)">✕</span> <code>ACESSO PROIBIDO!</code></p>
+      </div>
+      <div>
+        <h3>Frase curta, verbo no início</h3>
+        <p style="font-size:13px;color:var(--n400)">Restrição real: o display tem 16 caracteres. Isso educa toda a marca a ser econômica — inclusive fora do display.</p>
+      </div>
+      <div>
+        <h3>Modo offline é invisível</h3>
+        <p style="font-size:13px;color:var(--n400)">O colaborador nunca lê “SEM REDE”. A contingência é problema do administrador, não da pessoa na porta. A marca não expõe a própria dificuldade a quem não pode resolvê-la.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 SÍMBOLO ============ -->
+<section id="simbolo">
+  <div class="sechead">
+    <div class="secnum">03</div>
+    <div>
+      <h2 class="sec">Símbolo</h2>
+      <p class="dim" style="margin-top:14px;max-width:64ch">
+        <b>“O vão.”</b> Uma moldura em ∏ — os dois batentes e a verga — com uma fresta
+        deslocada para a direita. É a porta entreaberta e a luz que atravessa. A fresta é o
+        único elemento em Chartreuse: <b>a cor da marca é literalmente o instante da liberação.</b>
+      </p>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="panel">
+      <div class="logobox">
+        <svg viewBox="0 0 64 64" width="190" height="190">
+          <use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/>
+        </svg>
+      </div>
+      <div class="cap">Símbolo primário · positivo sobre Gun Metal</div>
+    </div>
+
+    <div class="panel">
+      <div class="logobox" style="position:relative">
+        <svg viewBox="0 0 64 64" width="190" height="190">
+          <!-- malha de construção -->
+          <g stroke="#4C9DB0" stroke-width=".35" opacity=".45">
+            <path d="M6 0V64M16 0V64M33 0V64M44 0V64M48 0V64M58 0V64"/>
+            <path d="M0 6H64M0 16H64M0 58H64"/>
+          </g>
+          <use href="#sym" opacity=".92"/>
+          <g stroke="#E1FF51" stroke-width=".6" opacity=".9">
+            <path d="M6 62H16M48 62H58"/>
+            <path d="M6 61v2M16 61v2M48 61v2M58 61v2"/>
+          </g>
+          <text x="11" y="60" fill="#E1FF51" font-size="3" text-anchor="middle" font-family="monospace">10</text>
+          <text x="53" y="60" fill="#E1FF51" font-size="3" text-anchor="middle" font-family="monospace">10</text>
+        </svg>
+      </div>
+      <div class="cap">Construção · malha 64 × 64 · haste 10u · raio externo 14u</div>
+    </div>
+  </div>
+
+  <div class="grid g3">
+    <div class="panel">
+      <div class="logobox" style="min-height:150px;position:relative">
+        <div style="position:absolute;inset:32px;border:1px dashed rgba(225,255,81,.4)"></div>
+        <svg viewBox="0 0 64 64" width="86" height="86">
+          <use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/>
+        </svg>
+      </div>
+      <div class="cap">Área de respiro = largura da haste (10u) em todos os lados</div>
+    </div>
+    <div class="panel">
+      <div class="logobox" style="min-height:150px;gap:26px">
+        <svg viewBox="0 0 64 64" width="48" height="48"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+        <svg viewBox="0 0 64 64" width="28" height="28"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+        <svg viewBox="0 0 64 64" width="16" height="16"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+      </div>
+      <div class="cap">Redução · mínimo 16 px digital · 6 mm impresso</div>
+    </div>
+    <div class="panel">
+      <div class="logobox" style="min-height:150px;gap:26px;background:var(--linen)">
+        <svg viewBox="0 0 64 64" width="62" height="62"><use href="#sym" style="--fc:#00272C;--bc:#00272C"/></svg>
+        <svg viewBox="0 0 64 64" width="62" height="62"><use href="#sym" style="--fc:#00272C;--bc:#9A0002"/></svg>
+      </div>
+      <div class="cap">Monocromático e sobre fundo claro · a fresta pode assumir a cor de estado</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 ASSINATURAS ============ -->
+<section id="assinaturas">
+  <div class="sechead">
+    <div class="secnum">04</div>
+    <div>
+      <h2 class="sec">Assinaturas</h2>
+      <p class="dim" style="margin-top:14px">
+        No logotipo, o <b>T</b> recebe a cor da fresta. A letra é a única do alfabeto cuja
+        forma repete a estrutura do símbolo — haste vertical sob travessão horizontal.
+        A rima é estrutural, não decorativa.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-bottom:18px">
+    <div class="panel">
+      <div class="logobox" style="gap:20px">
+        <svg viewBox="0 0 64 64" width="62" height="62"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+        <div style="font-family:var(--disp);font-variation-settings:'wdth' 116,'wght' 800;
+                    font-size:42px;color:var(--linen);letter-spacing:-.01em;line-height:1">BATEN<span style="color:var(--chart)">T</span>E</div>
+      </div>
+      <div class="cap">Assinatura horizontal · uso preferencial</div>
+    </div>
+    <div class="panel">
+      <div class="logobox" style="flex-direction:column;gap:16px">
+        <svg viewBox="0 0 64 64" width="62" height="62"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+        <div style="font-family:var(--disp);font-variation-settings:'wdth' 116,'wght' 800;
+                    font-size:30px;color:var(--linen);letter-spacing:.02em;line-height:1">BATEN<span style="color:var(--chart)">T</span>E</div>
+      </div>
+      <div class="cap">Assinatura vertical · formatos quadrados e centralizados</div>
+    </div>
+  </div>
+
+  <div class="grid g4">
+    <div class="panel">
+      <div class="logobox" style="min-height:150px">
+        <div style="font-family:var(--disp);font-variation-settings:'wdth' 116,'wght' 800;
+                    font-size:28px;color:var(--linen);line-height:1">BATEN<span style="color:var(--chart)">T</span>E</div>
+      </div>
+      <div class="cap">Logotipo isolado</div>
+    </div>
+    <div class="panel">
+      <div class="logobox" style="min-height:150px">
+        <div class="appicon" style="background:var(--gun);border:1px solid rgba(76,157,176,.3)">
+          <svg viewBox="0 0 64 64" width="58" height="58"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+        </div>
+      </div>
+      <div class="cap">Ícone de aplicativo · escuro</div>
+    </div>
+    <div class="panel">
+      <div class="logobox" style="min-height:150px">
+        <div class="appicon" style="background:var(--chart)">
+          <svg viewBox="0 0 64 64" width="58" height="58"><use href="#sym" style="--fc:#00272C;--bc:#00272C"/></svg>
+        </div>
+      </div>
+      <div class="cap">Ícone alternativo · alta visibilidade</div>
+    </div>
+    <div class="panel">
+      <div class="logobox" style="min-height:150px;gap:14px">
+        <svg viewBox="0 0 64 64" width="34" height="34"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+        <svg viewBox="0 0 64 64" width="22" height="22"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+        <svg viewBox="0 0 64 64" width="14" height="14"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+      </div>
+      <div class="cap">Favicon · a fresta sobrevive a 14 px</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 USOS INCORRETOS ============ -->
+<section id="incorretos">
+  <div class="sechead">
+    <div class="secnum">05</div>
+    <div><h2 class="sec">Usos incorretos</h2></div>
+  </div>
+  <div class="grid g4">
+    <div>
+      <div class="dont"><span class="x">✕</span>
+        <svg viewBox="0 0 64 64" width="72" height="72" style="transform:rotate(-14deg)"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+      </div>
+      <p class="dontcap">Não rotacionar. Um marco de porta inclinado deixa de ser um marco de porta.</p>
+    </div>
+    <div>
+      <div class="dont"><span class="x">✕</span>
+        <svg viewBox="0 0 64 64" width="110" height="62" preserveAspectRatio="none"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+      </div>
+      <p class="dontcap">Não distorcer a proporção. A haste tem espessura fixa de 10u.</p>
+    </div>
+    <div>
+      <div class="dont"><span class="x">✕</span>
+        <svg viewBox="0 0 64 64" width="72" height="72"><use href="#sym" style="--fc:#5E4074;--bc:#FFA602"/></svg>
+      </div>
+      <p class="dontcap">Não recolorir fora do sistema. A fresta é Chartreuse ou cor de estado — nunca arbitrária.</p>
+    </div>
+    <div>
+      <div class="dont" style="background:#4C9DB0"><span class="x" style="color:#00272C">✕</span>
+        <svg viewBox="0 0 64 64" width="72" height="72"><use href="#sym" style="--fc:#83BAC3;--bc:#E1FF51"/></svg>
+      </div>
+      <p class="dontcap">Não aplicar sobre fundo de contraste insuficiente. Mínimo 4.5:1 contra a moldura.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 COR ============ -->
+<section id="cor">
+  <div class="sechead">
+    <div class="secnum">06</div>
+    <div>
+      <h2 class="sec">Sistema cromático</h2>
+      <p class="dim" style="margin-top:14px;max-width:70ch">
+        Quatro cores extraídas de <b>duas</b> das referências fornecidas. A escolha não foi
+        estética: medindo o matiz de cada uma, as duas paletas revelaram pares quase idênticos.
+      </p>
+    </div>
+  </div>
+
+  <div class="panel" style="padding:26px 30px;margin-bottom:18px">
+    <div class="lbl">Por que estas quatro</div>
+    <div class="token" style="margin-top:14px">
+      Gun Metal &nbsp;&nbsp;H = <b>186.8°</b> &nbsp;┐ Δ 4.6° — mesma família<br>
+      Moonstone &nbsp;&nbsp;H = <b>191.4°</b> &nbsp;┘<br><br>
+      Chartreuse &nbsp;H = <b>&nbsp;70.3°</b> &nbsp;┐ Δ 1.1° — mesma família<br>
+      Linen Cloud H = <b>&nbsp;69.2°</b> &nbsp;┘
+    </div>
+    <p style="font-size:13px;color:var(--n400);margin-top:18px;max-width:72ch">
+      Duas famílias de matiz, quatro cores, e a distância entre as famílias é de ~117° —
+      quase o terço perfeito do círculo cromático. Por isso o par tem tensão sem brigar.
+      As referências <b>Chartreuse&nbsp;+&nbsp;Gun&nbsp;Metal</b> e <b>Plum&nbsp;Wine&nbsp;+&nbsp;Linen&nbsp;Cloud</b>
+      compartilham estrutura sem que isso seja visível a olho nu — foi preciso medir.
+    </p>
+  </div>
+
+  <div class="grid g4" style="margin-bottom:26px">
+    <div class="swatch"><div class="chip" style="background:#00272C;border-bottom:1px solid rgba(76,157,176,.25)"><span class="mono" style="font-size:10px;color:var(--n400)">FUNDAÇÃO</span></div>
+      <div class="meta"><div class="nm">Gun Metal</div><div class="hx">#00272C · HSL 187 100 9</div>
+        <div class="use">Superfície dominante. É a portaria à noite, o totem em repouso, o painel sempre ligado.</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#E1FF51"><span class="mono" style="font-size:10px;color:#00272C">SINAL</span></div>
+      <div class="meta"><div class="nm">Chartreuse</div><div class="hx">#E1FF51 · HSL 70 100 66</div>
+        <div class="use">A fresta de luz. Reservada ao instante da liberação e a um único ponto de ênfase por tela.</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#4C9DB0"><span class="mono" style="font-size:10px;color:#00272C">APOIO</span></div>
+      <div class="meta"><div class="nm">Moonstone</div><div class="hx">#4C9DB0 · HSL 191 40 49</div>
+        <div class="use">Informação neutra, bordas, rótulos, gráficos. Nunca compete com o sinal.</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#F7F9EC"><span class="mono" style="font-size:10px;color:#00272C">PAPEL</span></div>
+      <div class="meta"><div class="nm">Linen Cloud</div><div class="hx">#F7F9EC · HSL 69 52 95</div>
+        <div class="use">Texto sobre escuro e superfície clara. Levemente esverdeado — nunca branco puro.</div></div></div>
+  </div>
+
+  <h3 style="margin-bottom:12px">Escala neutra</h3>
+  <p class="dim" style="font-size:13px;margin-bottom:14px">
+    Interpolada entre Gun Metal → Moonstone → Linen Cloud. <b>Não há cinza puro no sistema:</b>
+    todos os neutros carregam o matiz teal, o que mantém a coesão mesmo em interfaces densas de tabela.
+  </p>
+  <div class="ramp" style="margin-bottom:38px">
+    <div style="background:#00181C;color:#83BAC3">950</div>
+    <div style="background:#00272C;color:#83BAC3">900</div>
+    <div style="background:#0B383E;color:#83BAC3">800</div>
+    <div style="background:#174A54;color:#AFD2D3">700</div>
+    <div style="background:#26626E;color:#D5E7E0">600</div>
+    <div style="background:#4C9DB0;color:#00272C">500</div>
+    <div style="background:#83BAC3;color:#00272C">400</div>
+    <div style="background:#AFD2D3;color:#00272C">300</div>
+    <div style="background:#D5E7E0;color:#00272C">200</div>
+    <div style="background:#E9F2E7;color:#00272C">100</div>
+    <div style="background:#F7F9EC;color:#00272C">050</div>
+  </div>
+
+  <h3 style="margin-bottom:12px">Cores de estado</h3>
+  <div class="panel" style="padding:22px 26px;margin-bottom:18px;border-left:2px solid var(--chart)">
+    <p style="font-size:13.5px;color:var(--n300);max-width:74ch">
+      <b>A decisão mais importante deste sistema:</b> Chartreuse não é uma cor de marca que
+      por acaso lembra “verde de aprovado”. Ela <b>é</b> o estado <code>GRANTED</code>.
+      A cor da marca e o momento central do produto são a mesma coisa — o que elimina o conflito
+      semântico clássico de usar verde institucional num sistema onde verde já significa algo.
+    </p>
+  </div>
+  <div class="grid g4" style="margin-bottom:26px">
+    <div class="swatch"><div class="chip" style="background:#E1FF51;height:80px"><span class="mono" style="font-size:10px;color:#00272C">GRANTED</span></div>
+      <div class="meta"><div class="nm" style="font-size:14px">Concedido</div><div class="hx">#E1FF51</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#FF5A4E;height:80px"><span class="mono" style="font-size:10px;color:#00272C">DENIED</span></div>
+      <div class="meta"><div class="nm" style="font-size:14px">Negado</div><div class="hx">#FF5A4E · claro<br>#9A0002 · escuro</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#FFA602;height:80px"><span class="mono" style="font-size:10px;color:#00272C">PENDING</span></div>
+      <div class="meta"><div class="nm" style="font-size:14px">Inconsistente</div><div class="hx">#FFA602</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#4C9DB0;height:80px"><span class="mono" style="font-size:10px;color:#00272C">OFFLINE</span></div>
+      <div class="meta"><div class="nm" style="font-size:14px">Contingência</div><div class="hx">#4C9DB0</div></div></div>
+  </div>
+
+  <h3 style="margin-bottom:12px">Contraste verificado — WCAG 2.1</h3>
+  <div class="panel" style="overflow:hidden">
+    <table>
+      <thead><tr><th>Combinação</th><th style="width:14%">Razão</th><th style="width:14%">Nível</th><th>Uso liberado</th></tr></thead>
+      <tbody>
+        <tr><td>Linen Cloud sobre Gun Metal</td><td class="mono" style="color:var(--chart)">14.86:1</td><td>AAA</td><td>Texto corrido, qualquer tamanho</td></tr>
+        <tr><td>Chartreuse sobre Gun Metal</td><td class="mono" style="color:var(--chart)">14.04:1</td><td>AAA</td><td>Texto, ícones, dados críticos</td></tr>
+        <tr><td>Gun Metal sobre Chartreuse</td><td class="mono" style="color:var(--chart)">14.04:1</td><td>AAA</td><td>Botão primário, ícone invertido</td></tr>
+        <tr><td>neutral-300 sobre Gun Metal</td><td class="mono" style="color:var(--chart)">9.79:1</td><td>AAA</td><td>Texto secundário</td></tr>
+        <tr><td>Sunburst sobre Gun Metal</td><td class="mono" style="color:var(--chart)">8.07:1</td><td>AAA</td><td>Alerta de inconsistência</td></tr>
+        <tr><td>neutral-400 sobre Gun Metal</td><td class="mono" style="color:var(--chart)">7.37:1</td><td>AAA</td><td>Rótulos, metadados</td></tr>
+        <tr><td>Cereja-claro sobre Gun Metal</td><td class="mono" style="color:var(--sun)">5.14:1</td><td>AA</td><td>Negação — <b>nunca abaixo de 14 px</b></td></tr>
+        <tr><td>Moonstone sobre Gun Metal</td><td class="mono" style="color:var(--sun)">5.09:1</td><td>AA</td><td>Bordas e rótulos — não usar em corpo de texto</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 07 TIPOGRAFIA ============ -->
+<section id="tipografia">
+  <div class="sechead">
+    <div class="secnum">07</div>
+    <div>
+      <h2 class="sec">Tipografia</h2>
+      <p class="dim" style="margin-top:14px;max-width:68ch">
+        Três funções, duas famílias. A monoespaçada não é enfeite: este produto é feito de
+        UIDs, timestamps e identificadores de evento. Alinhamento vertical de dígitos é
+        requisito funcional, não preferência.
+      </p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="typespec">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px">
+        <div class="lbl" style="color:var(--chart)">Display · Archivo</div>
+        <div class="mono" style="font-size:11px;color:var(--n600)">wdth 75–125 · wght 400–900 · Google Fonts</div>
+      </div>
+      <div style="font-family:var(--disp);font-variation-settings:'wdth' 118,'wght' 800;
+                  font-size:clamp(30px,6vw,64px);color:var(--linen);line-height:1.05;margin:16px 0 8px">
+        BATENTE 08:02
+      </div>
+      <p style="font-size:13px;color:var(--n400);max-width:70ch">
+        Grotesca derivada de <b>tipografia de sinalização</b> — a mesma linhagem das placas de
+        aeroporto e de rodovia. Coerência conceitual direta: este é um produto de wayfinding.
+        O eixo de largura permite expandir o logotipo (wdth&nbsp;118) sem trocar de fonte.
+      </p>
+    </div>
+
+    <div class="typespec">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px">
+        <div class="lbl" style="color:var(--chart)">Texto · IBM Plex Sans</div>
+        <div class="mono" style="font-size:11px;color:var(--n600)">400 · 500 · 600</div>
+      </div>
+      <div style="font-size:22px;color:var(--linen);margin:16px 0 8px;font-weight:500">
+        Espelho de ponto · 12 colaboradores · 3 inconsistências
+      </div>
+      <p style="font-size:13px;color:var(--n400);max-width:70ch">
+        Desenhada para contexto técnico e industrial. Aguenta tabelas densas em corpo 12–13 px
+        sem fechar contraforma — exatamente o caso do espelho de ponto e do log de eventos.
+      </p>
+    </div>
+
+    <div class="typespec">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px">
+        <div class="lbl" style="color:var(--chart)">Dados · IBM Plex Mono</div>
+        <div class="mono" style="font-size:11px;color:var(--n600)">400 · 500 · 600</div>
+      </div>
+      <div class="mono" style="font-size:16px;color:var(--chart);margin:16px 0 8px;line-height:1.9">
+        UID &nbsp;04A2B3C4<br>
+        EVT &nbsp;9f1c8a2e-4b7d<br>
+        RTC &nbsp;2026-07-31 08:02:14 &nbsp;<span style="color:var(--n400)">drift +18ms</span>
+      </div>
+      <p style="font-size:13px;color:var(--n400);max-width:70ch">
+        Obrigatória para UID, <code>eventId</code>, horário, matrícula e saldo. Mesma superfamília
+        do texto — as duas compartilham esqueleto, então convivem na mesma tabela sem ruído.
+      </p>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-top:18px">
+    <div class="panel" style="padding:24px">
+      <div class="lbl">Escala tipográfica</div>
+      <div class="token" style="margin-top:14px">
+        Display XL &nbsp;<b>64 / 1.05</b> &nbsp;Archivo 800 wdth 118<br>
+        Display &nbsp;&nbsp;&nbsp;<b>40 / 1.10</b> &nbsp;Archivo 800 wdth 112<br>
+        Título &nbsp;&nbsp;&nbsp;&nbsp;<b>24 / 1.25</b> &nbsp;Archivo 700<br>
+        Subtítulo &nbsp;<b>17 / 1.40</b> &nbsp;Archivo 700<br>
+        Corpo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>15 / 1.60</b> &nbsp;Plex Sans 400<br>
+        Compacto &nbsp;&nbsp;<b>13 / 1.55</b> &nbsp;Plex Sans 400<br>
+        Rótulo &nbsp;&nbsp;&nbsp;&nbsp;<b>10.5/ 1.40</b> &nbsp;Plex Mono 500 · 0.16em · caixa alta<br>
+        Dado &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>13 / 1.50</b> &nbsp;Plex Mono 400 · tabular
+      </div>
+    </div>
+    <div class="panel" style="padding:24px">
+      <div class="lbl">Regras</div>
+      <ul style="margin-top:14px;padding-left:17px;font-size:13px;color:var(--n400);line-height:1.95">
+        <li>Archivo <b>nunca</b> em corpo de texto. Display e títulos apenas.</li>
+        <li>Todo número que possa ser comparado verticalmente vai em Plex Mono.</li>
+        <li>Rótulos sempre em caixa alta, monoespaçados, com <code>0.16em</code> de entreletra.</li>
+        <li>Máximo <b>três</b> tamanhos por tela. Densidade se resolve com espaço, não com corpo.</li>
+        <li>Sem itálico no sistema. A marca não enfatiza inclinando — enfatiza com cor.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 GRAFISMO ============ -->
+<section id="grafismo">
+  <div class="sechead">
+    <div class="secnum">08</div>
+    <div>
+      <h2 class="sec">Grafismo</h2>
+      <p class="dim" style="margin-top:14px;max-width:66ch">
+        Um único elemento auxiliar: <b>a cadência</b>. Frestas verticais em ritmo regular —
+        a repetição diária da passagem. Deriva diretamente do símbolo, sem inventar vocabulário novo.
+      </p>
+    </div>
+  </div>
+  <div class="grid g2">
+    <div>
+      <div class="pattern" style="opacity:.5"></div>
+      <div class="cap">Cadência regular · fundo de capa e cabeçalho · opacidade 30–50%</div>
+    </div>
+    <div>
+      <div style="height:150px;border-radius:3px;border:var(--hair);background:var(--gun-950);
+                  background-image:linear-gradient(90deg,transparent 0 62%,rgba(225,255,81,.85) 62% 63.5%,transparent 63.5%),
+                                   repeating-linear-gradient(90deg,rgba(76,157,176,.28) 0 1.5px,transparent 1.5px 30px)"></div>
+      <div class="cap">Cadência com marcação · destaca um evento na sequência</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 APLICAÇÕES ============ -->
+<section id="aplicacoes">
+  <div class="sechead">
+    <div class="secnum">09</div>
+    <div>
+      <h2 class="sec">Aplicações</h2>
+      <p class="dim" style="margin-top:14px;max-width:70ch">
+        A aplicação mais dura desta marca não é digital nem impressa: é um display de
+        <b>16 caracteres por 2 linhas</b>, matriz 5×8, monocromático. Se a marca não funciona
+        ali, não funciona.
+      </p>
+    </div>
+  </div>
+
+  <!-- LCD -->
+  <div class="panel" style="padding:30px;margin-bottom:18px">
+    <div class="lbl" style="color:var(--chart)">Display do totem · LCD 16×2 I2C</div>
+    <div class="grid g2" style="margin-top:20px">
+      <div>
+        <div class="lcd" style="margin-bottom:12px">
+          <div class="lcdline">BEM VINDO, ANA  </div>
+          <div class="lcdline">PONTO REGISTRADO</div>
+        </div>
+        <div class="mono" style="font-size:10.5px;color:var(--n600)">Concedido · 14 + 16 caracteres</div>
+      </div>
+      <div>
+        <div class="lcd" style="margin-bottom:12px">
+          <div class="lcdline" style="color:#FF5A4E;text-shadow:0 0 9px rgba(255,90,78,.5)">CRACHA BLOQUEADO</div>
+          <div class="lcdline" style="color:#FF5A4E;text-shadow:0 0 9px rgba(255,90,78,.5)">PROCURE O RH    </div>
+        </div>
+        <div class="mono" style="font-size:10.5px;color:var(--n600)">Negado · informa o caminho, não repreende</div>
+      </div>
+      <div>
+        <div class="lcd" style="margin-bottom:12px">
+          <div class="lcdline">BATENTE    08:02</div>
+          <div class="lcdline">APROXIME CRACHA </div>
+        </div>
+        <div class="mono" style="font-size:10.5px;color:var(--n600)">Repouso · a marca assina o estado ocioso</div>
+      </div>
+      <div>
+        <div class="lcd" style="margin-bottom:12px">
+          <div class="lcdline">BEM VINDO, ANA  </div>
+          <div class="lcdline">PONTO REGISTRADO</div>
+        </div>
+        <div class="mono" style="font-size:10.5px;color:var(--n600)">Modo offline · <b style="color:var(--n400)">idêntico ao online, por decisão de marca</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid g2" style="margin-bottom:18px">
+    <!-- Crachá -->
+    <div class="panel" style="padding:30px">
+      <div class="lbl" style="color:var(--chart)">Crachá RFID · MIFARE 13.56 MHz</div>
+      <div style="max-width:340px;margin-top:18px">
+        <div class="badge" style="background:var(--gun);border:1px solid rgba(76,157,176,.3)">
+          <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(90deg,rgba(225,255,81,.12) 0 2px,transparent 2px 26px)"></div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+            <svg viewBox="0 0 64 64" width="30" height="30"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+            <div class="mono" style="font-size:8.5px;color:var(--n600);letter-spacing:.1em;text-align:right">MIFARE<br>13.56 MHz</div>
+          </div>
+          <div style="position:relative">
+            <div style="font-family:var(--disp);font-variation-settings:'wght' 700;font-size:19px;color:var(--linen);line-height:1.15">ANA CAROLINA<br>SOUZA</div>
+            <div class="mono" style="font-size:10px;color:var(--chart);margin-top:7px;letter-spacing:.08em">MAT 20220023770 · OPERAÇÕES</div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:12.5px;color:var(--n600);margin-top:14px">
+        O grafismo de cadência ocupa o fundo. Matrícula em monoespaçada — é dado, não nome.
+      </p>
+    </div>
+
+    <!-- Sinalização -->
+    <div class="panel" style="padding:30px">
+      <div class="lbl" style="color:var(--chart)">Sinalização de porta · adesivo 90 × 130 mm</div>
+      <div style="max-width:250px;margin-top:18px;background:var(--chart);border-radius:6px;padding:26px 22px;text-align:center">
+        <svg viewBox="0 0 64 64" width="46" height="46" style="margin-bottom:14px"><use href="#sym" style="--fc:#00272C;--bc:#00272C"/></svg>
+        <div style="font-family:var(--disp);font-variation-settings:'wdth' 108,'wght' 800;font-size:21px;color:#00272C;line-height:1.15">APROXIME<br>O CRACHÁ</div>
+        <div class="mono" style="font-size:9.5px;color:rgba(0,39,44,.6);margin-top:12px;letter-spacing:.12em">ACESSO E PONTO</div>
+      </div>
+      <p style="font-size:12.5px;color:var(--n600);margin-top:14px">
+        Aqui Chartreuse vira fundo pleno: máxima visibilidade a distância, em corredor mal iluminado.
+      </p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="panel" style="padding:30px">
+    <div class="lbl" style="color:var(--chart)">Painel administrativo · monitor de acessos</div>
+    <div style="margin-top:20px;background:var(--gun);border:var(--hair);border-radius:5px;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:13px;padding:14px 18px;border-bottom:var(--hair)">
+        <svg viewBox="0 0 64 64" width="21" height="21"><use href="#sym" style="--fc:#F7F9EC;--bc:#E1FF51"/></svg>
+        <div style="font-family:var(--disp);font-variation-settings:'wdth' 114,'wght' 800;font-size:14px;color:var(--linen);letter-spacing:.01em">BATEN<span style="color:var(--chart)">T</span>E</div>
+        <div style="flex:1"></div>
+        <div class="mono" style="font-size:10px;color:var(--chart);display:flex;align-items:center;gap:6px">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--chart);display:inline-block"></span>TOTEM ONLINE · drift +18ms
+        </div>
+      </div>
+      <table style="font-size:12.5px">
+        <thead><tr><th style="width:16%">Hora</th><th style="width:26%">Colaborador</th><th style="width:16%">UID</th><th style="width:14%">Modo</th><th>Decisão</th></tr></thead>
+        <tbody>
+          <tr><td class="mono" style="color:var(--n300)">08:02:14</td><td>Ana Carolina Souza</td><td class="mono dimmer">04A2B3C4</td><td class="mono dimmer">ONLINE</td>
+              <td><span class="mono" style="color:var(--chart);font-size:11px">● CONCEDIDO</span></td></tr>
+          <tr><td class="mono" style="color:var(--n300)">08:01:55</td><td>Marcos Ferreira</td><td class="mono dimmer">04B7C1D9</td><td class="mono dimmer">ONLINE</td>
+              <td><span class="mono" style="color:var(--chart);font-size:11px">● CONCEDIDO</span></td></tr>
+          <tr><td class="mono" style="color:var(--n300)">07:58:03</td><td class="dimmer">—</td><td class="mono dimmer">0A11FF02</td><td class="mono dimmer">ONLINE</td>
+              <td><span class="mono" style="color:var(--cherry);font-size:11px">● UID DESCONHECIDO</span></td></tr>
+          <tr><td class="mono" style="color:var(--n300)">07:44:20</td><td>Beatriz Moura</td><td class="mono dimmer">04C3E8A1</td><td class="mono" style="color:var(--moon)">OFFLINE</td>
+              <td><span class="mono" style="color:var(--chart);font-size:11px">● CONCEDIDO</span> <span class="mono" style="color:var(--sun);font-size:10px">↻ sincronizado</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12.5px;color:var(--n600);margin-top:14px">
+      Chartreuse aparece apenas nas decisões concedidas e na marca. Todo o resto da tabela vive
+      na escala neutra — é isso que faz o olho encontrar a exceção sem procurar.
+    </p>
+  </div>
+</section>
+
+<!-- ============ 10 TOKENS ============ -->
+<section id="tokens">
+  <div class="sechead">
+    <div class="secnum">10</div>
+    <div><h2 class="sec">Tokens</h2><p class="dim" style="margin-top:14px">Pronto para colar em <code>globals.css</code> ou no tema do Tailwind.</p></div>
+  </div>
+  <div class="panel" style="padding:28px 30px">
+    <div class="token">
+<b>:root</b> {<br>
+&nbsp;&nbsp;<b>--bt-gun</b>:#00272C;&nbsp;&nbsp;&nbsp;<b>--bt-chartreuse</b>:#E1FF51;<br>
+&nbsp;&nbsp;<b>--bt-moonstone</b>:#4C9DB0;&nbsp;<b>--bt-linen</b>:#F7F9EC;<br><br>
+&nbsp;&nbsp;<b>--bt-n950</b>:#00181C;&nbsp;<b>--bt-n900</b>:#00272C;&nbsp;<b>--bt-n800</b>:#0B383E;<br>
+&nbsp;&nbsp;<b>--bt-n700</b>:#174A54;&nbsp;<b>--bt-n600</b>:#26626E;&nbsp;<b>--bt-n500</b>:#4C9DB0;<br>
+&nbsp;&nbsp;<b>--bt-n400</b>:#83BAC3;&nbsp;<b>--bt-n300</b>:#AFD2D3;&nbsp;<b>--bt-n200</b>:#D5E7E0;<br>
+&nbsp;&nbsp;<b>--bt-n100</b>:#E9F2E7;&nbsp;<b>--bt-n050</b>:#F7F9EC;<br><br>
+&nbsp;&nbsp;<b>--bt-granted</b>:#E1FF51;&nbsp;&nbsp;<b>--bt-denied</b>:#FF5A4E;<br>
+&nbsp;&nbsp;<b>--bt-denied-deep</b>:#9A0002;&nbsp;<b>--bt-pending</b>:#FFA602;<br>
+&nbsp;&nbsp;<b>--bt-offline</b>:#4C9DB0;<br><br>
+&nbsp;&nbsp;<b>--bt-display</b>:'Archivo',sans-serif;<br>
+&nbsp;&nbsp;<b>--bt-sans</b>:'IBM Plex Sans',sans-serif;<br>
+&nbsp;&nbsp;<b>--bt-mono</b>:'IBM Plex Mono',monospace;<br><br>
+&nbsp;&nbsp;<b>--bt-radius</b>:3px;&nbsp;<b>--bt-radius-lg</b>:11px;&nbsp;<b>--bt-radius-icon</b>:22px;<br>
+&nbsp;&nbsp;<b>--bt-hairline</b>:1px solid rgba(76,157,176,.22);<br>
+}
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  <div style="display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap">
+    <div>
+      <div class="lbl">BATENTE · Manual de Identidade Visual · v1.0</div>
+      <div style="margin-top:8px">Sistema Inteligente de Ponto e Controle de Acesso</div>
+    </div>
+    <div class="mono" style="font-size:11px;text-align:right;line-height:1.9">
+      Paletas de origem: Chartreuse + Gun Metal · Plum Wine + Linen Cloud · Sunburst + Mocha<br>
+      Contraste verificado em WCAG 2.1 · todos os pares de texto ≥ 4.5:1
+    </div>
+  </div>
+</div>
+
+</div>

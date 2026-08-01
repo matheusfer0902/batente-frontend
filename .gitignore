@@ -12,30 +12,60 @@
 
 # testing
 /coverage
+*.lcov
 
 # next.js
 /.next/
 /out/
-
-# production
 /build
+/dist
+
+# production / cache
+.turbo
+.swc
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
 
-# debug
+# debug / logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — never commit secrets
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+# IDE / editor (local only)
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.AppleDouble
+.LSOverride
+
+# cursor — commit rules, ignore local/cache
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
+
+# claude — commit project docs, ignore local settings
+.claude/*
+!.claude/project.md
+
+# agent tools / temp
+agent-tools/
+*.local

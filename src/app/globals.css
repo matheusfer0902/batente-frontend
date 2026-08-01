@@ -1,26 +1,117 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gun: #00272c;
+  --gun-950: #00181c;
+  --n800: #0b383e;
+  --n700: #174a54;
+  --n600: #26626e;
+  --moon: #4c9db0;
+  --n400: #83bac3;
+  --n300: #afd2d3;
+  --n200: #d5e7e0;
+  --n100: #e9f2e7;
+  --linen: #f7f9ec;
+  --chart: #e1ff51;
+  --sun: #ffa602;
+  --cherry: #ff5a4e;
+  --cherry-deep: #9a0002;
+
+  --background: var(--linen);
+  --foreground: var(--gun);
+  --card: #ffffff;
+  --card-foreground: var(--gun);
+  --popover: #ffffff;
+  --popover-foreground: var(--gun);
+  --primary: var(--moon);
+  --primary-foreground: var(--gun-950);
+  --secondary: var(--n100);
+  --secondary-foreground: var(--n700);
+  --muted: var(--n100);
+  --muted-foreground: var(--n600);
+  --accent: var(--chart);
+  --accent-foreground: var(--gun-950);
+  --destructive: var(--cherry);
+  --destructive-foreground: var(--linen);
+  --border: color-mix(in srgb, var(--moon) 22%, transparent);
+  --input: color-mix(in srgb, var(--moon) 22%, transparent);
+  --ring: var(--chart);
+  --radius: 0.375rem;
+}
+
+.dark {
+  --background: var(--gun);
+  --foreground: var(--n200);
+  --card: var(--gun-950);
+  --card-foreground: var(--n200);
+  --popover: var(--gun-950);
+  --popover-foreground: var(--n200);
+  --primary: var(--moon);
+  --primary-foreground: var(--gun-950);
+  --secondary: var(--n800);
+  --secondary-foreground: var(--n200);
+  --muted: var(--n800);
+  --muted-foreground: var(--n400);
+  --accent: var(--chart);
+  --accent-foreground: var(--gun-950);
+  --destructive: var(--cherry);
+  --destructive-foreground: var(--linen);
+  --border: color-mix(in srgb, var(--moon) 22%, transparent);
+  --input: color-mix(in srgb, var(--moon) 22%, transparent);
+  --ring: var(--chart);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-warning: var(--sun);
+  --color-gun: var(--gun);
+  --color-moon: var(--moon);
+  --color-chart: var(--chart);
+  --font-sans: var(--font-ibm-plex-sans);
+  --font-display: var(--font-archivo);
+  --font-mono: var(--font-ibm-plex-mono);
+  --font-family-display: var(--font-archivo), var(--font-ibm-plex-sans), system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--moon) 4.5%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--moon) 4.5%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+  }
 }

@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BATENTE Frontend
 
-## Getting Started
+Boilerplate frontend com Next.js 16, Clean Architecture, Redux Toolkit + RTK Query, i18n e tokens visuais BATENTE.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router) + TypeScript strict
+- Tailwind CSS v4 + Shadcn/UI pattern (Radix + cva)
+- Redux Toolkit + RTK Query (mock in-memory)
+- i18next (pt/en) + next-themes
+- React Hook Form + Zod
+
+## Começar
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Credenciais demo:** `owner@batente.dev` / `password123`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Comando | Descrição |
+|---------|-----------|
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm run build` | Build de produção |
+| `npm run typecheck` | Verificação TypeScript |
+| `npm run lint` | ESLint |
 
-To learn more about Next.js, take a look at the following resources:
+## Documentação
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Documentação completa em [`docs/`](./docs/):
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Arquitetura](./docs/architecture.md)
+- [SOLID](./docs/solid-principles.md)
+- [Guia de features](./docs/feature-module-guide.md)
+- [Auth](./docs/auth.md)
 
-## Deploy on Vercel
+Regras para agentes de IA: [`.cursor/rules/`](./.cursor/rules/), [`CLAUDE.md`](./CLAUDE.md), [`AGENTS.md`](./AGENTS.md).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Estrutura
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/           # Rotas (auth + dashboard)
+├── components/    # UI, auth, resource, shared
+├── redux/         # Store, slices, RTK Query APIs
+├── services/      # Lógica pura (ResourceService)
+├── hooks/         # useAuth, useResource, useCanMutate
+├── contexts/      # SearchContext
+├── types/         # Contratos TypeScript
+├── lib/           # utils, i18n, schemas, mock
+└── locales/       # Traduções pt/en
+```
+
+## Novo módulo de feature
+
+Replique o padrão do módulo `resource`:
+
+1. Tipos em `src/types/<feature>.ts`
+2. Schema Zod em `src/lib/schemas/<feature>Schema.ts`
+3. API RTK Query em `src/redux/reducers/queries/<feature>Api.ts`
+4. Service em `src/services/<Feature>Service.ts`
+5. Hook orquestrador em `src/hooks/use<Feature>.ts`
+6. Componentes em `src/components/<feature>/`
+7. Páginas em `src/app/(dashboard)/<feature>/`

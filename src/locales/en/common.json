@@ -1,0 +1,24 @@
+{
+  "appName": "BATENTE",
+  "loading": "Loading...",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "edit": "Edit",
+  "create": "Create",
+  "back": "Back",
+  "search": "Search",
+  "actions": "Actions",
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "language": {
+    "pt": "Português",
+    "en": "English"
+  },
+  "footer": {
+    "copyright": "© {{year}} BATENTE. Frontend boilerplate."
+  }
+}

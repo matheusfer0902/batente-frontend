@@ -1,0 +1,30 @@
+---
+description: Componentes React — UI atômica, domínio e composição
+globs: src/components/**
+alwaysApply: false
+---
+
+# Componentes
+
+## `components/ui/` — átomos
+
+- Radix + `cva` + `cn()`. Sem imports de domínio, redux ou services.
+- Variants: `default`, `destructive`, `outline`, `ghost`, `link`.
+
+## `components/<feature>/` — domínio
+
+- Consumir hooks orquestradores (`useResource`, `useAuth`).
+- Forms: React Hook Form + `zodResolver(schema)`.
+- Permissões: `useCanMutate()` — retorna `canEdit`, `canDelete`.
+- Dialogs destrutivos: componente dedicado (ex.: `ResourceDeleteDialog`).
+
+## `components/shared/`
+
+Layout shell: Header, Sidebar, Footer, Providers. Sem regra de negócio de feature.
+
+## Proibido em componentes
+
+- `fetch()` manual
+- Lógica de ordenação/filtro complexa (mover para service)
+- Strings hardcoded (usar i18n)
+- `any` nos props

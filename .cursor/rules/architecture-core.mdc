@@ -1,0 +1,38 @@
+---
+description: Arquitetura core BATENTE — camadas, fluxo de dados e regras invioláveis
+alwaysApply: true
+---
+
+# Arquitetura BATENTE Frontend
+
+Leia `docs/architecture.md` antes de implementar features.
+
+## Camadas (dependência unidirecional)
+
+```
+app → components → hooks → redux / services / types
+components/ui → lib/utils apenas
+services → types apenas (sem React, sem Redux)
+```
+
+## Regras invioláveis
+
+1. **`app/`** — só roteamento, layouts e composição. Zero `fetch`, zero `useEffect` para API.
+2. **Server state** — exclusivamente RTK Query em `redux/reducers/queries/`. Proibido duplicar em slices.
+3. **Componentes de domínio** — consomem hooks (`useResource`), nunca RTK Query direto se existir hook.
+4. **Lógica pura** — transformações em `services/`, não em componentes.
+5. **Permissões** — via `useCanMutate` / `canMutate()`. Proibido `if (user.id === ownerId)` espalhado.
+6. **i18n** — textos via `t()`. Proibido strings hardcoded na UI.
+7. **Tipos** — strict, zero `any`. Forms: inferir de Zod (`z.infer<typeof schema>`).
+8. **UI atômica** — `components/ui/` sem conhecimento de domínio. Classes via `cn()`.
+
+## Novo módulo de feature
+
+Seguir molde `resource` — ver `docs/feature-module-guide.md`.
+
+## Nomenclatura
+
+- Componentes: `PascalCase`
+- Hooks: `use<Nome>`
+- Slices: `<feature>Slice` | APIs: `<feature>Api` | Services: `<Feature>Service`
+- Endpoints RTK: `get<Feature>List`, `create<Feature>`, etc.

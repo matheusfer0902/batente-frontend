@@ -1,0 +1,39 @@
+{
+  "title": "Resources",
+  "subtitle": "Manage example resources",
+  "create": "New resource",
+  "empty": "No resources found",
+  "form": {
+    "title": "Title",
+    "description": "Description",
+    "createTitle": "Create resource",
+    "editTitle": "Edit resource",
+    "createSubmit": "Create resource",
+    "editSubmit": "Save changes"
+  },
+  "card": {
+    "updatedAt": "Updated on {{date}}",
+    "view": "View details"
+  },
+  "delete": {
+    "title": "Delete resource",
+    "description": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+    "confirm": "Delete"
+  },
+  "detail": {
+    "title": "Resource details",
+    "owner": "Owner: {{ownerId}}"
+  },
+  "validation": {
+    "titleMin": "Title must be at least 3 characters",
+    "titleMax": "Title must be at most 100 characters",
+    "descriptionMin": "Description must be at least 10 characters",
+    "descriptionMax": "Description must be at most 500 characters"
+  },
+  "toast": {
+    "created": "Resource created successfully",
+    "updated": "Resource updated successfully",
+    "deleted": "Resource deleted successfully",
+    "error": "Something went wrong. Please try again."
+  }
+}

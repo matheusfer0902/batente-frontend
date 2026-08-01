@@ -1,0 +1,39 @@
+---
+description: RTK Query e Redux — server state, tags e slices
+globs: src/redux/**,src/hooks/**
+alwaysApply: false
+---
+
+# Redux & RTK Query
+
+## Server state
+
+- Única porta: `redux/reducers/queries/` via `baseApi.injectEndpoints()`
+- Proibido: `useEffect` + `fetch` para dados de servidor
+- Proibido: duplicar server state em slices
+
+## Tags (cache/invalidação)
+
+```typescript
+providesTags: (result) =>
+  result
+    ? [...result.map(({ id }) => ({ type: "Feature", id })), { type: "Feature", id: "LIST" }]
+    : [{ type: "Feature", id: "LIST" }],
+
+invalidatesTags: (_r, _e, { id }) => [{ type: "Feature", id }, { type: "Feature", id: "LIST" }],
+```
+
+## Hooks Redux tipados
+
+Usar `useAppDispatch` / `useAppSelector` de `@/redux/hooks` — nunca hooks crus.
+
+## Slices
+
+Apenas estado de UI/sessão (ex.: `authSlice`). Não armazenar listas de entidades do servidor.
+
+## Novo endpoint
+
+1. Criar `<feature>Api.ts` com injectEndpoints
+2. Import side-effect em `store.ts`
+3. Adicionar tagType em `baseApi.ts`
+4. Estender mock ou fetch base query

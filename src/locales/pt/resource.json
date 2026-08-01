@@ -1,0 +1,39 @@
+{
+  "title": "Recursos",
+  "subtitle": "Gerencie recursos de exemplo",
+  "create": "Novo recurso",
+  "empty": "Nenhum recurso encontrado",
+  "form": {
+    "title": "Título",
+    "description": "Descrição",
+    "createTitle": "Criar recurso",
+    "editTitle": "Editar recurso",
+    "createSubmit": "Criar recurso",
+    "editSubmit": "Salvar alterações"
+  },
+  "card": {
+    "updatedAt": "Atualizado em {{date}}",
+    "view": "Ver detalhes"
+  },
+  "delete": {
+    "title": "Excluir recurso",
+    "description": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita.",
+    "confirm": "Excluir"
+  },
+  "detail": {
+    "title": "Detalhes do recurso",
+    "owner": "Proprietário: {{ownerId}}"
+  },
+  "validation": {
+    "titleMin": "O título deve ter pelo menos 3 caracteres",
+    "titleMax": "O título deve ter no máximo 100 caracteres",
+    "descriptionMin": "A descrição deve ter pelo menos 10 caracteres",
+    "descriptionMax": "A descrição deve ter no máximo 500 caracteres"
+  },
+  "toast": {
+    "created": "Recurso criado com sucesso",
+    "updated": "Recurso atualizado com sucesso",
+    "deleted": "Recurso excluído com sucesso",
+    "error": "Ocorreu um erro. Tente novamente."
+  }
+}
