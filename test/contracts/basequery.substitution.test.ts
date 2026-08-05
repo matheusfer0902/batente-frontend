@@ -5,6 +5,7 @@ import { mockBaseQuery } from "@/lib/mock/mockBaseQuery";
 import { createBaseApi } from "@/redux/reducers/queries/createBaseApi";
 import { createFetchBaseQuery } from "@/redux/reducers/queries/fetchBaseQuery";
 import { createSession, testDb } from "../mocks/db";
+import { setMockSession } from "../mocks/handlers/auth.handlers";
 import { mockDb } from "@/lib/mock/mockDb";
 
 describe("basequery.substitution", () => {
@@ -13,6 +14,13 @@ describe("basequery.substitution", () => {
     const token = createSession(userId);
     mockDb.sessions[token] = userId;
 
+    // O lado `fetch` não manda `Authorization` — não há token acessível ao JS —,
+    // então a sessão precisa existir no servidor simulado para os dois
+    // transportes verem a mesma listagem.
+    setMockSession("ADMIN");
+
+    // Sem `token`: a sessão real é cookie `HttpOnly` e não é representável no
+    // estado do cliente. `status` é o que o mock e os guards observam agora.
     const preloadedState = {
       auth: {
         user: {
@@ -21,7 +29,7 @@ describe("basequery.substitution", () => {
           name: testDb.users[0]!.name,
           role: testDb.users[0]!.role,
         },
-        token,
+        status: "authenticated" as const,
       },
     };
 
@@ -44,7 +52,7 @@ describe("basequery.substitution", () => {
     const mockStore = configureStore({
       reducer: {
         auth: authReducer,
-        [mockApi.reducerPath]: mockApi.reducer,
+        api: mockApi.reducer,
       },
       middleware: (gDM) => gDM().concat(mockApi.middleware),
       preloadedState,
@@ -53,7 +61,7 @@ describe("basequery.substitution", () => {
     const fetchStore = configureStore({
       reducer: {
         auth: authReducer,
-        [fetchApi.reducerPath]: fetchApi.reducer,
+        api: fetchApi.reducer,
       },
       middleware: (gDM) => gDM().concat(fetchApi.middleware),
       preloadedState,

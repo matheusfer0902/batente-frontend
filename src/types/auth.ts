@@ -15,18 +15,46 @@ export interface User {
   role: UserRole;
 }
 
+/** Permissões que o servidor resolve a partir do papel — só para UX. */
+export const permissions = ["user:create", "user:read"] as const;
+export type Permission = (typeof permissions)[number];
+
+/**
+ * Resposta de `GET /auth/me` — a **única** fonte de verdade de sessão.
+ *
+ * O frontend nunca decodifica token para descobrir quem está logado: o token
+ * está em cookie `HttpOnly` e é ilegível por JavaScript. `userId` (e não `id`)
+ * espelha o contrato do backend.
+ */
+export interface SessionUser {
+  userId: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  permissions: readonly Permission[];
+}
+
+/** Adapta o contrato de `/auth/me` ao `User` que os componentes já consomem. */
+export function toUser(session: SessionUser): User {
+  return {
+    id: session.userId,
+    email: session.email,
+    name: session.name,
+    role: session.role,
+  };
+}
+
 export interface AuthCredentials {
   email: string;
   password: string;
 }
 
-export interface RegisterPayload extends AuthCredentials {
+/** Corpo de `POST /users` — criação por administrador, não auto-registro. */
+export interface CreateUserPayload {
+  email: string;
   name: string;
-}
-
-export interface AuthResponse {
-  user: User;
-  token: string;
+  password: string;
+  role: UserRole;
 }
 
 /**

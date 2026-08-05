@@ -8,16 +8,35 @@ import { API_BASE_URL } from "@/redux/reducers/queries/fetchBaseQuery";
 import { generateId, testDb } from "../db";
 import { extractBearerToken, jsonError, unavailableResponse } from "../utils";
 import { findUserByToken } from "../db";
+import { getMockSession } from "./auth.handlers";
 
 const base = API_BASE_URL;
 
+/**
+ * Resolve quem está pedindo.
+ *
+ * A ordem importa e reflete a migração: o `Bearer` continua aceito para os
+ * testes de contrato que o enviam de propósito, mas **não é mais o caminho
+ * normal** — desde que a sessão passou a ser cookie `HttpOnly`,
+ * `createFetchBaseQuery` não injeta `Authorization`, porque não há token
+ * alcançável pelo JavaScript para injetar. Sem sessão, 401: o negativo continua
+ * exercitável.
+ */
 function requireAuth(request: Request) {
-  const token = extractBearerToken(request);
-  const user = findUserByToken(token);
-  if (!user || !token) {
-    return { error: jsonError(401, "Unauthorized") } as const;
+  const porToken = findUserByToken(extractBearerToken(request));
+  if (porToken) {
+    return { user: porToken } as const;
   }
-  return { user, token } as const;
+
+  const sessao = getMockSession();
+  const porSessao = sessao
+    ? testDb.users.find((candidate) => candidate.id === sessao.userId)
+    : undefined;
+  if (porSessao) {
+    return { user: porSessao } as const;
+  }
+
+  return { error: jsonError(401, "Unauthorized") } as const;
 }
 
 export const resourceHandlers = [

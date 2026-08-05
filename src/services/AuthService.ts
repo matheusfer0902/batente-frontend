@@ -141,6 +141,29 @@ export class AuthService {
     };
   }
 
+  /**
+   * Falha de um login que o servidor **aceitou** mas cuja identidade não pôde
+   * ser confirmada em `GET /auth/me`.
+   *
+   * Existe porque esse caminho não produz erro no RTK Query: o `POST /auth/login`
+   * respondeu `204`, então `loginState.error` fica `null` e a tela não teria o
+   * que exibir. Sem isto, o cookie é gravado e a interface não muda em nada —
+   * falha muda é o que transforma um defeito em mistério.
+   *
+   * Sem `status`: não houve resposta HTTP de login a reportar.
+   */
+  static sessionConfirmationFailure(): LoginFailure {
+    return {
+      code: "unknown",
+      failedAttempts: 0,
+      remainingAttempts: MAX_LOGIN_ATTEMPTS,
+      lockedAt: null,
+      unlockAt: null,
+      occurredAt: null,
+      status: null,
+    };
+  }
+
   /** O contador de tentativas restantes só aparece a partir da terceira falha. */
   static shouldShowRemainingAttempts(failure: LoginFailure | null): boolean {
     if (!failure || failure.code !== "invalid_credentials") return false;

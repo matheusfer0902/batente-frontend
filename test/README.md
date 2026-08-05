@@ -10,6 +10,7 @@ npm run test:watch        # watch mode
 npm run test:hook         # hooks + MSW
 npm run test:int          # integração de página
 npm run test:contract     # contrato + LSP baseQuery
+npm run test:e2e:real     # login contra a API real (:3030 + Postgres no ar)
 npm run test:all          # suíte completa
 ```
 
@@ -64,6 +65,21 @@ scenarios.servidorIndisponivel();
 | `toHaveNoA11yViolations` | axe |
 | `toContainNoLaborData` | RN-1.6 |
 | `toContainNoPersonalData` | LGPD |
+
+## Sessão nos testes
+
+```typescript
+// A consulta /auth/me de boot só existe se o SessionProvider estiver montado
+renderWithProviders(<LoginForm />, { withSession: true });
+
+// Abrir sessão no mock sem passar pelo login
+import { setMockSession } from '../mocks/handlers/auth.handlers';
+setMockSession('ADMIN');   // reset automático no afterEach
+```
+
+Para asserir navegação, sobrescreva `next/navigation` no próprio spec: o mock
+global devolve um router **novo por chamada**, então o spy dele não é o que o
+componente usou. Ver `src/hooks/useAuth.test.tsx`.
 
 ## Referência — módulo `resource`
 

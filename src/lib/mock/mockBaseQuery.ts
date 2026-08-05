@@ -2,7 +2,6 @@ import type { BaseQueryFn } from "@reduxjs/toolkit/query";
 import type { ApiError, MockRequestArgs } from "@/types/api";
 import type { RootState } from "@/redux/store";
 import { handleAccessRoute } from "@/lib/mock/handlers/accessHandler";
-import { handleAuthRoute } from "@/lib/mock/handlers/authHandler";
 import { handleDeviceRoute } from "@/lib/mock/handlers/deviceHandler";
 import { handleResourceRoute } from "@/lib/mock/handlers/resourceHandler";
 import { handleTimekeepingRoute } from "@/lib/mock/handlers/timekeepingHandler";
@@ -22,7 +21,8 @@ type RouteHandler = (request: MockRequest) => HandlerResult;
 
 /** Prefixo → handler do domínio. Mesma ordem de leitura das rotas reais. */
 const ROUTES: ReadonlyArray<[string, RouteHandler]> = [
-  ["/auth", handleAuthRoute],
+  // "/auth" não aparece aqui: a autenticação fala com o backend real
+  // (ver redux/reducers/queries/authBaseApi.ts).
   ["/resources", handleResourceRoute],
   ["/access-events", handleAccessRoute],
   ["/devices", handleDeviceRoute],

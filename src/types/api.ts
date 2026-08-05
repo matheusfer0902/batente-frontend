@@ -46,6 +46,10 @@ export function withScenario(url: string, scenario?: string): string {
   return `${url}${separator}scenario=${encodeURIComponent(scenario)}`;
 }
 
-export const AUTH_TOKEN_COOKIE = "auth-token";
-/** Papel do usuário — permite ao edge/middleware resolver o destino pós-login. */
-export const AUTH_ROLE_COOKIE = "auth-role";
+/**
+ * Não há constantes de cookie de sessão aqui, e isso é deliberado.
+ *
+ * `AUTH_TOKEN_COOKIE` e `AUTH_ROLE_COOKIE` foram removidos: os cookies de
+ * sessão são `HttpOnly`, gravados e lidos só pelo servidor. O frontend não os
+ * nomeia porque não os toca — descobre a sessão por `GET /auth/me`.
+ */

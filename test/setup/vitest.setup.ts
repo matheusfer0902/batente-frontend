@@ -5,6 +5,8 @@ import { cleanup } from "@testing-library/react";
 import { afterAll, afterEach, beforeAll, vi } from "vitest";
 import { server } from "./msw.server";
 import { resetTestDb } from "../mocks/db";
+import { setMockSession } from "../mocks/handlers/auth.handlers";
+import { resetAuthClientState } from "@/redux/reducers/queries/authBaseQuery";
 
 process.env.TZ = "America/Recife";
 
@@ -15,6 +17,14 @@ beforeAll(() => {
 afterEach(() => {
   server.resetHandlers();
   resetTestDb();
+
+  // Estado de módulo não morre com o componente. `csrfToken` e `refreshEmVoo`
+  // vivem em `lib/csrf.ts` / `authBaseQuery.ts`, e a sessão do mock vive em
+  // `auth.handlers.ts` — sem isto, um teste que faz login deixa o próximo já
+  // autenticado, e um token CSRF obtido aqui satisfaz uma asserção lá.
+  resetAuthClientState();
+  setMockSession(null);
+
   cleanup();
   vi.clearAllMocks();
 });
