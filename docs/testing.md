@@ -146,19 +146,53 @@ npm run test:all          # suíte completa (CI)
 - Mock de `next/navigation` e `next/link`
 - `cleanup()` automático após cada teste
 - `resetTestDb()` após cada teste
+- **`resetAuthClientState()` e `setMockSession(null)` após cada teste** — estado de
+  módulo não morre com o componente: `csrfToken` e `refreshEmVoo` vivem em
+  `lib/csrf.ts` / `authBaseQuery.ts`, e a sessão do mock vive em
+  `auth.handlers.ts`. Sem esse reset, um teste que faz login deixa o próximo já
+  autenticado
+
+**Armadilha do router.** O mock de `next/navigation` devolve um objeto **novo a
+cada chamada** de `useRouter()`, então o spy que ele cria não é o que o
+componente usou. Para asserir `push`/`replace`, sobrescreva o mock no próprio
+spec com um router estável içado por `vi.hoisted` — ver
+`src/hooks/useAuth.test.tsx`.
 
 ### Playwright ([`playwright.config.ts`](../playwright.config.ts))
 
-- Esqueleto configurado — specs completos na Fase 7
-- `webServer`: `next build && next start` (nunca `next dev`)
-- Projects: `chromium`, `webkit`, `mobile-chrome`
+- `webServer`: `next build && next start` (nunca `next dev`), porta **3000** —
+  imposta pelo `CORS_ALLOWED_ORIGINS` do backend
+- Projects mockados: `chromium`, `webkit`, `mobile-chrome` (ignoram `@real`)
+- Project **`e2e-real`**: só os testes com tag `@real`, contra o backend de
+  verdade; serial, para não bater no limite de taxa de `/auth/login`
 - `retries: 2` no CI, `0` local
+
+```bash
+npm run test:e2e         # tudo
+npm run test:e2e:real    # só o fluxo contra a API real
+```
+
+O `e2e-real` exige Postgres no Docker e a API na `:3030`; o spec faz um ping em
+`/auth/csrf` e **pula com aviso** se a API não responder, em vez de pintar a
+suíte de vermelho por infraestrutura ausente.
+
+Esta camada não é redundante com a de integração: o Vitest roda em jsdom sobre
+módulos já transformados, então passa mesmo quando o bundle **não hidrata** no
+navegador — modo de falha real, em que o formulário faz submit nativo e joga a
+senha na query string. `test/e2e/login.spec.ts` afirma justamente isso.
 
 ## Infraestrutura de teste
 
 ### `renderWithProviders`
 
-Helper único que envolve o componente em todos os providers reais:
+Helper único que envolve o componente em todos os providers reais.
+
+Aceita `withSession` (padrão **desligado**), que monta o `SessionProvider` — quem
+dispara o `GET /auth/me` de boot. Deixe desligado quando o teste pré-carrega a
+sessão com `authState()`: montar o provider custaria uma ida à rede sem ganho.
+Ligue quando o objeto sob teste **é** a descoberta de sessão — inclusive a corrida
+entre a consulta de boot e o login, que só existe quando essa consulta existe (ver
+`test/integration/login.test.tsx`).
 
 ```typescript
 import { renderWithProviders } from '../../test/helpers/render';
@@ -248,6 +282,18 @@ Implementação canônica de cada camada (Fase 0 ✅):
 | Contract | `api.contract.test.ts` | handler × schema Zod |
 | Contract | `basequery.substitution.test.ts` | H1 LSP mock ↔ fetch |
 
+## Suíte de autenticação (Fase 3)
+
+| Camada | Arquivo | Foco |
+|---|---|---|
+| Unit | `src/services/AuthService.test.ts` | classificação de falha, destinos por papel, contagem de bloqueio |
+| Unit | `src/lib/schemas/authSchema.test.ts` | validação da entrada; login **sem** mínimo de senha |
+| Hook | `src/hooks/useAuth.test.tsx` | corrida do `/auth/me` de boot, `replace`, falha de confirmação, logout |
+| Component | `src/components/auth/LoginForm.test.tsx` | estados visuais, alertas, bloqueio com contagem, a11y |
+| Integration | `test/integration/login.test.tsx` | página com `SessionProvider`, do anônimo à navegação |
+| Contract | `test/contracts/auth.contract.test.ts` | `/auth/me` × Zod, `code` estável, CSRF obrigatório |
+| E2E | `test/e2e/login.spec.ts` | backend real: hidratação, cookies HttpOnly, sessão pós-reload |
+
 ## Escrever teste para nova feature
 
 Seguir o molde `resource` — ver [feature-module-guide.md](./feature-module-guide.md) passo 11.
@@ -281,7 +327,7 @@ Excluídos: `app/**/layout.tsx`, `**/index.ts`, `locales/**`, `lib/mock/**`.
 | **0 · Fundação** | Runner, MSW, helpers, matchers, suíte `resource` | ✅ |
 | **1 · Fronteiras** | `test:arch`, `test:i18n`, `test:types` | 🔜 |
 | **2 · Design system** | `components/ui/` completo — variantes, teclado, axe | 🔜 |
-| **3 · Auth** | E1–E20 — RN-1.5, bloqueio, cookies, middleware | 🔜 |
+| **3 · Auth** | Login: unit, hook, component, integration, contract, E2E real | ✅ |
 | **4 · Contrato** | H1–H8 — prepareHeaders, validação Zod completa | 🔜 |
 | **5 · Molde feature** | I1–I9 + G1–G9 para `resource` | 🔜 |
 | **6 · Domínio** | J1–J19 como `test.todo`; E2E N1–N3 | 🔜 |

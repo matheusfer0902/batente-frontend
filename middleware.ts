@@ -1,35 +1,37 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { isProtectedPath } from "@/lib/navigation";
-import { AuthService } from "@/services/AuthService";
-import { AUTH_ROLE_COOKIE, AUTH_TOKEN_COOKIE } from "@/types/api";
 
-const authPaths = ["/login", "/register"];
-
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get(AUTH_TOKEN_COOKIE)?.value;
-  const role = request.cookies.get(AUTH_ROLE_COOKIE)?.value;
-  const { pathname } = request.nextUrl;
-
-  const isAuthRoute = authPaths.some((path) => pathname.startsWith(path));
-
-  // Rotas do painel vêm de `lib/navigation` — uma lista só, sem duplicar aqui.
-  if (isProtectedPath(pathname) && !token) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("from", pathname);
-    return NextResponse.redirect(loginUrl);
-  }
-
-  if (isAuthRoute && token) {
-    return NextResponse.redirect(
-      new URL(AuthService.resolveAuthenticatedRoute(role), request.url),
-    );
-  }
-
+/**
+ * O middleware **não decide mais autenticação** — e não é uma simplificação
+ * preguiçosa, é consequência direta da topologia.
+ *
+ * Antes, ele lia os cookies `auth-token` e `auth-role` no edge para redirecionar
+ * e resolver o destino pós-login. Isso deixou de ser possível por dois motivos
+ * independentes:
+ *
+ * 1. **Cross-site.** A API está em outro domínio, e o edge do Next só recebe
+ *    cookies da própria origem. Os cookies de sessão simplesmente não chegam
+ *    aqui, então não há o que ler.
+ * 2. **Não seria confiável nem se chegassem.** Presença de cookie não é prova
+ *    de sessão válida — qualquer um escreve um cookie chamado `auth-token`. E
+ *    `auth-role` como base de decisão era pior: papel vindo do cliente.
+ *
+ * A proteção real acontece em dois lugares, ambos preservados: o servidor
+ * revalida identidade e papel em toda requisição, e o `ProtectedRoute` cuida da
+ * experiência a partir de `GET /auth/me`.
+ *
+ * Custo aceito: quem não está logado vê um instante de carregamento antes do
+ * redirecionamento, em vez de ser barrado no edge. A alternativa — um proxy de
+ * mesma origem no Next — devolveria o redirecionamento no edge e ainda
+ * eliminaria o cookie de terceiros; vale reconsiderar se o ITP do Safari se
+ * tornar um problema.
+ */
+export function middleware(_request: NextRequest) {
   return NextResponse.next();
 }
 
 export const config = {
-  // Tudo que não for asset: a decisão de proteger fica no código, não aqui.
+  // Mantido para que reativar regras de edge (locale, cabeçalhos) não exija
+  // redescobrir o matcher.
   matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };

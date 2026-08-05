@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Trans, useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { useCountdown } from "@/hooks/useCountdown";
+import { useRedirectAuthenticated } from "@/hooks/useRedirectAuthenticated";
 import { AuthService } from "@/services/AuthService";
 import {
   buildLoginSchema,
@@ -33,6 +34,9 @@ const ENTRY_INPUT_CLASS =
 export function LoginForm() {
   const { t } = useTranslation("auth");
   const { login, isSubmitting, loginFailure, clearLoginFailure } = useAuth();
+
+  // Quem já tem sessão não deve ficar preso no formulário.
+  useRedirectAuthenticated();
 
   const schema = useMemo(
     () =>

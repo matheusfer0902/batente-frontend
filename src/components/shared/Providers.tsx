@@ -6,7 +6,7 @@ import { Toaster } from "sonner";
 import i18next from "@/lib/i18n/client";
 import { StoreProvider } from "@/redux/storeProvider";
 import { SearchProvider } from "@/contexts/SearchContext";
-import { AuthHydrator } from "@/components/auth/AuthHydrator";
+import { SessionProvider } from "@/components/auth/SessionProvider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -16,7 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
         <I18nextProvider i18n={i18next}>
           <SearchProvider>
-            <AuthHydrator />
+            <SessionProvider />
             {children}
             <Toaster richColors closeButton position="top-right" />
           </SearchProvider>

@@ -29,11 +29,20 @@ export const loginSchema = buildLoginSchema({
   passwordRequired: "Required",
 });
 
-export const registerSchema = z.object({
+/**
+ * Criação de usuário **por administrador** — não há auto-registro.
+ *
+ * Ao contrário do login, aqui validar o tamanho mínimo da senha é correto: quem
+ * preenche está definindo uma credencial nova, e o feedback imediato evita uma
+ * ida ao servidor para ouvir "curta demais". O mínimo espelha o backend
+ * (`CreateUserBody`), e o servidor continua sendo a autoridade.
+ */
+export const createUserSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
-  password: z.string().min(6),
+  password: z.string().min(8),
+  role: z.enum(["ADMIN", "RH", "OPERADOR"]),
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
-export type RegisterFormValues = z.infer<typeof registerSchema>;
+export type CreateUserFormValues = z.infer<typeof createUserSchema>;

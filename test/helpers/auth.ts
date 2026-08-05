@@ -1,6 +1,6 @@
 import type { User } from "@/types/auth";
 import type { RootState } from "@/redux/store";
-import { createSession, testDb } from "../mocks/db";
+import { testDb } from "../mocks/db";
 
 const USER_BY_ROLE = {
   ADMIN: () => testDb.users[0]!,
@@ -19,13 +19,19 @@ export const users: Record<"ADMIN" | "RH" | "OPERADOR", User> = {
   OPERADOR: toSafeUser(testDb.users[1]!),
 };
 
+/**
+ * Pré-carrega uma sessão aberta no slice.
+ *
+ * **Não há mais `token`.** O par de tokens vive em cookie `HttpOnly` e não é
+ * representável no estado do cliente — é essa a garantia que o desenho oferece.
+ * O `status` precisa vir como `authenticated`: sem ele o `ProtectedRoute`
+ * ficaria em "resolvendo" para sempre e nenhuma tela renderizaria no teste.
+ */
 export function authState(role: keyof typeof users): Partial<RootState> {
-  const record = USER_BY_ROLE[role]();
-  const token = createSession(record.id);
   return {
     auth: {
-      user: toSafeUser(record),
-      token,
+      user: toSafeUser(USER_BY_ROLE[role]()),
+      status: "authenticated",
     },
   };
 }

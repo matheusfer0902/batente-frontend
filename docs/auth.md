@@ -1,5 +1,16 @@
 # Autenticação e autorização
 
+A sessão é do **servidor**. O frontend não guarda token, não decodifica token e
+não decide autorização — só reage ao que `GET /auth/me` responde.
+
+## Princípio
+
+| Regra | Como é cumprida |
+|---|---|
+| Nenhum token acessível por JavaScript | `access_token` e `refresh_token` são cookies `HttpOnly`, gravados pelo backend. Não há `localStorage`, `sessionStorage`, nem `token` no Redux |
+| O frontend não decide autorização | `ProtectedRoute`, `RoleGuard` e `useCanAccess` são **UX**. Toda rota protegida da API revalida identidade e papel no servidor |
+| Sessão descoberta por endpoint | `GET /auth/me` é a única fonte. Nada de ler cookie ou decodificar JWT |
+
 ## Fluxo de login
 
 ```mermaid
@@ -8,152 +19,185 @@ sequenceDiagram
     participant LoginForm
     participant useAuth
     participant authApi
-    participant mockDb
-    participant authSlice
-    participant Cookie
-
-    User->>LoginForm: submit credentials
+    participant API
+    User->>LoginForm: submete credenciais
     LoginForm->>useAuth: login(credentials)
-    useAuth->>authApi: login mutation
-    authApi->>mockDb: POST /auth/login
-    mockDb-->>authApi: user + token
-    authApi-->>useAuth: AuthResponse
-    useAuth->>authSlice: setCredentials
-    useAuth->>Cookie: set auth-token + auth-role
-    useAuth->>User: redirect por papel (AuthService)
+    useAuth->>authApi: GET /auth/csrf (se preciso)
+    API-->>authApi: csrfToken no corpo + cookie csrf_secret (HttpOnly)
+    useAuth->>authApi: POST /auth/login + x-csrf-token
+    API-->>authApi: 204 + Set-Cookie (access, refresh)
+    useAuth->>authApi: GET /auth/me
+    API-->>useAuth: { userId, email, name, role, permissions }
+    useAuth->>useAuth: sessionEstablished + redireciona pelo papel
 ```
 
-Em caso de falha, `login` **não lança**: o erro fica no RTK Query e vira
-`loginFailure` (contrato `LoginFailure`) via `AuthService.parseLoginFailure`.
+`POST /auth/login` responde **204 sem corpo**: o papel vem de `/auth/me`, nunca
+da resposta do login. Em falha, `login` **não lança** — o erro fica no RTK Query
+e vira `loginFailure` via `AuthService.parseLoginFailure`.
 
-## Papéis e destino pós-login
+### A confirmação de sessão tem uma retentativa
 
-| Papel | Destino | Rota |
-|-------|---------|------|
-| `ADMIN` | Início | `/inicio` |
-| `RH` | Início | `/inicio` |
-| `OPERADOR` | Portaria | `/portaria` |
+`confirmarSessao` em `useAuth` chama `/auth/me` **até duas vezes**, e isso não é
+redundância: é exigência do RTK Query.
 
-Mapa único em `AuthService` (`resolveLandingRoute`). `/inicio` e `/portaria`
-existem hoje como placeholders — conteúdo chega nos Blocos 2 e 3.
+O `condition` do `queryThunk` rejeita um refetch forçado enquanto existe consulta
+pendente para a mesma chave — `status === "pending"` é avaliado **antes** de
+`isForcedQuery` — e nesse caso o `unwrap` passa a esperar *aquela* resposta. Se a
+consulta em voo for a de boot, emitida antes do login, ela volta `401`. O efeito
+era um login bem-sucedido (cookies gravados) seguido de nada: sem navegação e sem
+erro, porque o `204` não deixa nada em `loginState.error`.
 
-## Estados da tela de entrada (Bloco 1)
+Uma retentativa basta — `getMe` tem chave única e deduplicada, então depois que a
+primeira liquida não resta consulta anterior ao login pendente — e não custa ida
+extra no caminho normal.
 
-| Estado | Código | Origem | Tratamento na UI |
-|--------|--------|--------|------------------|
-| Padrão | — | — | Formulário habilitado, foco no e-mail |
-| Enviando | — | `isSubmitting` | Campos travados, indicador de atividade |
-| Credencial inválida | `invalid_credentials` | 401 | Aviso vermelho genérico |
-| Conta bloqueada | `account_locked` | 423 | Aviso âmbar + contagem regressiva |
-| Servidor sem resposta | `server_unavailable` | 503 / falha de rede | Aviso na cor de contingência + "Tentar novamente" |
-| Sem permissão | — | rota `/403` | `ForbiddenView` |
+Quando as duas tentativas falham, `AuthService.sessionConfirmationFailure()`
+produz um `LoginFailure` com `code: "unknown"`, para a tela ter o que dizer. O
+princípio: **falha muda é pior que falha visível.**
 
-Regras de segurança e conteúdo:
+### Quem já tem sessão não fica na tela de entrada
 
-- Senha incorreta e e-mail inexistente produzem **a mesma resposta**, o mesmo
-  contador de tentativas e a mesma latência — nada revela se a conta existe.
-- O contador de tentativas restantes só aparece a partir da terceira falha
-  (`LOGIN_ATTEMPTS_HINT_THRESHOLD`).
-- Bloqueio após `MAX_LOGIN_ATTEMPTS` falhas seguidas, por
-  `LOGIN_LOCKOUT_MINUTES` minutos (constantes em `types/auth.ts`).
-- Falha de infraestrutura usa a cor de contingência (`moon`), **nunca** a cor
-  de negação (`cherry`).
-- O 403 não informa qual papel seria necessário.
+`useRedirectAuthenticated`, consumido pelo `LoginForm`, leva ao destino do papel
+quando a sessão já está confirmada. Usa `AuthService.resolveAuthenticatedRoute`,
+que **nunca** devolve `/login` — daí não haver laço com o `ProtectedRoute`.
+
+É opt-in por hook, e não dentro de `useAuth`, porque `ProtectedRoute`,
+`useCanAccess` e `SidebarUserMenu` também consomem `useAuth`: um efeito de
+redirecionamento ali navegaria a partir de toda tela do painel.
+
+Serve também de rede de segurança: se a navegação do `login` não ocorrer, a
+hidratação do `SessionProvider` vira `isAuthenticated` e o efeito conclui a
+viagem.
+
+A navegação pós-login usa `replace`, não `push` — entrar não deve deixar a tela
+de login no histórico.
+
+## Refresh silencioso
+
+Em `401`, o cliente tenta **um** refresh e repete a requisição. Falhando,
+devolve o 401 e o `SessionProvider` leva ao login.
+
+A deduplicação em `authBaseQuery.ts` (`refreshEmVoo`) **não é otimização**: o
+backend rotaciona o refresh token a cada uso e trata reapresentação como reúso,
+revogando a família inteira. Cinco 401 simultâneos sem single-flight
+disparariam cinco rotações do mesmo token e derrubariam a sessão.
+
+## CSRF
+
+Cookie de sessão implica CSRF explícito. Com `SameSite=None` (imposto pelo
+cross-site), o navegador anexa o cookie a requisições de qualquer site.
+
+O double-submit clássico (ler cookie por JS e repetir no header) **não funciona
+aqui**: o JS não lê cookie de outro domínio. Então:
+
+1. `GET /auth/csrf` grava `csrf_secret` (`HttpOnly`) e devolve `csrfToken` no corpo;
+2. `lib/csrf.ts` guarda o `csrfToken` **em memória**;
+3. todo método mutável envia `x-csrf-token`;
+4. o servidor recomputa o HMAC e compara em tempo constante.
+
+O `csrfToken` em memória não contradiz "nenhum token acessível por JS": ele não
+autentica ninguém, só prova que a requisição partiu de código capaz de ler a
+resposta de `/auth/csrf` — o que a allowlist de CORS nega a terceiros.
 
 ## Camadas de proteção
 
 | Camada | Arquivo | Função |
-|--------|---------|--------|
-| Edge | `middleware.ts` | Redireciona sem cookie `auth-token`; leva sessão ativa ao destino do papel. Rotas protegidas vêm de `lib/navigation.ts` |
-| Layout | `ProtectedRoute.tsx` | Guard client-side no `(dashboard)` |
-| Hidratação | `AuthHydrator.tsx` | Restaura Redux a partir do cookie |
-| Papel (tela) | `RoleGuard` | Barra a tela inteira; esconder o item do menu não basta, a URL é digitável |
-| Papel (UI) | `useCanAccess` / `PermissionService` | Itens de menu e blocos por papel |
-| Autorização | `useCanMutate` | Ownership para ações de escrita |
+|---|---|---|
+| Sessão | `SessionProvider.tsx` | Pergunta `GET /auth/me` e hidrata o slice |
+| Rota | `ProtectedRoute.tsx` | Espera `status` resolver; redireciona se anônimo (UX) |
+| Papel (tela) | `RoleGuard` | Barra a tela; a URL é digitável, esconder o menu não basta |
+| Papel (UI) | `useCanAccess` / `PermissionService` | Itens de menu e blocos |
+| Ownership | `useCanMutate` | Ações de escrita |
+| **Autoridade** | **backend** | Revalida em toda requisição; papel vem do banco |
 
-Papéis e telas visíveis estão em [`panel.md`](./panel.md).
-
-## Cookies
-
-| Cookie | Constante | Uso |
-|--------|-----------|-----|
-| `auth-token` | `AUTH_TOKEN_COOKIE` | Sessão — base de toda a proteção |
-| `auth-role` | `AUTH_ROLE_COOKIE` | Permite ao edge resolver o destino pós-login |
-
-Ambos são setados em `useAuth.login` / `register` e removidos em `logout` e em
-falha de hidratação.
+**O `middleware.ts` não decide mais autenticação.** Em cross-site o edge do Next
+não recebe os cookies da API, e presença de cookie nunca foi prova de sessão.
+Custo: um instante de carregamento antes do redirecionamento, em vez de bloqueio
+no edge.
 
 ## Estado Redux — `authSlice`
 
 ```typescript
 interface AuthState {
   user: User | null;
-  token: string | null;
+  status: "unknown" | "authenticated" | "anonymous";
 }
 ```
 
-Actions: `setCredentials`, `setToken`, `logout`.
+Actions: `sessionEstablished`, `sessionCleared`. **Não existe `token`.**
 
-## Endpoints stub — `authApi`
+`status` distingue "ainda não perguntei" de "não há sessão" — sem isso o guard
+piscaria o login na cara de quem recarrega a página.
 
-| Endpoint | Método | Descrição |
-|----------|--------|-----------|
-| `/auth/login` | POST | Autentica usuário |
-| `/auth/register` | POST | Cria usuário |
-| `/auth/me` | GET | Retorna usuário atual |
-| `/auth/logout` | POST | Revoga sessão mock |
+`user` espelha `/auth/me`, o que é uma exceção consciente à regra de não
+duplicar server state em slice: `authState()` em `test/helpers/auth.ts` pré-carrega
+este slice e é usado por outros módulos. A hidratação é unidirecional — só o
+`SessionProvider` escreve — então não há duas fontes concorrentes.
 
-Erros de `/auth/login` seguem `ApiError` com `code` estável e `details`
+## Endpoints
+
+| Endpoint | Método | Observação |
+|---|---|---|
+| `/auth/csrf` | GET | Emite o token a ecoar em `x-csrf-token` |
+| `/auth/login` | POST | 204 sem corpo |
+| `/auth/refresh` | POST | Rotação; só o interceptor chama |
+| `/auth/logout` | POST | Revoga a família no servidor |
+| `/auth/me` | GET | Fonte de verdade da sessão |
+| `/users` | POST | **Criação por ADMIN.** Não existe `/auth/register` |
+
+Erros de login seguem `ApiError` com `code` estável e `details`
 (`failedAttempts`, `remainingAttempts`, `lockedAt`, `unlockAt`, `occurredAt`).
 A UI decide o texto pelo `code` — nunca pela `message`.
 
-## Credenciais demo
+## Não existe auto-registro
 
-| Email | Senha | Papel | Destino | Recursos owned |
-|-------|-------|-------|---------|----------------|
-| `owner@batente.dev` | `password123` | ADMIN | `/inicio` | resource-1, resource-2 |
-| `viewer@batente.dev` | `password123` | OPERADOR | `/portaria` | resource-3 |
-| `rh@construtoravale.com.br` | `password123` | RH | `/inicio` | — |
+A rota pública `/register` e o `RegisterForm` foram **removidos**. Criar usuário
+é `POST /users`, exclusivo de ADMIN: o servidor responde `403` a qualquer outro
+papel, mesmo chamando a API direto, e o caso de uso confere a permissão de novo
+por dentro — não só o middleware.
 
-Qualquer e-mail começando com `offline` (ex.: `offline@batente.dev`) simula
-servidor fora do ar, sem contar tentativa.
+## Transporte
 
-## Autorização por ownership
+`baseApi` usa uma instância só; `hybridBaseQuery.ts` roteia por prefixo:
 
-Regra: **editar/excluir** só quando `resource.ownerId === user.id`.
+- `/auth/*` e `/users` → backend real (`credentials: "include"`, CSRF, refresh);
+- resto → mock (`mockBaseQuery` em dev, `fetchBaseQuery` + MSW em teste).
 
-Centralizado em:
+Instância única de propósito: duas fariam `invalidatesTags: ["Auth"]` não
+alcançar consultas registradas na outra. E `reducerPath` **precisa** ser o
+literal `"api"` — parametrizá-lo alarga o genérico do RTK Query para `string` e
+o `RootState` dele vira uma assinatura de índice que rejeita a chave `auth`,
+quebrando a tipagem do middleware com uma mensagem que não aponta para a causa.
 
-- `canMutate(resource, user)` — função pura testável
-- `useCanMutate(resource)` — hook para componentes
+## Papéis e destino pós-login
 
-**Proibido** espalhar checks de permissão inline nos JSX.
+| Papel | Rota |
+|---|---|
+| `ADMIN` | `/inicio` |
+| `RH` | `/inicio` |
+| `OPERADOR` | `/portaria` |
 
-## Migrar para backend real
+Mapa único em `AuthService.resolveLandingRoute`, aplicado **depois** de
+`/auth/me` confirmar o papel.
 
-Com **Plano B** (implementado), testes já usam `fetchBaseQuery` + MSW. Passos para produção:
+`resolveLandingRoute` devolve `/login` quando não há papel — é o destino correto
+para "não há sessão". Já `resolveAuthenticatedRoute` parte de uma sessão que
+existe e cujo papel pode ser ilegível: ela nunca devolve `/login`, e por isso é a
+usada por `useRedirectAuthenticated`. Trocar uma pela outra cria laço de
+redirecionamento.
 
-1. Substituir `mockBaseQuery` por `createFetchBaseQuery()` em `baseApi.ts` (fora de Vitest também)
-2. `prepareHeaders` já injeta JWT — ver `fetchBaseQuery.ts`
-3. Tratar `401` com re-auth (limpar slice + cookie + redirect `/login`)
-4. Devolver `code`/`details` nos erros de login — `AuthService.parseLoginFailure`
-   já aceita `FETCH_ERROR`/`TIMEOUT_ERROR` como indisponibilidade
-5. Manter mesma interface de `authApi` e `useAuth` — componentes intactos
-6. Desligar MSW em produção; handlers MSW servem como contrato de referência
+## Revogação
 
-Contrato LSP mock ↔ fetch: `test/contracts/basequery.substitution.test.ts`.
+Mudança de papel ou suspensão no banco reflete na requisição seguinte, sem novo
+login: o guard do backend relê `users` a cada rota autorizada. O access token
+tem 15 min, mas carrega uma época de revogação (`token_version`) conferida na
+mesma consulta — reúso de refresh detectado incrementa a época e mata os tokens
+vivos na hora.
 
-## Testes (Fase 3 — roadmap)
+## Configuração
 
-Regras testáveis densas — prioridade P0. Matriz completa em [`testing.md`](./testing.md).
+`NEXT_PUBLIC_API_URL` aponta para a origem da API e precisa constar em
+`CORS_ALLOWED_ORIGINS` no backend. Ver `.env.example`.
 
-| ID | Regra | Tipo |
-|---|---|---|
-| E1 | Seis estados da tela de entrada | component + integration |
-| E2 | **RN-1.5** — senha errada = e-mail inexistente (texto, contador, latência) | integration |
-| E7 | `login` não lança — `parseLoginFailure` | unit |
-| E9 | `resolveLandingRoute` — mapa único por papel | unit |
-| E12 | middleware redireciona sem token | unit + e2e |
-| F1 | `canMutate` — matriz owner/não-owner | unit |
-
-Handlers MSW de auth: `test/mocks/handlers/auth.handlers.ts`. Helpers: `authState('ADMIN'|'RH'|'OPERADOR')`.
+Em dev, o backend ocupa a `:3000` — rode o front em outra porta:
+`npm run dev -- -p 3001`.

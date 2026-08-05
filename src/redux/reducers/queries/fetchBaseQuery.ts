@@ -1,6 +1,5 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { BaseQueryFn, FetchBaseQueryError } from "@reduxjs/toolkit/query";
-import type { RootState } from "@/redux/store";
 import type { ApiError, ApiErrorData, MockRequestArgs } from "@/types/api";
 
 /** Base URL interceptada pelo MSW em testes e, futuramente, pelo backend real. */
@@ -26,6 +25,15 @@ function normalizeFetchError(error: FetchBaseQueryError): ApiError {
   return { status, data };
 }
 
+/**
+ * Base query dos domínios que **ainda não** têm backend (acessos, dispositivos,
+ * ponto). Usada sob MSW nos testes.
+ *
+ * Não injeta mais `Authorization: Bearer`: não existe token acessível ao
+ * JavaScript para injetar. Quando estes domínios migrarem para o backend real,
+ * o caminho é `createAuthBaseQuery` — que carrega a sessão por cookie, com
+ * `credentials: "include"` e CSRF.
+ */
 export function createFetchBaseQuery(): BaseQueryFn<
   MockRequestArgs,
   unknown,
@@ -33,13 +41,6 @@ export function createFetchBaseQuery(): BaseQueryFn<
 > {
   const inner = fetchBaseQuery({
     baseUrl: API_BASE_URL,
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.token;
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
   });
 
   return async (args, api, extraOptions) => {

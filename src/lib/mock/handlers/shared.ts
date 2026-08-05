@@ -1,6 +1,5 @@
 import type { ApiError, ApiErrorDetailValue } from "@/types/api";
 import type { RootState } from "@/redux/store";
-import { findUserByToken } from "@/lib/mock/mockDb";
 import type { User } from "@/types/auth";
 
 export type HandlerResult = { data: unknown } | { error: ApiError };
@@ -35,19 +34,26 @@ export function unavailable(): { error: ApiError } {
   });
 }
 
-export function getTokenFromState(state: RootState): string | null {
-  return state.auth.token;
-}
+export type UserOrError = { user: User } | { error: { error: ApiError } };
 
-export type UserOrError =
-  | { user: User; token: string }
-  | { error: { error: ApiError } };
-
+/**
+ * Autenticação dos domínios que seguem no mock.
+ *
+ * Deixou de olhar token: o estado do cliente não tem mais nenhum, porque a
+ * sessão real vive em cookie `HttpOnly`. O que resta observável é o usuário que
+ * o `SessionProvider` hidratou a partir de `GET /auth/me` — e para um mock isso
+ * basta, já que ele nunca foi barreira de segurança de verdade.
+ *
+ * `status` é conferido junto: durante `unknown` a sessão ainda não foi
+ * resolvida, e responder 200 aí faria o mock parecer mais permissivo que o
+ * backend.
+ */
 export function requireAuth(state: RootState): UserOrError {
-  const token = getTokenFromState(state);
-  const user = findUserByToken(token);
-  if (!user || !token) {
+  const { user, status } = state.auth;
+
+  if (!user || status !== "authenticated") {
     return { error: error(401, "Unauthorized") };
   }
-  return { user, token };
+
+  return { user };
 }
