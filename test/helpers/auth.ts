@@ -1,6 +1,7 @@
 import type { User } from "@/types/auth";
 import type { RootState } from "@/redux/store";
 import { testDb } from "../mocks/db";
+import { setMockSession } from "../mocks/handlers/auth.handlers";
 
 const USER_BY_ROLE = {
   ADMIN: () => testDb.users[0]!,
@@ -28,6 +29,12 @@ export const users: Record<"ADMIN" | "RH" | "OPERADOR", User> = {
  * ficaria em "resolvendo" para sempre e nenhuma tela renderizaria no teste.
  */
 export function authState(role: keyof typeof users): Partial<RootState> {
+  // Abre a sessão também no servidor simulado. Sem isto, o cliente diria
+  // "autenticado" e a rede responderia 401: desde que o token saiu do estado, a
+  // única prova de sessão que os handlers têm é a deles próprios. Reiniciado no
+  // `afterEach` junto com o resto do estado de módulo.
+  setMockSession(role);
+
   return {
     auth: {
       user: toSafeUser(USER_BY_ROLE[role]()),

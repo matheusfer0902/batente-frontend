@@ -59,7 +59,9 @@ describe("tela de entrada", () => {
   });
 
   it("I2 · confirma a sessão mesmo com o /auth/me de boot respondendo 401 depois do login", async () => {
-    // arrange — a consulta de boot fica presa até o teste liberar
+    // arrange — ordem imposta pelo servidor, não por tempo: a consulta de boot
+    // só responde depois que o login foi aceito, e responde o 401 obsoleto que
+    // ela teria devolvido de todo modo (foi emitida antes do login).
     let liberarBoot: () => void = () => undefined;
     const bootPreso = new Promise<void>((resolve) => {
       liberarBoot = resolve;
@@ -80,24 +82,24 @@ describe("tela de entrada", () => {
         () => jsonError(401, "refresh_invalido"),
         { once: true },
       ),
+      http.post(`${AUTH_API_BASE_URL}/auth/login`, () => {
+        // O servidor passa a reconhecer a sessão e só então solta o boot.
+        setMockSession("ADMIN");
+        liberarBoot();
+        return new Response(null, { status: 204 });
+      }),
     );
 
     const { user } = renderWithProviders(<LoginForm />, { withSession: true });
 
-    // act — submete com o boot ainda pendente e só depois libera a resposta obsoleta
+    // act
     await submeter(user);
-    await screen.findByRole("status");
-    // O aviso de "verificando" sai quando o POST liquida; o boot segue preso, que
-    // é exatamente o instante em que a confirmação pegava carona no 401 obsoleto.
-    await waitFor(() => {
-      expect(screen.queryByRole("status")).not.toBeInTheDocument();
-    });
-    liberarBoot();
 
-    // assert
+    // assert — apesar do 401 obsoleto, a sessão se confirma e a viagem termina
     await waitFor(() => {
       expect(router.replace).toHaveBeenCalledWith("/inicio");
     });
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 
   it("I2 · quem já tem sessão não fica preso no formulário", async () => {

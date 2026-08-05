@@ -53,6 +53,17 @@ function toSessionUser(user: (typeof testDb.users)[number]): SessionUser {
   };
 }
 
+/**
+ * Sessão corrente do mock, para os handlers dos outros domínios.
+ *
+ * Eles não podem mais autenticar por `Authorization: Bearer`: com cookie
+ * `HttpOnly` não existe token que o cliente possa enviar. Quem sabe se há sessão
+ * é o servidor — aqui, este módulo.
+ */
+export function getMockSession(): SessionUser | null {
+  return sessaoAtual;
+}
+
 /** Permite ao teste abrir ou encerrar sessão sem passar pelo login. */
 export function setMockSession(role: UserRole | null): void {
   if (role === null) {

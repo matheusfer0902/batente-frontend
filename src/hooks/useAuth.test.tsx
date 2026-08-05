@@ -5,6 +5,7 @@ import { http } from "msw";
 import { Provider } from "react-redux";
 import { I18nextProvider } from "react-i18next";
 import { AUTH_API_BASE_URL } from "@/redux/reducers/queries/authBaseQuery";
+import { SessionProvider } from "@/components/auth/SessionProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { server } from "../../test/setup/msw.server";
 import { makeTestStore } from "../../test/helpers/store";
@@ -40,13 +41,23 @@ vi.mock("next/navigation", () => ({
 const ADMIN = { email: "owner@batente.dev", password: "password123" };
 const OPERADOR = { email: "viewer@batente.dev", password: "password123" };
 
+/**
+ * Compõe como a aplicação compõe: o `SessionProvider` acompanha o hook.
+ *
+ * Não é conveniência — é quem traduz a resposta de `GET /auth/me` em
+ * `sessionEstablished`/`sessionCleared`. Sem ele o `status` do slice fica em
+ * `unknown` para sempre, e `isSessionResolved` nunca vira `true`.
+ */
 function createWrapper(preloadedState?: ReturnType<typeof authState>) {
   const store = makeTestStore(preloadedState);
 
   return function Wrapper({ children }: { children: ReactNode }) {
     return (
       <Provider store={store}>
-        <I18nextProvider i18n={getTestI18n()}>{children}</I18nextProvider>
+        <I18nextProvider i18n={getTestI18n()}>
+          <SessionProvider />
+          {children}
+        </I18nextProvider>
       </Provider>
     );
   };

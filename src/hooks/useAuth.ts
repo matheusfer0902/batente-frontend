@@ -8,6 +8,7 @@ import {
   sessionEstablished,
 } from "@/redux/reducers/slices/authSlice";
 import {
+  authApi,
   useGetMeQuery,
   useLoginMutation,
   useLogoutMutation,
@@ -63,17 +64,24 @@ export function useAuth() {
    * chave de cache única e deduplicada, então depois que a primeira liquida não
    * pode restar nenhuma consulta anterior ao login pendente.
    */
-  const confirmarSessao = useCallback(async () => {
-    const primeira = await refetchMe()
-      .unwrap()
-      .catch(() => null);
+  const consultarMe = useCallback(async () => {
+    // `try` em volta da chamada, não só `.catch` na promessa: `refetch()` lança
+    // **sincronamente** ("Cannot refetch a query that has not been started yet")
+    // quando a assinatura já não existe — caso de quem desmonta a tela no meio do
+    // login. Sem isto, `login()` rejeitaria e o erro escaparia do formulário.
+    try {
+      return await refetchMe().unwrap();
+    } catch {
+      return null;
+    }
+  }, [refetchMe]);
 
+  const confirmarSessao = useCallback(async () => {
+    const primeira = await consultarMe();
     if (primeira) return primeira;
 
-    return await refetchMe()
-      .unwrap()
-      .catch(() => null);
-  }, [refetchMe]);
+    return await consultarMe();
+  }, [consultarMe]);
 
   /**
    * Não lança em falha: a tela de entrada trata os estados a partir de
@@ -119,6 +127,18 @@ export function useAuth() {
 
     resetAuthClientState();
     setConfirmationFailure(null);
+
+    // Descarta o cache de servidor por dois motivos, e o segundo é o que
+    // realmente exige isto:
+    //
+    // 1. **Higiene.** Nada do usuário que saiu deve sobrar para o próximo que
+    //    entrar nesta aba — listagens, nomes, qualquer resposta já buscada.
+    // 2. **Uma consulta em voo ressuscitaria a sessão.** Se o `/auth/me` do boot
+    //    ainda não voltou, sua resposta (bem-sucedida, emitida antes do logout)
+    //    chega depois do `sessionCleared` e o `SessionProvider` hidrata de novo,
+    //    deixando a interface autenticada logo após o usuário pedir para sair.
+    //    Zerar a fatia da API descarta essa resposta e força uma pergunta nova.
+    dispatch(authApi.util.resetApiState());
     dispatch(sessionCleared());
     router.replace("/login");
   }, [dispatch, logoutMutation, router]);
