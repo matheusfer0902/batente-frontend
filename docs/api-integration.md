@@ -14,7 +14,7 @@ Exemplo — painel + totem no backend real, cadastros ainda no mock:
 
 ```env
 NEXT_PUBLIC_API_URL=http://192.168.1.10:3000
-NEXT_PUBLIC_REAL_API_PREFIXES=/access-events,/devices,/timekeeping
+NEXT_PUBLIC_REAL_API_PREFIXES=/access-events,/devices,/timekeeping,/absences
 ```
 
 `/auth` e `/users` **sempre** vão ao backend real. Ver [`auth.md`](./auth.md).
@@ -91,6 +91,26 @@ Campos críticos para hardware:
 ### `GET /access-events/:id`
 
 Detalhe imutável. **404** se não existir. Sem POST/PUT/DELETE.
+
+### `GET /timekeeping/mirror?month=&q=`
+
+Espelho de ponto (lista por colaborador/mês). **Implementado no backend.**
+
+**Resposta 200:** `TimesheetMirrorListItem[]` — ver `src/types/timekeeping.ts`.
+
+### `GET /absences?status=&q=`
+
+Lista ausências aprovadas. **Implementado no backend.**
+
+**Resposta 200:** `AbsenceListItem[]` — ver `src/types/absence.ts`.
+
+### `GET /absences/:id`
+
+Detalhe de uma ausência.
+
+---
+
+## Ponto (legado mock — pending/adjustments)
 
 ### `GET /timekeeping/pending`
 
@@ -229,18 +249,6 @@ Ficha com abas (detalhe futuro).
 ## Escalas (Bloco 5)
 
 ### `GET /schedules` · CRUD em `/schedules/:id`
-
----
-
-## Ponto (Blocos 6–8)
-
-### `GET /timekeeping/mirror?employeeId=&month=`
-
-Espelho de ponto.
-
-### `GET /absences` · `/absences/:id` · POST
-
-Ausências e tipos (`/absences/types`).
 
 ---
 
