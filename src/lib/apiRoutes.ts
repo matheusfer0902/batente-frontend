@@ -56,6 +56,16 @@ function usesFullCutover(): boolean {
   return mode === "real";
 }
 
+/** Prefixos que permanecem no mock mesmo com `API_MODE=real` (backend pendente). */
+export function parseMockOverridePrefixes(): readonly string[] {
+  const fromEnv = process.env.NEXT_PUBLIC_MOCK_PREFIXES?.trim();
+  if (!fromEnv) return [];
+  return fromEnv
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
+
 /** Prefixos que usam `authBaseQuery` (backend real) nesta build. */
 export function resolveRealApiPrefixes(): readonly string[] {
   if (usesFullCutover()) {

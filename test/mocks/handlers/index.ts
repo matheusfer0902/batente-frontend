@@ -29,12 +29,21 @@ function employeeSummary() {
 
 function listAccessEvents(request: Request) {
   const url = new URL(request.url);
+  const page = Math.max(Number(url.searchParams.get("page")) || 1, 1);
   const limitParam = Number(url.searchParams.get("limit"));
   const limit =
     Number.isFinite(limitParam) && limitParam > 0
       ? limitParam
-      : mockDb.accessEvents.length;
-  return mockDb.accessEvents.slice(0, limit);
+      : mockDb.accessEvents.length || 1;
+  const start = (page - 1) * limit;
+  const items = mockDb.accessEvents.slice(start, start + limit);
+
+  return {
+    items,
+    total: mockDb.accessEvents.length,
+    page,
+    limit,
+  };
 }
 
 function filterAbsences(request: Request) {

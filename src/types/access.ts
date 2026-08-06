@@ -76,6 +76,14 @@ export interface AccessStats {
   offline: number;
 }
 
+/** Resposta paginada de `GET /access-events` no backend real. */
+export interface AccessEventPage {
+  items: AccessEvent[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
 export const accessTimelineTones = ["done", "denied", "muted"] as const;
 export type AccessTimelineTone = (typeof accessTimelineTones)[number];
 
@@ -100,6 +108,7 @@ export interface AccessQueryArgs {
 
 /** Filtros estendidos para `/historico`. */
 export interface AccessHistoryQueryArgs extends AccessQueryArgs {
+  page?: number;
   from?: string;
   to?: string;
   decision?: AccessDecision | "ALL";

@@ -1,5 +1,6 @@
 import type {
   AccessEvent,
+  AccessEventPage,
   AccessTimelineStep,
   AccessTimelineTone,
 } from "@/types/access";
@@ -178,5 +179,36 @@ export class AccessService {
       titleKey: "timeline.upload.title",
       bodyKey: "timeline.upload.online",
     };
+  }
+
+  /**
+   * Normaliza listagem de acessos: backend real devolve página; mock legado devolvia array.
+   */
+  static parseEventListResponse(data: unknown): AccessEventPage {
+    if (Array.isArray(data)) {
+      return {
+        items: data,
+        total: data.length,
+        page: 1,
+        limit: data.length || 1,
+      };
+    }
+
+    if (
+      data &&
+      typeof data === "object" &&
+      "items" in data &&
+      Array.isArray((data as AccessEventPage).items)
+    ) {
+      const page = data as AccessEventPage;
+      return {
+        items: page.items,
+        total: page.total ?? page.items.length,
+        page: page.page ?? 1,
+        limit: page.limit ?? (page.items.length || 1),
+      };
+    }
+
+    return { items: [], total: 0, page: 1, limit: 1 };
   }
 }

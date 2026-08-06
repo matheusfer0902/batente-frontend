@@ -1,6 +1,6 @@
 import type { BaseQueryFn } from "@reduxjs/toolkit/query";
 import type { ApiError, MockRequestArgs } from "@/types/api";
-import { resolveRealApiPrefixes } from "@/lib/apiRoutes";
+import { parseMockOverridePrefixes, resolveRealApiPrefixes } from "@/lib/apiRoutes";
 import { createAuthBaseQuery } from "@/redux/reducers/queries/authBaseQuery";
 
 /**
@@ -25,8 +25,11 @@ export function createHybridBaseQuery(
     const usaBackendReal = resolveRealApiPrefixes().some((prefixo) =>
       path.startsWith(prefixo),
     );
+    const permaneceMock = parseMockOverridePrefixes().some((prefixo: string) =>
+      path.startsWith(prefixo),
+    );
 
-    return usaBackendReal
+    return usaBackendReal && !permaneceMock
       ? real(args, api, extraOptions)
       : mockBaseQuery(args, api, extraOptions);
   };
