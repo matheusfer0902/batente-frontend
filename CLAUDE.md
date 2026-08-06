@@ -6,10 +6,12 @@ Instruções obrigatórias para Claude Code neste repositório.
 
 Antes de implementar qualquer código, leia:
 
-1. [`docs/architecture.md`](./docs/architecture.md) — arquitetura e camadas
-2. [`docs/solid-principles.md`](./docs/solid-principles.md) — SOLID aplicado
-3. [`docs/feature-module-guide.md`](./docs/feature-module-guide.md) — molde para novas features
-4. [`docs/testing.md`](./docs/testing.md) — arquitetura de testes (Vitest, MSW, Playwright)
+1. [`docs/agents.md`](./docs/agents.md) — guia central de agentes (Claude, Cursor, Codex)
+2. [`docs/screens.md`](./docs/screens.md) — **telas e design** (se a tarefa envolve UI ou página)
+3. [`docs/architecture.md`](./docs/architecture.md) — arquitetura e camadas
+4. [`docs/solid-principles.md`](./docs/solid-principles.md) — SOLID aplicado
+5. [`docs/feature-module-guide.md`](./docs/feature-module-guide.md) — molde para novas features
+6. [`docs/testing.md`](./docs/testing.md) — arquitetura de testes (Vitest, MSW, Playwright)
 
 ## Stack
 
@@ -63,9 +65,18 @@ services → types
 - Mockar hooks orquestradores em testes de integração
 - Assertar `dispatch` ou estado interno RTK em testes
 
+## Telas e design
+
+- Fonte de verdade visual: [`docs/Telas Batente.zip`](./docs/Telas%20Batente.zip) — ver [`docs/screens.md`](./docs/screens.md)
+- **Antes de implementar ou alterar qualquer tela**, consultar o zip e verificar o código existente
+- O que está no zip é a especificação; o código converge para ela, nunca o contrário
+- Se a tela não existir no zip, derivar de blocos vizinhos + identidade visual
+
 ## Novo módulo de feature
 
 Replicar molde `resource`: types → schema → *Api → *Service → use* → components → pages → locales → **testes** (passo 11).
+
+Passo 0: consultar [`docs/screens.md`](./docs/screens.md) e o bloco correspondente no zip.
 
 ## Verificação antes de concluir
 

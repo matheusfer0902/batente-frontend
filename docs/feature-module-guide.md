@@ -8,7 +8,8 @@ Ordem recomendada de implementação:
 
 ```mermaid
 flowchart LR
-    A[types] --> B[schema Zod]
+    Z[0. Consultar design] --> A[types]
+    A --> B[schema Zod]
     B --> C[RTK Query API]
     C --> D[Service]
     D --> E[Hook]
@@ -17,6 +18,17 @@ flowchart LR
     G --> H[locales i18n]
     H --> I[testes]
 ```
+
+## 0. Consultar design — `docs/screens.md` + `docs/Telas Batente.zip`
+
+Antes de criar types ou código, verificar se a tela alvo já existe no design:
+
+1. Consultar [screens.md](./screens.md) → localizar bloco e IDs de tela
+2. Abrir o HTML correspondente em [`Telas Batente.zip`](./Telas%20Batente.zip)
+3. Verificar implementação existente em `src/app/` e `src/components/`
+4. Se já implementada → evoluir alinhado ao design; se placeholder → substituir `ModulePlaceholder`
+
+Ver também [agents.md](./agents.md) para o fluxo completo do agente.
 
 ## 1. Tipos — `src/types/<feature>.ts`
 

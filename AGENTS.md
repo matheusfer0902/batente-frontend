@@ -10,12 +10,23 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 Leia antes de codar:
 
+- [`docs/agents.md`](./docs/agents.md) — guia central de agentes
+- [`docs/screens.md`](./docs/screens.md) — **telas e design** (se a tarefa envolve UI ou página)
 - [`docs/architecture.md`](./docs/architecture.md)
 - [`docs/solid-principles.md`](./docs/solid-principles.md)
 - [`docs/feature-module-guide.md`](./docs/feature-module-guide.md)
 - [`docs/testing.md`](./docs/testing.md) — **antes de escrever testes**
 
-Regras Cursor detalhadas: [`.cursor/rules/`](./.cursor/rules/) — inclui [`testing.mdc`](./.cursor/rules/testing.mdc)
+Regras Cursor detalhadas: [`.cursor/rules/`](./.cursor/rules/) — inclui [`design-screens.mdc`](./.cursor/rules/design-screens.mdc) e [`testing.mdc`](./.cursor/rules/testing.mdc)
+
+## Telas e design
+
+Antes de implementar ou alterar qualquer página:
+
+1. Consultar [`docs/screens.md`](./docs/screens.md) → localizar bloco e IDs de tela
+2. Abrir o HTML correspondente em [`docs/Telas Batente.zip`](./docs/Telas%20Batente.zip)
+3. Verificar o que já existe no código (`page.tsx`, `components/`, `hooks/`)
+4. Evoluir implementação existente ou substituir `ModulePlaceholder` — nunca inventar layout que contradiga o design
 
 ## Arquitetura (resumo)
 

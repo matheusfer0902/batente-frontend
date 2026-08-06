@@ -1,0 +1,27 @@
+---
+description: Telas BATENTE — consultar design antes de implementar UI
+alwaysApply: true
+---
+
+# Telas e design
+
+Leia `docs/screens.md` antes de implementar ou alterar qualquer página ou componente de UI de domínio.
+
+## Fonte de verdade
+
+`docs/Telas Batente.zip` — especificação visual e de UX. O código converge para o design; nunca o contrário.
+
+## Checklist obrigatório
+
+1. Identificar a rota/página alvo
+2. Consultar `docs/screens.md` → localizar bloco e IDs de tela
+3. Abrir o HTML correspondente dentro do zip
+4. Verificar o que já existe no código (`page.tsx`, `components/`, `hooks/`)
+5. Se implementado → evoluir alinhado ao design
+6. Se placeholder → substituir `ModulePlaceholder` seguindo o design
+7. Se ausente no zip → derivar de telas vizinhas + identidade visual
+
+## Proibido
+
+- Inventar layout ou fluxo que contradiga o design quando a tela existe no zip
+- Implementar UI de página sem verificar o zip e o código existente primeiro

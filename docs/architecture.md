@@ -244,6 +244,7 @@ Detalhes em [auth.md](./auth.md).
 
 ## Tema e identidade visual
 
+- Fonte de design completa: [screens.md](./screens.md) e [`Telas Batente.zip`](./Telas%20Batente.zip)
 - Tokens BATENTE em `globals.css` (`@theme inline`)
 - **Escuro fixo**: `forcedTheme="dark"` em `Providers`. Entrada e painel só
   têm design escuro; o `ThemeProvider` continua no lugar para quando existir
