@@ -8,16 +8,27 @@ Contrato esperado entre frontend e backend. Em **dev**, rotas não listadas em
 | Variável | Efeito |
 |---|---|
 | `NEXT_PUBLIC_API_URL` | Origem do backend (default `http://localhost:3000`) |
-| `NEXT_PUBLIC_REAL_API_PREFIXES` | Prefixos extras no backend real, separados por vírgula |
+| `NEXT_PUBLIC_API_MODE` | `real` — **todas** as rotas de painel vão ao backend |
+| `NEXT_PUBLIC_REAL_API_PREFIXES` | Cutover parcial: lista separada por vírgula ou `all` |
 
-Exemplo — painel + totem no backend real, cadastros ainda no mock:
+### Modo real (hardware / demo)
 
 ```env
-NEXT_PUBLIC_API_URL=http://192.168.1.10:3000
+NEXT_PUBLIC_API_URL=http://192.168.0.10:3000
+NEXT_PUBLIC_API_MODE=real
+```
+
+Inclui: `/access-events`, `/devices`, `/timekeeping`, `/absences`, `/departments`,
+`/employees`, `/badges`, `/schedules`, `/audit-logs`, `/gate`, `/settings` e
+`GET /users`.
+
+### Cutover parcial
+
+```env
 NEXT_PUBLIC_REAL_API_PREFIXES=/access-events,/devices,/timekeeping,/absences
 ```
 
-`/auth` e `/users` **sempre** vão ao backend real. Ver [`auth.md`](./auth.md).
+`/auth` e rotas sob `/users` **sempre** vão ao backend real. Ver [`auth.md`](./auth.md).
 
 ## Enums compartilhados
 
