@@ -1,0 +1,18 @@
+{
+  "title": "Users",
+  "subtitle": "{{count}} on record",
+  "create": "New user",
+  "table": {
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "lastLoginAt": "Last login"
+  },
+  "role": {
+    "ADMIN": "Administrator",
+    "RH": "HR",
+    "OPERADOR": "Operator"
+  },
+  "neverLoggedIn": "Never logged in",
+  "empty": "No users on record."
+}

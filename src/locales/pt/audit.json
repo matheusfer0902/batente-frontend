@@ -1,0 +1,13 @@
+{
+  "title": "Auditoria",
+  "subtitle": "{{count}} registros · somente leitura",
+  "table": {
+    "occurredAt": "Quando",
+    "actor": "Quem",
+    "action": "Ação",
+    "resource": "Recurso",
+    "summary": "Resumo"
+  },
+  "note": "A auditoria não tem botão de editar nem de excluir — nem para o ADMIN.",
+  "empty": "Nenhum registro de auditoria."
+}

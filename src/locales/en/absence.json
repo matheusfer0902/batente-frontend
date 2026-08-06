@@ -1,0 +1,24 @@
+{
+  "title": "Absences",
+  "subtitle": "{{count}} on record",
+  "create": "New absence",
+  "filters": {
+    "search": "Search by person or type",
+    "status": "Status"
+  },
+  "status": {
+    "ALL": "All",
+    "ACTIVE": "Active",
+    "SCHEDULED": "Scheduled",
+    "ENDED": "Ended"
+  },
+  "table": {
+    "employee": "Employee",
+    "type": "Type",
+    "period": "Period",
+    "days": "Days",
+    "status": "Status"
+  },
+  "empty": "No absences on record.",
+  "emptyFiltered": "No absences match the filters."
+}

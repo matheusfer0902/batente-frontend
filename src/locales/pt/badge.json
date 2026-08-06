@@ -1,0 +1,25 @@
+{
+  "title": "Crachás",
+  "subtitle": "{{count}} cadastrados",
+  "create": "Vincular crachá",
+  "filters": {
+    "search": "Buscar pelo código do crachá",
+    "status": "Situação"
+  },
+  "status": {
+    "ALL": "Todos",
+    "ACTIVE": "Em uso",
+    "BLOCKED": "Bloqueados",
+    "UNASSIGNED": "Livres"
+  },
+  "table": {
+    "code": "Código",
+    "employee": "Vinculado a",
+    "department": "Departamento",
+    "linkedAt": "Vinculado em",
+    "passCount": "Passagens",
+    "status": "Situação"
+  },
+  "empty": "Nenhum crachá cadastrado.",
+  "emptyFiltered": "Nenhum crachá corresponde aos filtros."
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Configurações",
+  "subtitle": "{{count}} parâmetros · somente leitura",
+  "table": {
+    "category": "Grupo",
+    "label": "Parâmetro",
+    "value": "Valor"
+  },
+  "note": "Mudanças aqui vão para a auditoria e chegam ao totem na próxima sincronização.",
+  "empty": "Nenhuma configuração disponível."
+}

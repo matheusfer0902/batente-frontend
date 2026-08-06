@@ -1,5 +1,5 @@
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { EmployeeList } from "@/components/employee/EmployeeList";
 
 export default function ColaboradoresPage() {
-  return <ModulePlaceholder navKey="colaboradores" />;
+  return <EmployeeList />;
 }

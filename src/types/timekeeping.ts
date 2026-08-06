@@ -17,3 +17,27 @@ export interface AdjustmentSummary {
 export interface TimekeepingQueryArgs {
   scenario?: string;
 }
+
+export const timesheetMirrorStatuses = ["OPEN", "PENDING", "CONSOLIDATED"] as const;
+export type TimesheetMirrorStatus = (typeof timesheetMirrorStatuses)[number];
+
+export interface TimesheetMirrorEmployee {
+  id: string;
+  name: string;
+  registration: string;
+  department: string;
+}
+
+export interface TimesheetMirrorListItem {
+  id: string;
+  employee: TimesheetMirrorEmployee;
+  month: string;
+  status: TimesheetMirrorStatus;
+  workedHours: string;
+  balanceHours: string;
+}
+
+export interface TimesheetMirrorQueryArgs {
+  month?: string;
+  q?: string;
+}

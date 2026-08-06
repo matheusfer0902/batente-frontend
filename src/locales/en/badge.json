@@ -1,0 +1,25 @@
+{
+  "title": "Badges",
+  "subtitle": "{{count}} on record",
+  "create": "Link badge",
+  "filters": {
+    "search": "Search by badge code",
+    "status": "Status"
+  },
+  "status": {
+    "ALL": "All",
+    "ACTIVE": "In use",
+    "BLOCKED": "Blocked",
+    "UNASSIGNED": "Unassigned"
+  },
+  "table": {
+    "code": "Code",
+    "employee": "Linked to",
+    "department": "Department",
+    "linkedAt": "Linked on",
+    "passCount": "Passes",
+    "status": "Status"
+  },
+  "empty": "No badges on record.",
+  "emptyFiltered": "No badges match the filters."
+}

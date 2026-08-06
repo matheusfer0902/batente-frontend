@@ -4,10 +4,18 @@ import type { ApiError, MockRequestArgs } from "@/types/api";
 
 export const API_TAG_TYPES = [
   "Auth",
-  "Resource",
   "Access",
   "Device",
   "Timekeeping",
+  "Department",
+  "Employee",
+  "Badge",
+  "Schedule",
+  "Absence",
+  "AuditLog",
+  "Gate",
+  "Settings",
+  "User",
 ] as const;
 
 /**

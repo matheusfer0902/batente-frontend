@@ -1,0 +1,24 @@
+{
+  "title": "Ausências",
+  "subtitle": "{{count}} registradas",
+  "create": "Nova ausência",
+  "filters": {
+    "search": "Buscar por pessoa ou tipo",
+    "status": "Situação"
+  },
+  "status": {
+    "ALL": "Todas",
+    "ACTIVE": "Em curso",
+    "SCHEDULED": "Agendadas",
+    "ENDED": "Encerradas"
+  },
+  "table": {
+    "employee": "Colaborador",
+    "type": "Tipo",
+    "period": "Período",
+    "days": "Dias",
+    "status": "Situação"
+  },
+  "empty": "Nenhuma ausência registrada.",
+  "emptyFiltered": "Nenhuma ausência corresponde aos filtros."
+}

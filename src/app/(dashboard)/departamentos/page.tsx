@@ -1,5 +1,5 @@
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { DepartmentList } from "@/components/department/DepartmentList";
 
 export default function DepartamentosPage() {
-  return <ModulePlaceholder navKey="departamentos" />;
+  return <DepartmentList />;
 }

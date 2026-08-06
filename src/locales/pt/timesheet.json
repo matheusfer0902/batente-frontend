@@ -1,0 +1,25 @@
+{
+  "title": "Espelho de ponto",
+  "subtitle": "{{count}} espelhos",
+  "filters": {
+    "search": "Buscar por colaborador",
+    "month": "Mês",
+    "allMonths": "Todos os meses"
+  },
+  "table": {
+    "employee": "Colaborador",
+    "registration": "Matrícula",
+    "department": "Departamento",
+    "month": "Mês",
+    "workedHours": "Horas trabalhadas",
+    "balanceHours": "Saldo",
+    "status": "Situação"
+  },
+  "status": {
+    "OPEN": "Aberto",
+    "PENDING": "Pendente",
+    "CONSOLIDATED": "Consolidado"
+  },
+  "empty": "Nenhum espelho encontrado.",
+  "emptyFiltered": "Nenhum espelho corresponde aos filtros."
+}

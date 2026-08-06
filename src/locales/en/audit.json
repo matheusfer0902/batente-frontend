@@ -1,0 +1,13 @@
+{
+  "title": "Audit log",
+  "subtitle": "{{count}} entries · read-only",
+  "table": {
+    "occurredAt": "When",
+    "actor": "Who",
+    "action": "Action",
+    "resource": "Resource",
+    "summary": "Summary"
+  },
+  "note": "The audit log has no edit or delete actions — not even for ADMIN.",
+  "empty": "No audit entries on record."
+}

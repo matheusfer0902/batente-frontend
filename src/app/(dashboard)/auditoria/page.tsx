@@ -1,10 +1,5 @@
-import { RoleGuard } from "@/components/auth/RoleGuard";
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { AuditLogList } from "@/components/audit/AuditLogList";
 
 export default function AuditoriaPage() {
-  return (
-    <RoleGuard roles={["ADMIN"]}>
-      <ModulePlaceholder navKey="auditoria" />
-    </RoleGuard>
-  );
+  return <AuditLogList />;
 }

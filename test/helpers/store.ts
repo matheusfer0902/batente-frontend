@@ -1,10 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { baseApi } from "@/redux/reducers/queries/baseApi";
-import "@/redux/reducers/queries/authApi";
-import "@/redux/reducers/queries/resourceApi";
-import "@/redux/reducers/queries/accessApi";
-import "@/redux/reducers/queries/deviceApi";
-import "@/redux/reducers/queries/timekeepingApi";
+import "@/redux/store";
 import { rootReducer, type RootState } from "@/redux/store";
 
 export type TestStore = ReturnType<typeof makeTestStore>;

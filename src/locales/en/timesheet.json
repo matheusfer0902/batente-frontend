@@ -1,0 +1,25 @@
+{
+  "title": "Timesheet",
+  "subtitle": "{{count}} timesheets",
+  "filters": {
+    "search": "Search by employee",
+    "month": "Month",
+    "allMonths": "All months"
+  },
+  "table": {
+    "employee": "Employee",
+    "registration": "Registration",
+    "department": "Department",
+    "month": "Month",
+    "workedHours": "Worked hours",
+    "balanceHours": "Balance",
+    "status": "Status"
+  },
+  "status": {
+    "OPEN": "Open",
+    "PENDING": "Pending",
+    "CONSOLIDATED": "Consolidated"
+  },
+  "empty": "No timesheets found.",
+  "emptyFiltered": "No timesheets match the filters."
+}

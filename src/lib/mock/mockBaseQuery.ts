@@ -2,9 +2,20 @@ import type { BaseQueryFn } from "@reduxjs/toolkit/query";
 import type { ApiError, MockRequestArgs } from "@/types/api";
 import type { RootState } from "@/redux/store";
 import { handleAccessRoute } from "@/lib/mock/handlers/accessHandler";
+import { handleAbsenceRoute } from "@/lib/mock/handlers/absenceHandler";
+import { handleAuditRoute } from "@/lib/mock/handlers/auditHandler";
+import { handleBadgeRoute } from "@/lib/mock/handlers/badgeHandler";
 import { handleDeviceRoute } from "@/lib/mock/handlers/deviceHandler";
+import { handleGateRoute } from "@/lib/mock/handlers/gateHandler";
+import {
+  handleDepartmentRoute,
+  handleEmployeeRoute,
+} from "@/lib/mock/handlers/peopleHandler";
 import { handleResourceRoute } from "@/lib/mock/handlers/resourceHandler";
+import { handleScheduleRoute } from "@/lib/mock/handlers/scheduleHandler";
+import { handleSettingsRoute } from "@/lib/mock/handlers/settingsHandler";
 import { handleTimekeepingRoute } from "@/lib/mock/handlers/timekeepingHandler";
+import { handleUserRoute } from "@/lib/mock/handlers/userHandler";
 import {
   notFound,
   type HandlerResult,
@@ -23,10 +34,20 @@ type RouteHandler = (request: MockRequest) => HandlerResult;
 const ROUTES: ReadonlyArray<[string, RouteHandler]> = [
   // "/auth" não aparece aqui: a autenticação fala com o backend real
   // (ver redux/reducers/queries/authBaseApi.ts).
+  // Handler legado usado só pelo contract test H1 (substituição de base query).
   ["/resources", handleResourceRoute],
   ["/access-events", handleAccessRoute],
   ["/devices", handleDeviceRoute],
   ["/timekeeping", handleTimekeepingRoute],
+  ["/departments", handleDepartmentRoute],
+  ["/employees", handleEmployeeRoute],
+  ["/badges", handleBadgeRoute],
+  ["/schedules", handleScheduleRoute],
+  ["/absences", handleAbsenceRoute],
+  ["/audit-logs", handleAuditRoute],
+  ["/gate", handleGateRoute],
+  ["/settings", handleSettingsRoute],
+  ["/users", handleUserRoute],
 ];
 
 function parseUrl(url: string): { path: string; searchParams: URLSearchParams } {

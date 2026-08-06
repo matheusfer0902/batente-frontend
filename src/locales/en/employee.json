@@ -1,0 +1,45 @@
+{
+  "title": "Employees",
+  "subtitle": "{{total}} registered · {{active}} active",
+  "create": "New employee",
+  "alerts": {
+    "missingBadge": {
+      "title": "Active without badge",
+      "body": "They cannot pass at the gate.",
+      "filter": "Filter →"
+    },
+    "missingSchedule": {
+      "title": "Active without schedule",
+      "body": "Timekeeping cannot be calculated.",
+      "filter": "Filter →"
+    }
+  },
+  "filters": {
+    "search": "Search by name or ID",
+    "status": "Status",
+    "department": "Department",
+    "allDepartments": "All"
+  },
+  "status": {
+    "ALL": "All",
+    "ACTIVE": "Active",
+    "VACATION": "Vacation",
+    "INACTIVE": "Inactive"
+  },
+  "table": {
+    "employee": "Employee",
+    "registration": "ID",
+    "department": "Department",
+    "badge": "Badge",
+    "schedule": "Schedule",
+    "status": "Status"
+  },
+  "badge": {
+    "missing": "NO BADGE"
+  },
+  "schedule": {
+    "missing": "NO SCHEDULE"
+  },
+  "empty": "No employees found.",
+  "emptyFiltered": "No results for current filters."
+}

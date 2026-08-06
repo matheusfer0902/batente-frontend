@@ -57,3 +57,15 @@ export function requireAuth(state: RootState): UserOrError {
 
   return { user };
 }
+
+/** Rotas exclusivas de ADMIN no mock. */
+export function requireAdmin(state: RootState): UserOrError {
+  const authResult = requireAuth(state);
+  if ("error" in authResult) return authResult;
+
+  if (authResult.user.role !== "ADMIN") {
+    return { error: error(403, "Forbidden", "forbidden") };
+  }
+
+  return authResult;
+}

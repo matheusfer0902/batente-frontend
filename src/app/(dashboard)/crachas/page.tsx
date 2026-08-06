@@ -1,5 +1,5 @@
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { BadgeList } from "@/components/badge/BadgeList";
 
 export default function CrachasPage() {
-  return <ModulePlaceholder navKey="crachas" />;
+  return <BadgeList />;
 }

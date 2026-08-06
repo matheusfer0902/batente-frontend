@@ -1,0 +1,23 @@
+{
+  "title": "Portaria",
+  "subtitle": "Entradas recentes",
+  "deviceOnline": "Totem funcionando",
+  "deviceOffline": "Totem offline",
+  "queueTitle": "Entrando agora",
+  "credentialsTitle": "Crachás bloqueáveis",
+  "actions": {
+    "release": "Liberar entrada",
+    "block": "Bloquear crachá"
+  },
+  "table": {
+    "code": "Crachá",
+    "employee": "Vinculado a",
+    "status": "Situação"
+  },
+  "credentialStatus": {
+    "ACTIVE": "Ativo",
+    "BLOCKED": "Bloqueado"
+  },
+  "emptyQueue": "Ninguém passou recentemente.",
+  "emptyCredentials": "Nenhum crachá disponível."
+}

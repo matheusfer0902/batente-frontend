@@ -1,0 +1,20 @@
+{
+  "title": "Escalas",
+  "subtitle": "{{count}} cadastradas",
+  "create": "Nova escala",
+  "table": {
+    "name": "Escala",
+    "weeklyHours": "Carga semanal",
+    "employeeCount": "Pessoas",
+    "shiftType": "Tipo",
+    "actions": "Ações"
+  },
+  "shiftType": {
+    "FIXED": "Fixa",
+    "ROTATING": "Revezamento"
+  },
+  "actions": {
+    "edit": "Editar"
+  },
+  "empty": "Nenhuma escala cadastrada."
+}

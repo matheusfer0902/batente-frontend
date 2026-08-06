@@ -1,0 +1,23 @@
+{
+  "title": "Gate",
+  "subtitle": "Recent entries",
+  "deviceOnline": "Terminal online",
+  "deviceOffline": "Terminal offline",
+  "queueTitle": "Entering now",
+  "credentialsTitle": "Blockable badges",
+  "actions": {
+    "release": "Release entry",
+    "block": "Block badge"
+  },
+  "table": {
+    "code": "Badge",
+    "employee": "Linked to",
+    "status": "Status"
+  },
+  "credentialStatus": {
+    "ACTIVE": "Active",
+    "BLOCKED": "Blocked"
+  },
+  "emptyQueue": "No recent entries.",
+  "emptyCredentials": "No badges available."
+}

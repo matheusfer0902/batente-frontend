@@ -1,3 +1,4 @@
+import type { TimesheetMirrorListItem } from "@/types/timekeeping";
 import { mockDb } from "@/lib/mock/mockDb";
 import {
   notFound,
@@ -9,10 +10,31 @@ import {
 
 const DEGRADED = "degradado";
 
+function filterTimesheetMirrors(searchParams: URLSearchParams): TimesheetMirrorListItem[] {
+  let items = [...mockDb.timesheetMirrors];
+
+  const month = searchParams.get("month");
+  if (month) {
+    items = items.filter((mirror) => mirror.month === month);
+  }
+
+  const q = searchParams.get("q")?.trim().toLowerCase();
+  if (q) {
+    items = items.filter(
+      (mirror) =>
+        mirror.employee.name.toLowerCase().includes(q) ||
+        mirror.employee.registration.includes(q),
+    );
+  }
+
+  return items;
+}
+
 export function handleTimekeepingRoute({
   path,
   method,
   scenario,
+  searchParams,
   state,
 }: MockRequest): HandlerResult {
   const authResult = requireAuth(state);
@@ -40,6 +62,10 @@ export function handleTimekeepingRoute({
       return unavailable();
     }
     return { data: mockDb.adjustmentSummary };
+  }
+
+  if (path === "/timekeeping/mirror" && method === "GET") {
+    return { data: filterTimesheetMirrors(searchParams) };
   }
 
   return notFound();

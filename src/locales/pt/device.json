@@ -1,4 +1,26 @@
 {
+  "list": {
+    "title": "Dispositivos",
+    "subtitle": "{{count}} totem em operação",
+    "subtitle_plural": "{{count}} totens em operação",
+    "create": "Novo dispositivo",
+    "open": "Abrir →",
+    "singleNote": "Hoje é um só",
+    "singleNoteBody": "A tela já é lista porque a segunda portaria entra em obra em setembro. Cada totem tem chave própria e sincroniza de forma independente.",
+    "recentEvents": "Últimos eventos do dispositivo",
+    "metrics": {
+      "status": "Situação",
+      "lastContact": "Último contato",
+      "firmware": "Firmware",
+      "clock": "Relógio",
+      "queue": "Fila de envio"
+    }
+  },
+  "eventTone": {
+    "ok": "OK",
+    "contingency": "CONTINGÊNCIA",
+    "error": "ERRO"
+  },
   "status": {
     "online": "Totem online",
     "offline": "Totem offline"

@@ -2,16 +2,20 @@
 export const accessDecisions = ["GRANTED", "DENIED"] as const;
 export type AccessDecision = (typeof accessDecisions)[number];
 
-/** Por que a porta não abriu. `null` quando foi concedido. */
+/** Por que a porta não abriu. `null` quando foi concedido. Alinhado ao banco. */
 export const accessDenialReasons = [
-  "UNKNOWN_BADGE",
-  "BLOCKED_BADGE",
-  "OUT_OF_SCHEDULE",
+  "UNKNOWN_UID",
+  "CREDENTIAL_BLOCKED",
+  "CREDENTIAL_EXPIRED",
+  "EMPLOYEE_INACTIVE",
+  "OUTSIDE_WINDOW",
+  "DUPLICATE_READ",
+  "DEVICE_UNAUTHORIZED",
 ] as const;
 export type AccessDenialReason = (typeof accessDenialReasons)[number];
 
 /** Estado da rede no momento da leitura — o totem decide nos dois. */
-export const accessModes = ["ONLINE", "OFFLINE"] as const;
+export const accessModes = ["ONLINE", "OFFLINE", "REMOTE"] as const;
 export type AccessMode = (typeof accessModes)[number];
 
 export const timeEntryKinds = ["ENTRY", "EXIT"] as const;
@@ -92,4 +96,14 @@ export interface AccessTimelineStep {
 export interface AccessQueryArgs {
   limit?: number;
   scenario?: string;
+}
+
+/** Filtros estendidos para `/historico`. */
+export interface AccessHistoryQueryArgs extends AccessQueryArgs {
+  from?: string;
+  to?: string;
+  decision?: AccessDecision | "ALL";
+  mode?: AccessMode | "ALL";
+  q?: string;
+  badgeCode?: string;
 }

@@ -6,11 +6,21 @@ export const defaultNS = "common";
 export const namespaces = [
   "common",
   "auth",
-  "resource",
   "nav",
   "dashboard",
   "device",
   "access",
+  "department",
+  "employee",
+  "badge",
+  "schedule",
+  "absence",
+  "audit",
+  "gate",
+  "settings",
+  "user",
+  "history",
+  "timesheet",
 ] as const;
 export type Namespace = (typeof namespaces)[number];
 

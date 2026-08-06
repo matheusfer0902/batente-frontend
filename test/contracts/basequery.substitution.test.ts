@@ -14,13 +14,8 @@ describe("basequery.substitution", () => {
     const token = createSession(userId);
     mockDb.sessions[token] = userId;
 
-    // O lado `fetch` não manda `Authorization` — não há token acessível ao JS —,
-    // então a sessão precisa existir no servidor simulado para os dois
-    // transportes verem a mesma listagem.
     setMockSession("ADMIN");
 
-    // Sem `token`: a sessão real é cookie `HttpOnly` e não é representável no
-    // estado do cliente. `status` é o que o mock e os guards observam agora.
     const preloadedState = {
       auth: {
         user: {
@@ -35,16 +30,16 @@ describe("basequery.substitution", () => {
 
     const mockApi = createBaseApi(mockBaseQuery).injectEndpoints({
       endpoints: (builder) => ({
-        getResources: builder.query<unknown, void>({
-          query: () => ({ url: "/resources", method: "GET" }),
+        getDepartments: builder.query<unknown, void>({
+          query: () => ({ url: "/departments", method: "GET" }),
         }),
       }),
     });
 
     const fetchApi = createBaseApi(createFetchBaseQuery()).injectEndpoints({
       endpoints: (builder) => ({
-        getResources: builder.query<unknown, void>({
-          query: () => ({ url: "/resources", method: "GET" }),
+        getDepartments: builder.query<unknown, void>({
+          query: () => ({ url: "/departments", method: "GET" }),
         }),
       }),
     });
@@ -68,10 +63,10 @@ describe("basequery.substitution", () => {
     });
 
     const mockResult = await mockStore.dispatch(
-      mockApi.endpoints.getResources.initiate(),
+      mockApi.endpoints.getDepartments.initiate(),
     );
     const fetchResult = await fetchStore.dispatch(
-      fetchApi.endpoints.getResources.initiate(),
+      fetchApi.endpoints.getDepartments.initiate(),
     );
 
     expect(mockResult.data).toBeDefined();

@@ -14,13 +14,18 @@
     "denied": "BARRADO"
   },
   "denial": {
-    "UNKNOWN_BADGE": "CRACHÁ DESCONHECIDO",
-    "BLOCKED_BADGE": "CRACHÁ BLOQUEADO",
-    "OUT_OF_SCHEDULE": "FORA DA ESCALA"
+    "UNKNOWN_UID": "CRACHÁ DESCONHECIDO",
+    "CREDENTIAL_BLOCKED": "CRACHÁ BLOQUEADO",
+    "CREDENTIAL_EXPIRED": "CRACHÁ VENCIDO",
+    "EMPLOYEE_INACTIVE": "ACESSO NEGADO",
+    "OUTSIDE_WINDOW": "FORA DO HORÁRIO",
+    "DUPLICATE_READ": "REPique",
+    "DEVICE_UNAUTHORIZED": "TERMINAL INATIVO"
   },
   "mode": {
     "ONLINE": "ONLINE",
-    "OFFLINE": "OFFLINE"
+    "OFFLINE": "OFFLINE",
+    "REMOTE": "REMOTO"
   },
   "outcome": {
     "doorOpened": "porta aberta · ponto registrado",

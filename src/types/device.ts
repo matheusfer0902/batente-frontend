@@ -14,6 +14,39 @@ export interface Device {
   pendingUploads: number;
 }
 
+/** Item da listagem admin — estende telemetria básica. */
+export interface DeviceListItem extends Device {
+  firmwareVersion: string;
+  serialNumber: string;
+}
+
+export interface DeviceEventLog {
+  id: string;
+  occurredAt: string;
+  message: string;
+  tone: "ok" | "contingency" | "error";
+}
+
+export interface DeviceDetail extends DeviceListItem {
+  doorOpenMs: number;
+  badgeListVersion: string;
+  badgeListSyncedAt: string | null;
+  recentEvents: DeviceEventLog[];
+}
+
+export interface CreateDevicePayload {
+  name: string;
+  location: string;
+  serialNumber: string;
+  doorOpenMs: number;
+}
+
+export interface CreateDeviceResult {
+  device: DeviceListItem;
+  /** Exibida uma única vez após cadastro ou rotação. */
+  secretKey: string;
+}
+
 export interface DeviceQueryArgs {
   scenario?: string;
 }

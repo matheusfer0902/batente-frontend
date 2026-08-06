@@ -1,5 +1,5 @@
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { AccessHistoryList } from "@/components/history/AccessHistoryList";
 
 export default function HistoricoPage() {
-  return <ModulePlaceholder navKey="historico" />;
+  return <AccessHistoryList />;
 }

@@ -1,0 +1,32 @@
+{
+  "title": "Histórico de acessos",
+  "subtitle": "{{count}} registros · somente leitura",
+  "export": "Exportar",
+  "openMonitor": "Abrir monitor",
+  "filters": {
+    "person": "Pessoa",
+    "badgeCode": "Código do crachá",
+    "decision": "Decisão",
+    "mode": "Modo"
+  },
+  "decision": {
+    "ALL": "Todos",
+    "GRANTED": "Concedidos",
+    "DENIED": "Barrados"
+  },
+  "modeFilter": {
+    "ALL": "Todos",
+    "ONLINE": "Online",
+    "OFFLINE": "Offline"
+  },
+  "table": {
+    "occurredAt": "Quando",
+    "employee": "Pessoa",
+    "badge": "Crachá",
+    "decision": "Decisão",
+    "mode": "Modo",
+    "device": "Totem"
+  },
+  "empty": "Nenhum acesso no período.",
+  "emptyFiltered": "Nenhum acesso corresponde aos filtros."
+}

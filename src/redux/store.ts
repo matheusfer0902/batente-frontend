@@ -2,10 +2,18 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "@/redux/reducers/slices/authSlice";
 import { baseApi } from "@/redux/reducers/queries/baseApi";
 import "@/redux/reducers/queries/authApi";
-import "@/redux/reducers/queries/resourceApi";
 import "@/redux/reducers/queries/accessApi";
 import "@/redux/reducers/queries/deviceApi";
 import "@/redux/reducers/queries/timekeepingApi";
+import "@/redux/reducers/queries/departmentApi";
+import "@/redux/reducers/queries/employeeApi";
+import "@/redux/reducers/queries/badgeApi";
+import "@/redux/reducers/queries/scheduleApi";
+import "@/redux/reducers/queries/absenceApi";
+import "@/redux/reducers/queries/auditApi";
+import "@/redux/reducers/queries/gateApi";
+import "@/redux/reducers/queries/settingsApi";
+import "@/redux/reducers/queries/userApi";
 
 /**
  * Uma instância de API só. O roteamento entre backend real e mock acontece

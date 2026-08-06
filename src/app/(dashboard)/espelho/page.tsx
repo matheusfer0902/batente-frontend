@@ -1,5 +1,5 @@
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { TimesheetMirrorList } from "@/components/timesheet/TimesheetMirrorList";
 
 export default function EspelhoPage() {
-  return <ModulePlaceholder navKey="espelho" />;
+  return <TimesheetMirrorList />;
 }

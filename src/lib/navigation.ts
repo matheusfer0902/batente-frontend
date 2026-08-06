@@ -69,7 +69,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
 ];
 
 /** Rotas do painel que não aparecem na navegação. */
-const EXTRA_PROTECTED_PATHS = ["/acessos", "/portaria", "/resources"] as const;
+const EXTRA_PROTECTED_PATHS = ["/acessos", "/portaria"] as const;
 
 export const PROTECTED_PATHS: readonly string[] = [
   ...NAV_GROUPS.flatMap((group) => group.items.map((item) => item.href)),

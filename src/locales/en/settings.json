@@ -1,0 +1,11 @@
+{
+  "title": "Settings",
+  "subtitle": "{{count}} parameters · read-only",
+  "table": {
+    "category": "Group",
+    "label": "Parameter",
+    "value": "Value"
+  },
+  "note": "Changes here go to the audit log and reach the terminal on the next sync.",
+  "empty": "No settings available."
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Departments",
+  "subtitle": "{{count}} registered",
+  "create": "New department",
+  "table": {
+    "name": "Department",
+    "people": "People",
+    "actions": "Actions"
+  },
+  "actions": {
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "deleteBlocked": {
+    "title": "{{name}} cannot be deleted",
+    "body": "{{count}} people are linked. Move them before deleting.",
+    "viewPeople": "View {{count}} people"
+  },
+  "empty": "No departments yet.",
+  "form": {
+    "name": "Department name",
+    "save": "Save",
+    "cancel": "Cancel"
+  }
+}

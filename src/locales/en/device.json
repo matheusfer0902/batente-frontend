@@ -1,4 +1,26 @@
 {
+  "list": {
+    "title": "Devices",
+    "subtitle": "{{count}} terminal in operation",
+    "subtitle_plural": "{{count}} terminals in operation",
+    "create": "New device",
+    "open": "Open →",
+    "singleNote": "Only one today",
+    "singleNoteBody": "The screen is already a list because the second gate opens in September. Each terminal has its own key and syncs independently.",
+    "recentEvents": "Recent device events",
+    "metrics": {
+      "status": "Status",
+      "lastContact": "Last contact",
+      "firmware": "Firmware",
+      "clock": "Clock",
+      "queue": "Upload queue"
+    }
+  },
+  "eventTone": {
+    "ok": "OK",
+    "contingency": "CONTINGENCY",
+    "error": "ERROR"
+  },
   "status": {
     "online": "Terminal online",
     "offline": "Terminal offline"

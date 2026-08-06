@@ -1,0 +1,20 @@
+{
+  "title": "Schedules",
+  "subtitle": "{{count}} on record",
+  "create": "New schedule",
+  "table": {
+    "name": "Schedule",
+    "weeklyHours": "Weekly hours",
+    "employeeCount": "People",
+    "shiftType": "Type",
+    "actions": "Actions"
+  },
+  "shiftType": {
+    "FIXED": "Fixed",
+    "ROTATING": "Rotating"
+  },
+  "actions": {
+    "edit": "Edit"
+  },
+  "empty": "No schedules on record."
+}

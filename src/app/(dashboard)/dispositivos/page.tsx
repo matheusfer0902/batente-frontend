@@ -1,10 +1,5 @@
-import { RoleGuard } from "@/components/auth/RoleGuard";
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { DeviceAdminList } from "@/components/device/DeviceAdminList";
 
 export default function DispositivosPage() {
-  return (
-    <RoleGuard roles={["ADMIN"]}>
-      <ModulePlaceholder navKey="dispositivos" />
-    </RoleGuard>
-  );
+  return <DeviceAdminList />;
 }

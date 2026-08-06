@@ -14,13 +14,18 @@
     "denied": "DENIED"
   },
   "denial": {
-    "UNKNOWN_BADGE": "UNKNOWN BADGE",
-    "BLOCKED_BADGE": "BLOCKED BADGE",
-    "OUT_OF_SCHEDULE": "OUT OF SCHEDULE"
+    "UNKNOWN_UID": "UNKNOWN BADGE",
+    "CREDENTIAL_BLOCKED": "BLOCKED BADGE",
+    "CREDENTIAL_EXPIRED": "EXPIRED BADGE",
+    "EMPLOYEE_INACTIVE": "ACCESS DENIED",
+    "OUTSIDE_WINDOW": "OUT OF SCHEDULE",
+    "DUPLICATE_READ": "DUPLICATE READ",
+    "DEVICE_UNAUTHORIZED": "DEVICE INACTIVE"
   },
   "mode": {
     "ONLINE": "ONLINE",
-    "OFFLINE": "OFFLINE"
+    "OFFLINE": "OFFLINE",
+    "REMOTE": "REMOTE"
   },
   "outcome": {
     "doorOpened": "door opened · time recorded",

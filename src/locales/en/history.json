@@ -1,0 +1,32 @@
+{
+  "title": "Access history",
+  "subtitle": "{{count}} entries · read-only",
+  "export": "Export",
+  "openMonitor": "Open monitor",
+  "filters": {
+    "person": "Person",
+    "badgeCode": "Badge code",
+    "decision": "Decision",
+    "mode": "Mode"
+  },
+  "decision": {
+    "ALL": "All",
+    "GRANTED": "Granted",
+    "DENIED": "Denied"
+  },
+  "modeFilter": {
+    "ALL": "All",
+    "ONLINE": "Online",
+    "OFFLINE": "Offline"
+  },
+  "table": {
+    "occurredAt": "When",
+    "employee": "Person",
+    "badge": "Badge",
+    "decision": "Decision",
+    "mode": "Mode",
+    "device": "Terminal"
+  },
+  "empty": "No access events in the period.",
+  "emptyFiltered": "No access events match the filters."
+}

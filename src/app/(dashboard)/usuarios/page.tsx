@@ -1,10 +1,5 @@
-import { RoleGuard } from "@/components/auth/RoleGuard";
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { UserList } from "@/components/user/UserList";
 
 export default function UsuariosPage() {
-  return (
-    <RoleGuard roles={["ADMIN"]}>
-      <ModulePlaceholder navKey="usuarios" />
-    </RoleGuard>
-  );
+  return <UserList />;
 }

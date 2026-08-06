@@ -1,0 +1,18 @@
+{
+  "title": "Usuários",
+  "subtitle": "{{count}} cadastrados",
+  "create": "Novo usuário",
+  "table": {
+    "name": "Nome",
+    "email": "E-mail",
+    "role": "Papel",
+    "lastLoginAt": "Último acesso"
+  },
+  "role": {
+    "ADMIN": "Administrador",
+    "RH": "RH",
+    "OPERADOR": "Operador"
+  },
+  "neverLoggedIn": "Nunca acessou",
+  "empty": "Nenhum usuário cadastrado."
+}

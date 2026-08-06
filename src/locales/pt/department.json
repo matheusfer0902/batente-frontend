@@ -1,0 +1,25 @@
+{
+  "title": "Departamentos",
+  "subtitle": "{{count}} cadastrados",
+  "create": "Novo departamento",
+  "table": {
+    "name": "Departamento",
+    "people": "Pessoas",
+    "actions": "Ações"
+  },
+  "actions": {
+    "edit": "Editar",
+    "delete": "Excluir"
+  },
+  "deleteBlocked": {
+    "title": "{{name}} não pode ser excluído",
+    "body": "Há {{count}} pessoas vinculadas. Mova-as para outro departamento antes de excluir.",
+    "viewPeople": "Ver as {{count}} pessoas"
+  },
+  "empty": "Nenhum departamento cadastrado.",
+  "form": {
+    "name": "Nome do departamento",
+    "save": "Salvar",
+    "cancel": "Cancelar"
+  }
+}

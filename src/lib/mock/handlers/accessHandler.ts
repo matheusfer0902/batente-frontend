@@ -14,6 +14,68 @@ import {
  */
 const SILENT_SCENARIOS = new Set(["offline", "sem-movimento"]);
 
+function filterAccessEvents(request: MockRequest) {
+  const { searchParams, scenario } = request;
+  if (scenario && SILENT_SCENARIOS.has(scenario)) {
+    return [];
+  }
+
+  let items = [...mockDb.accessEvents];
+
+  const decision = searchParams.get("decision");
+  if (decision && decision !== "ALL") {
+    items = items.filter((event) => event.decision === decision);
+  }
+
+  const mode = searchParams.get("mode");
+  if (mode && mode !== "ALL") {
+    items = items.filter((event) => event.mode === mode);
+  }
+
+  const from = searchParams.get("from");
+  if (from) {
+    const fromTime = new Date(from).getTime();
+    if (!Number.isNaN(fromTime)) {
+      items = items.filter(
+        (event) => new Date(event.occurredAt).getTime() >= fromTime,
+      );
+    }
+  }
+
+  const to = searchParams.get("to");
+  if (to) {
+    const toTime = new Date(to).getTime();
+    if (!Number.isNaN(toTime)) {
+      items = items.filter(
+        (event) => new Date(event.occurredAt).getTime() <= toTime,
+      );
+    }
+  }
+
+  const badgeCode = searchParams.get("badgeCode")?.trim().toLowerCase();
+  if (badgeCode) {
+    items = items.filter((event) =>
+      event.badgeCode.toLowerCase().includes(badgeCode),
+    );
+  }
+
+  const q = searchParams.get("q")?.trim().toLowerCase();
+  if (q) {
+    items = items.filter(
+      (event) =>
+        event.employee?.name.toLowerCase().includes(q) ||
+        event.employee?.registration.includes(q) ||
+        event.badgeCode.toLowerCase().includes(q),
+    );
+  }
+
+  const limitParam = Number(searchParams.get("limit"));
+  const limit =
+    Number.isFinite(limitParam) && limitParam > 0 ? limitParam : items.length;
+
+  return items.slice(0, limit);
+}
+
 export function handleAccessRoute({
   path,
   method,
@@ -36,15 +98,7 @@ export function handleAccessRoute({
   }
 
   if (path === "/access-events") {
-    if (scenario && SILENT_SCENARIOS.has(scenario)) {
-      return { data: [] };
-    }
-    const limitParam = Number(searchParams.get("limit"));
-    const limit =
-      Number.isFinite(limitParam) && limitParam > 0
-        ? limitParam
-        : mockDb.accessEvents.length;
-    return { data: mockDb.accessEvents.slice(0, limit) };
+    return { data: filterAccessEvents({ path, method, body: undefined, searchParams, scenario, state }) };
   }
 
   const detailMatch = path.match(/^\/access-events\/([^/]+)$/);

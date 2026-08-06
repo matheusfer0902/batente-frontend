@@ -1,0 +1,45 @@
+{
+  "title": "Colaboradores",
+  "subtitle": "{{total}} cadastrados · {{active}} ativos",
+  "create": "Novo colaborador",
+  "alerts": {
+    "missingBadge": {
+      "title": "Ativos sem crachá",
+      "body": "Não conseguem passar na portaria.",
+      "filter": "Filtrar →"
+    },
+    "missingSchedule": {
+      "title": "Ativos sem escala",
+      "body": "O ponto delas não pode ser calculado.",
+      "filter": "Filtrar →"
+    }
+  },
+  "filters": {
+    "search": "Buscar por nome ou matrícula",
+    "status": "Situação",
+    "department": "Departamento",
+    "allDepartments": "Todos"
+  },
+  "status": {
+    "ALL": "Todos",
+    "ACTIVE": "Ativos",
+    "VACATION": "Férias",
+    "INACTIVE": "Inativos"
+  },
+  "table": {
+    "employee": "Colaborador",
+    "registration": "Matrícula",
+    "department": "Departamento",
+    "badge": "Crachá",
+    "schedule": "Escala",
+    "status": "Situação"
+  },
+  "badge": {
+    "missing": "SEM CRACHÁ"
+  },
+  "schedule": {
+    "missing": "SEM ESCALA"
+  },
+  "empty": "Nenhum colaborador encontrado.",
+  "emptyFiltered": "Nenhum resultado para os filtros atuais."
+}

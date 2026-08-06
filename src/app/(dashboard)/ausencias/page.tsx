@@ -1,5 +1,5 @@
-import { ModulePlaceholder } from "@/components/shared/ModulePlaceholder";
+import { AbsenceList } from "@/components/absence/AbsenceList";
 
 export default function AusenciasPage() {
-  return <ModulePlaceholder navKey="ausencias" />;
+  return <AbsenceList />;
 }
