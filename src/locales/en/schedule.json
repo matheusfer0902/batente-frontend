@@ -1,20 +1,68 @@
 {
   "title": "Schedules",
-  "subtitle": "{{count}} on record",
+  "subtitle": "{{count}} workday templates",
   "create": "New schedule",
-  "table": {
-    "name": "Schedule",
-    "weeklyHours": "Weekly hours",
-    "employeeCount": "People",
-    "shiftType": "Type",
-    "actions": "Actions"
-  },
-  "shiftType": {
+  "createTitle": "Create schedule",
+  "editTitle": "Edit schedule",
+  "empty": "No schedules yet.",
+  "inactive": "Unused",
+  "load": "Load",
+  "tolerance": "Tolerance",
+  "minBreak": "Min. break",
+  "minutes": "{{count}}min",
+  "people": "{{count}} people",
+  "weeklyLoad": "Weekly load {{value}} · recalculated as you type",
+  "detailSubtitle": "Load {{load}} · tolerance {{tolerance}}min · minimum break {{minBreak}}min",
+  "reach": "This schedule is used by {{count}} people. Changes apply from today and do not recalculate closed months.",
+  "type": {
     "FIXED": "Fixed",
-    "ROTATING": "Rotating"
+    "FLEXIBLE": "Flexible"
   },
-  "actions": {
-    "edit": "Edit"
+  "form": {
+    "name": "Schedule name",
+    "namePlaceholder": "Administrative 44h",
+    "type": "Type",
+    "tolerance": "Tolerance (min)",
+    "minBreak": "Minimum break (min)",
+    "create": "Create schedule",
+    "saveChanges": "Save changes"
   },
-  "empty": "No schedules on record."
+  "grid": {
+    "title": "The seven days",
+    "hint": "Uncheck a day to make it a day off.",
+    "day": "Day",
+    "entry": "Clock in",
+    "breakStart": "Break start",
+    "breakEnd": "Break end",
+    "exit": "Clock out",
+    "total": "Total",
+    "dayOff": "Day off"
+  },
+  "weekday": {
+    "0": "Sunday",
+    "1": "Monday",
+    "2": "Tuesday",
+    "3": "Wednesday",
+    "4": "Thursday",
+    "5": "Friday",
+    "6": "Saturday"
+  },
+  "weekdayShort": {
+    "0": "SUN",
+    "1": "MON",
+    "2": "TUE",
+    "3": "WED",
+    "4": "THU",
+    "5": "FRI",
+    "6": "SAT"
+  },
+  "uncovered": {
+    "title": "{{count}} people without a schedule",
+    "body": "Until they have one, their time is not calculated and the month cannot be closed.",
+    "link": "See who"
+  },
+  "errors": {
+    "nameTaken": "A schedule with this name already exists.",
+    "noWorkday": "The schedule needs at least one working day."
+  }
 }

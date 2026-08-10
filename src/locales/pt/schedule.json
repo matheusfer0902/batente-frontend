@@ -1,20 +1,68 @@
 {
   "title": "Escalas",
-  "subtitle": "{{count}} cadastradas",
+  "subtitle": "{{count}} modelos de jornada",
   "create": "Nova escala",
-  "table": {
-    "name": "Escala",
-    "weeklyHours": "Carga semanal",
-    "employeeCount": "Pessoas",
-    "shiftType": "Tipo",
-    "actions": "Ações"
-  },
-  "shiftType": {
+  "createTitle": "Criar escala",
+  "editTitle": "Editar escala",
+  "empty": "Nenhuma escala cadastrada.",
+  "inactive": "Sem uso",
+  "load": "Carga",
+  "tolerance": "Tolerância",
+  "minBreak": "Intervalo mín.",
+  "minutes": "{{count}}min",
+  "people": "{{count}} pessoas",
+  "weeklyLoad": "Carga semanal {{value}} · recalculada a cada campo preenchido",
+  "detailSubtitle": "Carga {{load}} · tolerância {{tolerance}}min · intervalo mínimo {{minBreak}}min",
+  "reach": "Esta escala é usada por {{count}} pessoas. A alteração vale a partir de hoje e não recalcula meses já fechados.",
+  "type": {
     "FIXED": "Fixa",
-    "ROTATING": "Revezamento"
+    "FLEXIBLE": "Flexível"
   },
-  "actions": {
-    "edit": "Editar"
+  "form": {
+    "name": "Nome da escala",
+    "namePlaceholder": "Administrativo 44h",
+    "type": "Tipo",
+    "tolerance": "Tolerância (min)",
+    "minBreak": "Intervalo mínimo (min)",
+    "create": "Criar escala",
+    "saveChanges": "Salvar alterações"
   },
-  "empty": "Nenhuma escala cadastrada."
+  "grid": {
+    "title": "Os sete dias",
+    "hint": "Desmarque o dia para torná-lo folga.",
+    "day": "Dia",
+    "entry": "Entrada",
+    "breakStart": "Saída almoço",
+    "breakEnd": "Volta almoço",
+    "exit": "Saída",
+    "total": "Total",
+    "dayOff": "Folga"
+  },
+  "weekday": {
+    "0": "Domingo",
+    "1": "Segunda",
+    "2": "Terça",
+    "3": "Quarta",
+    "4": "Quinta",
+    "5": "Sexta",
+    "6": "Sábado"
+  },
+  "weekdayShort": {
+    "0": "DOM",
+    "1": "SEG",
+    "2": "TER",
+    "3": "QUA",
+    "4": "QUI",
+    "5": "SEX",
+    "6": "SÁB"
+  },
+  "uncovered": {
+    "title": "{{count}} pessoas sem escala",
+    "body": "Enquanto não tiverem escala, o ponto delas não é calculado e o mês não fecha.",
+    "link": "Ver quem"
+  },
+  "errors": {
+    "nameTaken": "Já existe uma escala com este nome.",
+    "noWorkday": "A escala precisa de ao menos um dia útil."
+  }
 }

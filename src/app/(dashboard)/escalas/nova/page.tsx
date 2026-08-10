@@ -1,10 +1,10 @@
 import { RoleGuard } from "@/components/auth/RoleGuard";
-import { ScheduleList } from "@/components/schedule/ScheduleList";
+import { ScheduleForm } from "@/components/schedule/ScheduleForm";
 
-export default function EscalasPage() {
+export default function NovaEscalaPage() {
   return (
     <RoleGuard roles={["ADMIN", "RH"]}>
-      <ScheduleList />
+      <ScheduleForm />
     </RoleGuard>
   );
 }

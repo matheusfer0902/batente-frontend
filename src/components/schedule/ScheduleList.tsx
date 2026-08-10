@@ -1,20 +1,31 @@
 "use client";
 
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { DataBoundary } from "@/components/shared/DataBoundary";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { SkeletonText } from "@/components/ui/skeleton";
+import { useCanMutate } from "@/hooks/useCanMutate";
 import { useScheduleList } from "@/hooks/useScheduleList";
-import { cn } from "@/lib/utils";
+import { ScheduleService } from "@/services/ScheduleService";
+import type { Weekday } from "@/types/schedule";
 
-const HEAD =
-  "border-b border-border px-6 py-2.5 text-left font-mono text-[9.5px] font-medium uppercase tracking-[0.14em] text-moon";
-
+/**
+ * Tela 19 — os modelos de jornada.
+ *
+ * Cartão em vez de tabela porque o que identifica uma escala é o **resumo dos
+ * dias** ("SEG A SEX · 08:00–12:00 · 13:00–17:48"), que não cabe numa célula.
+ */
 export function ScheduleList() {
   const { t } = useTranslation(["schedule", "common"]);
-  const { schedules, isLoading, isError, retry } = useScheduleList();
+  const { schedules, uncoveredCount, isLoading, isError, retry } =
+    useScheduleList();
+  const { canCreate } = useCanMutate("schedules");
+
+  const nomeDoDia = (weekday: Weekday) => t(`schedule:weekdayShort.${weekday}`);
 
   return (
     <>
@@ -22,9 +33,11 @@ export function ScheduleList() {
         title={t("schedule:title")}
         subtitle={t("schedule:subtitle", { count: schedules.length })}
         actions={
-          <Button variant="default" size="entry" disabled>
-            {t("schedule:create")}
-          </Button>
+          canCreate ? (
+            <Button asChild size="entryInline">
+              <Link href="/escalas/nova">{t("schedule:create")}</Link>
+            </Button>
+          ) : null
         }
       />
 
@@ -35,43 +48,78 @@ export function ScheduleList() {
         isEmpty={schedules.length === 0}
         skeleton={<SkeletonText lines={6} className="p-6" />}
         empty={
-          <EmptyState title={t("schedule:empty")} className="mx-auto max-w-md py-16" />
+          <EmptyState
+            title={t("schedule:empty")}
+            className="mx-auto max-w-md py-16"
+          />
         }
       >
-        <div className="overflow-hidden rounded-sm border border-border bg-gun-950">
-          <table className="w-full border-collapse text-[13.5px]">
-            <thead>
-              <tr>
-                <th className={cn(HEAD, "w-[35%]")}>{t("schedule:table.name")}</th>
-                <th className={cn(HEAD, "w-[15%]")}>{t("schedule:table.weeklyHours")}</th>
-                <th className={cn(HEAD, "w-[15%]")}>{t("schedule:table.employeeCount")}</th>
-                <th className={cn(HEAD, "w-[20%]")}>{t("schedule:table.shiftType")}</th>
-                <th className={cn(HEAD, "text-right")}>{t("schedule:table.actions")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {schedules.map((schedule) => (
-                <tr
-                  key={schedule.id}
-                  className="border-b border-border last:border-b-0"
-                >
-                  <td className="px-6 py-3.5 text-linen">{schedule.name}</td>
-                  <td className="px-6 py-3.5 font-mono text-n300">
-                    {schedule.weeklyHours}h
-                  </td>
-                  <td className="px-6 py-3.5 font-mono text-n300">
-                    {schedule.employeeCount}
-                  </td>
-                  <td className="px-6 py-3.5 text-n300">
-                    {t(`schedule:shiftType.${schedule.shiftType}`)}
-                  </td>
-                  <td className="px-6 py-3.5 text-right font-mono text-[11px] text-n400">
-                    {t("schedule:actions.edit")}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="space-y-3 px-5 py-5 md:px-8">
+          {schedules.map((escala) => (
+            <Link
+              key={escala.id}
+              href={`/escalas/${escala.id}`}
+              className="block rounded-sm border border-border bg-gun-950 px-5 py-4 transition-colors hover:border-chart"
+            >
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <span className="font-display text-[15px] text-linen">
+                  {escala.name}
+                </span>
+                {!escala.active ? (
+                  <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-n400">
+                    {t("schedule:inactive")}
+                  </span>
+                ) : null}
+              </div>
+
+              <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.08em] text-n300">
+                {ScheduleService.summarize(escala.days, nomeDoDia)}
+              </p>
+
+              <div className="mt-2.5 flex flex-wrap gap-x-6 gap-y-1 font-mono text-[11px] text-n400">
+                <span>
+                  {t("schedule:load")}{" "}
+                  <span className="text-linen">
+                    {ScheduleService.formatMinutes(escala.weeklyMinutes)}
+                  </span>
+                </span>
+                <span>
+                  {t("schedule:tolerance")}{" "}
+                  <span className="text-linen">
+                    {t("schedule:minutes", { count: escala.toleranceMinutes })}
+                  </span>
+                </span>
+                <span>
+                  {t("schedule:minBreak")}{" "}
+                  <span className="text-linen">
+                    {escala.minBreakMinutes > 0
+                      ? t("schedule:minutes", { count: escala.minBreakMinutes })
+                      : "—"}
+                  </span>
+                </span>
+                <span>
+                  {t("schedule:people", { count: escala.employeeCount })}
+                </span>
+              </div>
+            </Link>
+          ))}
+
+          {/* O alerta da tela 19. Sem escala vigente a marcação não é
+              classificável (RN-6.2) e o mês não fecha. */}
+          {uncoveredCount > 0 ? (
+            <Alert variant="warning">
+              <strong className="block">
+                {t("schedule:uncovered.title", { count: uncoveredCount })}
+              </strong>
+              {t("schedule:uncovered.body")}{" "}
+              <Link
+                href="/colaboradores?filtro=sem-escala"
+                className="underline underline-offset-2"
+              >
+                {t("schedule:uncovered.link")}
+              </Link>
+            </Alert>
+          ) : null}
         </div>
       </DataBoundary>
     </>
