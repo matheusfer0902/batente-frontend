@@ -18,13 +18,6 @@ export interface ApiError {
   data: ApiErrorData;
 }
 
-export type TagType =
-  | "Auth"
-  | "Resource"
-  | "Access"
-  | "Device"
-  | "Timekeeping";
-
 /**
  * Cenários de demonstração do mock. Chegam pela query `?cenario=` da página e
  * viajam até o mock como query string — um backend real ignora o parâmetro.
