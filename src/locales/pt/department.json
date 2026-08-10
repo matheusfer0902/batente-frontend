@@ -20,6 +20,11 @@
   "form": {
     "name": "Nome do departamento",
     "save": "Salvar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "description": "O nome aparece na ficha de cada pessoa vinculada."
+  },
+  "edit": "Editar departamento",
+  "errors": {
+    "nameTaken": "Já existe um departamento com este nome."
   }
 }

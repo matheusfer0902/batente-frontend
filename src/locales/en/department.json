@@ -20,6 +20,11 @@
   "form": {
     "name": "Department name",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "description": "The name shows on every linked person's record."
+  },
+  "edit": "Edit department",
+  "errors": {
+    "nameTaken": "A department with this name already exists."
   }
 }
