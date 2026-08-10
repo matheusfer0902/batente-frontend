@@ -23,7 +23,9 @@
   },
   "status": {
     "online": "Totem online",
-    "offline": "Totem offline"
+    "offline": "Totem offline",
+    "ONLINE": "Online",
+    "OFFLINE": "Offline"
   },
   "card": {
     "title": "Totem · {{location}}",
@@ -35,5 +37,63 @@
     "clockDrift": "Desvio do relógio",
     "pendingUploads": "Não enviados",
     "approximate": "≈{{value}}"
+  },
+  "title": "Dispositivo",
+  "firmware": "Firmware",
+  "createTitle": "Novo dispositivo",
+  "createSubtitle": "Ao salvar, o sistema gera a chave secreta do totem.",
+  "lifecycle": {
+    "ACTIVE": "Ativo",
+    "MAINTENANCE": "Manutenção",
+    "DISABLED": "Desativado"
+  },
+  "actions": {
+    "rotate": "Rotacionar chave",
+    "maintenance": "Modo manutenção",
+    "leaveMaintenance": "Sair da manutenção"
+  },
+  "fields": {
+    "link": "Rede",
+    "lifecycle": "Situação",
+    "lastContact": "Último contato",
+    "clockDrift": "Desvio do relógio",
+    "pending": "Fila de envio",
+    "doorOpen": "Duração da trava",
+    "inherited": "(global)",
+    "badgeListVersion": "Lista de crachás",
+    "installedAt": "Instalado em",
+    "serial": "Número de série"
+  },
+  "form": {
+    "name": "Nome do dispositivo",
+    "location": "Local de instalação",
+    "serial": "Número de série",
+    "doorOpen": "Duração da trava (ms)",
+    "doorOpenHint": "Em branco herda a trava global das configurações.",
+    "keyNotice": "Ao salvar, o sistema gera a chave secreta do dispositivo. Ela é usada pelo firmware para se autenticar e não fica armazenada em texto em nenhum lugar.",
+    "submit": "Cadastrar e gerar chave"
+  },
+  "secret": {
+    "pageTitle": "Chave gerada",
+    "pageSubtitle": "Aparece uma única vez — copie agora.",
+    "title": "Copie agora — não haverá segunda chance",
+    "body": "Depois de sair desta tela a chave não pode ser exibida de novo. Quem perder precisa rotacionar a chave no detalhe do dispositivo.",
+    "snippetLabel": "secrets.h · {{name}}",
+    "pathHint": "Cole no secrets.h e regrave o hardware.ino.",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "confirm": "Confirmo que copiei a chave e guardei em local seguro.",
+    "confirmHint": "Marque a confirmação para habilitar",
+    "finish": "Concluir cadastro",
+    "done": "Concluir"
+  },
+  "rotate": {
+    "confirmTitle": "Rotacionar invalida a chave atual imediatamente",
+    "confirmBody": "O totem em campo passa a receber 401 até o secrets.h ser regravado com a chave nova. Rotacionar não reabilita um totem desativado.",
+    "confirmAction": "Rotacionar mesmo assim"
+  },
+  "errors": {
+    "nameTaken": "Já existe dispositivo com este nome.",
+    "serialTaken": "Já existe dispositivo com este número de série."
   }
 }

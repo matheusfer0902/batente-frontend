@@ -71,7 +71,9 @@ function DeviceCard({ device }: { device: DeviceListItem }) {
           <dt className="mb-1.5 font-mono text-[9.5px] uppercase tracking-[0.14em] text-n400">
             {t("device:list.metrics.firmware")}
           </dt>
-          <dd className="font-mono text-sm text-linen">{device.firmwareVersion}</dd>
+          <dd className="font-mono text-sm text-linen">
+            {device.firmwareVersion ?? "—"}
+          </dd>
         </div>
         <div>
           <dt className="mb-1.5 font-mono text-[9.5px] uppercase tracking-[0.14em] text-n400">
@@ -83,7 +85,9 @@ function DeviceCard({ device }: { device: DeviceListItem }) {
               device.clockDriftMs !== null ? "text-chart" : "text-n400",
             )}
           >
-            {device.clockDriftMs !== null ? `+${device.clockDriftMs}ms` : "—"}
+            {device.clockDriftMs !== null
+              ? `${device.clockDriftMs > 0 ? "+" : ""}${device.clockDriftMs}ms`
+              : "—"}
           </dd>
         </div>
         <div>
@@ -101,7 +105,18 @@ function DeviceCard({ device }: { device: DeviceListItem }) {
         </div>
       </dl>
 
-      <span className="font-mono text-[11px] text-linen">{t("device:list.open")}</span>
+      <div className="flex items-center gap-3">
+        {device.lifecycle !== "ACTIVE" ? (
+          // MAINTENANCE e DISABLED mudam o que o totem pode fazer, não só como
+          // ele aparece: DISABLED faz `fn_verificar_dispositivo` recusar a chave.
+          <span className="rounded-sm border border-sun/45 px-1.5 py-0.5 font-mono text-[10.5px] uppercase tracking-wide text-sun">
+            {t(`device:lifecycle.${device.lifecycle}`)}
+          </span>
+        ) : null}
+        <span className="font-mono text-[11px] text-linen">
+          {t("device:list.open")}
+        </span>
+      </div>
     </Link>
   );
 }
@@ -117,8 +132,8 @@ export function DeviceAdminList() {
           title={t("device:list.title")}
           subtitle={t("device:list.subtitle", { count: devices.length })}
           actions={
-            <Button variant="default" size="entry" disabled>
-              {t("device:list.create")}
+            <Button asChild size="entryInline">
+              <Link href="/dispositivos/novo">{t("device:list.create")}</Link>
             </Button>
           }
         />

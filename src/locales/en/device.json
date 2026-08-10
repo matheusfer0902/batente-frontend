@@ -23,7 +23,9 @@
   },
   "status": {
     "online": "Terminal online",
-    "offline": "Terminal offline"
+    "offline": "Terminal offline",
+    "ONLINE": "Online",
+    "OFFLINE": "Offline"
   },
   "card": {
     "title": "Terminal · {{location}}",
@@ -35,5 +37,63 @@
     "clockDrift": "Clock drift",
     "pendingUploads": "Not uploaded",
     "approximate": "≈{{value}}"
+  },
+  "title": "Device",
+  "firmware": "Firmware",
+  "createTitle": "New device",
+  "createSubtitle": "On save, the system generates the device secret key.",
+  "lifecycle": {
+    "ACTIVE": "Active",
+    "MAINTENANCE": "Maintenance",
+    "DISABLED": "Disabled"
+  },
+  "actions": {
+    "rotate": "Rotate key",
+    "maintenance": "Maintenance mode",
+    "leaveMaintenance": "Leave maintenance"
+  },
+  "fields": {
+    "link": "Network",
+    "lifecycle": "Status",
+    "lastContact": "Last contact",
+    "clockDrift": "Clock drift",
+    "pending": "Upload queue",
+    "doorOpen": "Lock pulse",
+    "inherited": "(global)",
+    "badgeListVersion": "Badge list",
+    "installedAt": "Installed on",
+    "serial": "Serial number"
+  },
+  "form": {
+    "name": "Device name",
+    "location": "Installation site",
+    "serial": "Serial number",
+    "doorOpen": "Lock pulse (ms)",
+    "doorOpenHint": "Leave blank to inherit the global lock pulse.",
+    "keyNotice": "On save, the system generates the device secret key. The firmware uses it to authenticate, and it is never stored in plain text.",
+    "submit": "Register and generate key"
+  },
+  "secret": {
+    "pageTitle": "Key generated",
+    "pageSubtitle": "Shown once — copy it now.",
+    "title": "Copy it now — there is no second chance",
+    "body": "Once you leave this screen the key cannot be shown again. If lost, rotate the key from the device detail.",
+    "snippetLabel": "secrets.h · {{name}}",
+    "pathHint": "Paste into secrets.h and reflash hardware.ino.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "confirm": "I confirm I copied the key and stored it safely.",
+    "confirmHint": "Check the confirmation to enable",
+    "finish": "Finish registration",
+    "done": "Done"
+  },
+  "rotate": {
+    "confirmTitle": "Rotating invalidates the current key immediately",
+    "confirmBody": "The device in the field will get 401 until secrets.h is rewritten with the new key. Rotating does not re-enable a disabled device.",
+    "confirmAction": "Rotate anyway"
+  },
+  "errors": {
+    "nameTaken": "A device with this name already exists.",
+    "serialTaken": "A device with this serial number already exists."
   }
 }

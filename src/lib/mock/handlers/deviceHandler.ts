@@ -1,8 +1,9 @@
 import type {
   CreateDevicePayload,
   DeviceDetail,
-  DeviceEventLog,
   DeviceListItem,
+  DeviceWithSecret,
+  UpdateDevicePayload,
 } from "@/types/device";
 import { generateId, mockDb, readPrimaryDevice } from "@/lib/mock/mockDb";
 import {
@@ -19,6 +20,9 @@ const OFFLINE_SCENARIOS = new Set(["degradado", "offline"]);
 const OFFLINE_SINCE_MINUTES = 12;
 const OFFLINE_PENDING_UPLOADS = 14;
 
+/** Espelha `system_settings.lock.pulse_ms`, semeado com 3000. */
+const TRAVA_GLOBAL_MS = 3000;
+
 function toOfflineListItem(device: DeviceListItem): DeviceListItem {
   return {
     ...device,
@@ -34,33 +38,46 @@ function toOfflineListItem(device: DeviceListItem): DeviceListItem {
 function toListItem(): DeviceListItem {
   const primary = readPrimaryDevice();
   const stored = mockDb.deviceDetails[primary.id];
+
   return {
     ...primary,
+    lifecycle: stored?.lifecycle ?? "ACTIVE",
     firmwareVersion: stored?.firmwareVersion ?? "v2.4.1",
     serialNumber: stored?.serialNumber ?? "BT-0001-0042",
   };
 }
 
-const DEFAULT_EVENTS: DeviceEventLog[] = [
-  {
-    id: "dev-ev-1",
-    occurredAt: new Date(Date.now() - 4 * 60 * 1000).toISOString(),
-    message: "Sincronização concluída · 6 registros aceitos",
-    tone: "ok",
-  },
-  {
-    id: "dev-ev-2",
-    occurredAt: new Date(Date.now() - 12 * 60 * 1000).toISOString(),
-    message: "Reconectado à rede após 12min offline",
-    tone: "contingency",
-  },
-  {
-    id: "dev-ev-3",
-    occurredAt: new Date(Date.now() - 20 * 60 * 1000).toISOString(),
-    message: "Perda de conexão · totem seguiu decidindo local",
-    tone: "contingency",
-  },
-];
+/**
+ * O bloco do `secrets.h`, no mesmo formato do backend.
+ *
+ * Se o mock respondesse outra coisa, a tela pareceria funcionar em demo e
+ * quebraria no cutover — que é justamente o que o Plano B existe para evitar.
+ */
+function comSegredo(device: DeviceDetail): DeviceWithSecret {
+  const secretKey = crypto.randomUUID().replace(/-/g, "");
+
+  return {
+    device,
+    secretKey,
+    firmwareSnippet: [
+      `#define DEVICE_ID  "${device.id}"`,
+      `#define DEVICE_KEY "${secretKey}"`,
+    ].join("\n"),
+  };
+}
+
+function paraDetalhe(listItem: DeviceListItem): DeviceDetail {
+  const extra = mockDb.deviceDetails[listItem.id];
+
+  return {
+    ...listItem,
+    installedAt:
+      extra?.installedAt ?? new Date().toISOString().slice(0, 10),
+    doorOpenMs: extra?.doorOpenMs ?? null,
+    effectiveDoorOpenMs: extra?.doorOpenMs ?? TRAVA_GLOBAL_MS,
+    badgeListVersion: extra?.badgeListVersion ?? 1842,
+  };
+}
 
 export function handleDeviceRoute({
   path,
@@ -78,77 +95,93 @@ export function handleDeviceRoute({
     const device = toListItem();
     return {
       data:
-        scenario && OFFLINE_SCENARIOS.has(scenario) ? toOfflineListItem(device) : device,
+        scenario && OFFLINE_SCENARIOS.has(scenario)
+          ? toOfflineListItem(device)
+          : device,
     };
   }
 
   if (path === "/devices" && method === "GET") {
     const device = toListItem();
     const list =
-      scenario && OFFLINE_SCENARIOS.has(scenario) ? [toOfflineListItem(device)] : [device];
+      scenario && OFFLINE_SCENARIOS.has(scenario)
+        ? [toOfflineListItem(device)]
+        : [device];
+
     return { data: list };
   }
 
   if (path === "/devices" && method === "POST") {
     const payload = body as CreateDevicePayload;
-    if (!payload.name?.trim() || !payload.location?.trim()) {
-      return error(400, "Invalid payload", "validation_error");
+
+    // Só o nome é obrigatório — igual ao backend. Local e serial são opcionais,
+    // e a trava em branco herda a global.
+    if (!payload.name?.trim()) {
+      return error(400, "Name is required", "validation_error");
     }
+
     const id = generateId("device");
-    const device: DeviceListItem = {
+    const detail: DeviceDetail = {
       id,
       name: payload.name.trim(),
-      location: payload.location.trim(),
+      location: payload.location?.trim() || "—",
       status: "OFFLINE",
+      lifecycle: "ACTIVE",
       lastContactAt: new Date().toISOString(),
       clockDriftMs: null,
       pendingUploads: 0,
-      firmwareVersion: "v0.0.0",
-      serialNumber: payload.serialNumber?.trim() || "BT-0000-0000",
+      firmwareVersion: null,
+      serialNumber: payload.serialNumber?.trim() || null,
+      installedAt: new Date().toISOString().slice(0, 10),
+      doorOpenMs: payload.doorOpenMs ?? null,
+      effectiveDoorOpenMs: payload.doorOpenMs ?? TRAVA_GLOBAL_MS,
+      badgeListVersion: 0,
     };
-    mockDb.deviceDetails[id] = {
-      ...device,
-      doorOpenMs: payload.doorOpenMs ?? 3000,
-      badgeListVersion: "0",
-      badgeListSyncedAt: null,
-      recentEvents: [],
-    };
-    return {
-      data: {
-        device,
-        secretKey: `bt_sk_${crypto.randomUUID().replace(/-/g, "")}`,
-      },
-    };
-  }
 
-  const detailMatch = path.match(/^\/devices\/([^/]+)$/);
-  if (detailMatch?.[1] && method === "GET") {
-    const id = detailMatch[1];
-    const listItem = toListItem();
-    if (listItem.id !== id) return error(404, "Device not found");
-    const extra = mockDb.deviceDetails[id];
-    const detail: DeviceDetail = {
-      ...listItem,
-      doorOpenMs: extra?.doorOpenMs ?? 3000,
-      badgeListVersion: extra?.badgeListVersion ?? "1842",
-      badgeListSyncedAt: extra?.badgeListSyncedAt ?? new Date().toISOString(),
-      recentEvents: extra?.recentEvents.length
-        ? extra.recentEvents
-        : DEFAULT_EVENTS,
-    };
-    return { data: detail };
+    mockDb.deviceDetails[id] = detail;
+
+    return { data: comSegredo(detail) };
   }
 
   const rotateMatch = path.match(/^\/devices\/([^/]+)\/rotate-key$/);
   if (rotateMatch?.[1] && method === "POST") {
     const listItem = toListItem();
     if (listItem.id !== rotateMatch[1]) return error(404, "Device not found");
-    return {
-      data: {
-        device: listItem,
-        secretKey: `bt_sk_${crypto.randomUUID().replace(/-/g, "")}`,
-      },
-    };
+
+    return { data: comSegredo(paraDetalhe(listItem)) };
+  }
+
+  const detailMatch = path.match(/^\/devices\/([^/]+)$/);
+  if (detailMatch?.[1]) {
+    const id = detailMatch[1];
+    const listItem = toListItem();
+    if (listItem.id !== id) return error(404, "Device not found");
+
+    if (method === "GET") {
+      return { data: paraDetalhe(listItem) };
+    }
+
+    if (method === "PUT") {
+      const payload = body as UpdateDevicePayload;
+      const atual = paraDetalhe(listItem);
+      const atualizado: DeviceDetail = {
+        ...atual,
+        ...(payload.name ? { name: payload.name } : {}),
+        ...(payload.location ? { location: payload.location } : {}),
+        ...(payload.serialNumber ? { serialNumber: payload.serialNumber } : {}),
+        ...(payload.doorOpenMs !== undefined
+          ? {
+              doorOpenMs: payload.doorOpenMs,
+              effectiveDoorOpenMs: payload.doorOpenMs,
+            }
+          : {}),
+        ...(payload.lifecycle ? { lifecycle: payload.lifecycle } : {}),
+      };
+
+      mockDb.deviceDetails[id] = atualizado;
+
+      return { data: atualizado };
+    }
   }
 
   return notFound();
