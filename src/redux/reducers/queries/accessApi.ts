@@ -1,7 +1,9 @@
 import { baseApi } from "@/redux/reducers/queries/baseApi";
+import { AccessService } from "@/services/AccessService";
 import { withScenario } from "@/types/api";
 import type {
   AccessEvent,
+  AccessEventPage,
   AccessHistoryQueryArgs,
   AccessQueryArgs,
   AccessStats,
@@ -9,6 +11,7 @@ import type {
 
 function buildAccessQuery(args: AccessHistoryQueryArgs = {}): string {
   const params = new URLSearchParams();
+  if (args.page) params.set("page", String(args.page));
   if (args.limit) params.set("limit", String(args.limit));
   if (args.from) params.set("from", args.from);
   if (args.to) params.set("to", args.to);
@@ -30,6 +33,8 @@ export const accessApi = baseApi.injectEndpoints({
         ),
         method: "GET",
       }),
+      transformResponse: (response: unknown) =>
+        AccessService.parseEventListResponse(response).items,
       providesTags: (result) =>
         result
           ? [
@@ -39,13 +44,15 @@ export const accessApi = baseApi.injectEndpoints({
           : [{ type: "Access", id: "LIST" }],
     }),
     getAccessHistoryList: builder.query<
-      AccessEvent[],
+      AccessEventPage,
       AccessHistoryQueryArgs | void
     >({
       query: (args) => ({
         url: withScenario(buildAccessQuery(args ?? {}), args?.scenario),
         method: "GET",
       }),
+      transformResponse: (response: unknown) =>
+        AccessService.parseEventListResponse(response),
       providesTags: [{ type: "Access", id: "HISTORY" }],
     }),
     getAccessStats: builder.query<AccessStats, AccessQueryArgs | void>({

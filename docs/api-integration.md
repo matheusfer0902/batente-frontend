@@ -1,30 +1,58 @@
 # Integração API — BATENTE Frontend
 
-Contrato esperado entre frontend e backend. Em **dev**, rotas não listadas em
-`NEXT_PUBLIC_REAL_API_PREFIXES` passam pelo mock in-memory (`mockBaseQuery`).
+Contrato esperado entre frontend e backend. Em **dev**, o que não estiver no
+cutover passa pelo mock in-memory (`mockBaseQuery`).
 
 ## Cutover gradual
 
 | Variável | Efeito |
 |---|---|
-| `NEXT_PUBLIC_API_URL` | Origem do backend (default `http://localhost:3000`) |
-| `NEXT_PUBLIC_REAL_API_PREFIXES` | Prefixos extras no backend real, separados por vírgula |
+| `NEXT_PUBLIC_API_URL` | Origem do backend (dev: `http://localhost:3030`) |
+| `NEXT_PUBLIC_API_MODE` | `real` — **todas** as rotas de painel vão ao backend |
+| `NEXT_PUBLIC_MOCK_PREFIXES` | Exceções que ficam no mock mesmo com `API_MODE=real` |
+| `NEXT_PUBLIC_REAL_API_PREFIXES` | Lista de inclusão, usada só quando `API_MODE` não é `real`. Aceita `all` |
 
-Configuração atual — painel, totem e cadastro no backend real:
+Os dois mecanismos são opostos de propósito: `MOCK_PREFIXES` é lista de
+**exceção** (o default é ir ao backend) e `REAL_API_PREFIXES` é lista de
+**inclusão** (o default é o mock). O primeiro é o modo de quem já tem backend
+para quase tudo; o segundo, de quem está ligando um domínio por vez.
+`resolveRealApiPrefixes()` em `src/lib/apiRoutes.ts` implementa a precedência.
+
+### Modo real — o default hoje (hardware / demo)
 
 ```env
-NEXT_PUBLIC_API_URL=http://192.168.1.10:3030
-NEXT_PUBLIC_REAL_API_PREFIXES=/access-events,/devices,/departments,/employees,/schedules,/absences
+NEXT_PUBLIC_API_URL=http://localhost:3030
+NEXT_PUBLIC_API_MODE=real
+NEXT_PUBLIC_MOCK_PREFIXES=
 ```
 
-`/auth` e `/users` **sempre** vão ao backend real. Ver [`auth.md`](./auth.md).
+Todo domínio do painel tem backend, então a lista de exceção está vazia.
 
-> **`/timekeeping` saiu da lista.** O backend serve só `/timekeeping/mirror`;
-> `/timekeeping/pending` e `/timekeeping/adjustments`, que o `/inicio` consome,
-> não existem. Com o prefixo ligado — como estava — os blocos do Início
-> respondiam 404. O prefixo volta junto de `/pendencias` e `/ajustes`.
+### Cutover parcial
 
-Ainda no mock: `/badges`, `/audit-logs`, `/gate`, `/settings`, `/timekeeping`.
+```env
+NEXT_PUBLIC_REAL_API_PREFIXES=/access-events,/devices,/timekeeping,/absences
+```
+
+`/auth` e rotas sob `/users` **sempre** vão ao backend real, fora de qualquer
+lista. Ver [`auth.md`](./auth.md).
+
+### O que é leitura e o que é escrita
+
+Ter backend não é a mesma coisa que ter escrita. Ligar o cutover destes não
+quebra tela nenhuma porque as telas correspondentes também não escrevem:
+
+| Prefixo | Backend | Escrita |
+|---|---|---|
+| `/access-events`, `/devices`, `/departments`, `/employees`, `/schedules` | real | sim |
+| `/absences`, `/badges`, `/audit-logs`, `/gate`, `/settings` | real | **não** — só leitura |
+| `/timekeeping` | real | não — `mirror`, `pending` e `adjustments` são leitura |
+
+> **`/timekeeping` voltou para o cutover.** Antes o backend servia só
+> `/timekeeping/mirror`, e `pending`/`adjustments` — que o `/inicio` consome —
+> respondiam 404 com o prefixo ligado. Os dois passaram a existir, e
+> `TimekeepingSummaryReturn` no backend espelha `types/timekeeping.ts` campo por
+> campo.
 
 ## Enums compartilhados
 

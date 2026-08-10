@@ -9,13 +9,12 @@
 export const API_ROUTES_AUTH = ["/auth", "/users"] as const;
 
 /**
- * Domínios com backend real pronto — habilitar via
- * `NEXT_PUBLIC_REAL_API_PREFIXES`.
+ * Domínios com backend real e escrita — habilitar via cutover.
  *
- * `/timekeeping` **não entra**: o backend serve só `/timekeeping/mirror`,
- * enquanto o `/inicio` chama `/timekeeping/pending` e
- * `/timekeeping/adjustments`. Ligar o prefixo inteiro faria os blocos do
- * Início responderem 404 — o prefixo volta quando os dois endpoints existirem.
+ * `/timekeeping` entrou aqui: o backend passou a servir `mirror`, `pending` e
+ * `adjustments`, e `TimekeepingSummaryReturn` espelha os tipos de
+ * `types/timekeeping.ts` campo por campo. Antes só existia `mirror`, e ligar o
+ * prefixo fazia os blocos do Início responderem 404.
  */
 export const API_ROUTES_PANEL = [
   "/access-events",
@@ -24,15 +23,26 @@ export const API_ROUTES_PANEL = [
   "/employees",
   "/schedules",
   "/absences",
+  "/timekeeping",
 ] as const;
 
-/** Cadastros e operação — mock até o backend expor o contrato. */
+/**
+ * Backend real, mas **somente leitura** — o painel lista e não escreve.
+ *
+ * Ligar o cutover destes não quebra tela nenhuma, porque nenhuma delas tem
+ * mutation. Quando a escrita chegar, cada um sai desta lista para a de cima.
+ */
 export const API_ROUTES_DOMAIN = [
   "/badges",
   "/audit-logs",
   "/gate",
   "/settings",
-  "/timekeeping",
+] as const;
+
+/** Todas as rotas de painel fora `/auth` e POST-only em `/users`. */
+export const API_ROUTES_CUTOVER = [
+  ...API_ROUTES_PANEL,
+  ...API_ROUTES_DOMAIN,
 ] as const;
 
 export type ApiRoutePrefix =
@@ -44,6 +54,24 @@ export type ApiRoutePrefix =
 export function parseRealApiPrefixes(): readonly string[] {
   const fromEnv = process.env.NEXT_PUBLIC_REAL_API_PREFIXES?.trim();
   if (!fromEnv) return [];
+  if (fromEnv.toLowerCase() === "all") {
+    return [...API_ROUTES_CUTOVER];
+  }
+  return fromEnv
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
+
+function usesFullCutover(): boolean {
+  const mode = process.env.NEXT_PUBLIC_API_MODE?.trim().toLowerCase();
+  return mode === "real";
+}
+
+/** Prefixos que permanecem no mock mesmo com `API_MODE=real` (backend pendente). */
+export function parseMockOverridePrefixes(): readonly string[] {
+  const fromEnv = process.env.NEXT_PUBLIC_MOCK_PREFIXES?.trim();
+  if (!fromEnv) return [];
   return fromEnv
     .split(",")
     .map((p) => p.trim())
@@ -52,5 +80,14 @@ export function parseRealApiPrefixes(): readonly string[] {
 
 /** Prefixos que usam `authBaseQuery` (backend real) nesta build. */
 export function resolveRealApiPrefixes(): readonly string[] {
-  return [...API_ROUTES_AUTH, ...parseRealApiPrefixes()];
+  if (usesFullCutover()) {
+    return [...API_ROUTES_AUTH, ...API_ROUTES_CUTOVER];
+  }
+
+  const partial = parseRealApiPrefixes();
+  if (partial.length > 0) {
+    return [...API_ROUTES_AUTH, ...partial];
+  }
+
+  return [...API_ROUTES_AUTH];
 }

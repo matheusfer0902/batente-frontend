@@ -25,9 +25,11 @@ export function useAccessHistory() {
   );
 
   const listQuery = useGetAccessHistoryListQuery(queryArgs);
+  const page = listQuery.data;
 
   return {
-    events: listQuery.data ?? [],
+    events: page?.items ?? [],
+    total: page?.total ?? 0,
     decision,
     setDecision,
     mode,

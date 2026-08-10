@@ -1,4 +1,5 @@
 import { findAccessEventById, mockDb } from "@/lib/mock/mockDb";
+import type { AccessEvent } from "@/types/access";
 import {
   error,
   notFound,
@@ -69,11 +70,33 @@ function filterAccessEvents(request: MockRequest) {
     );
   }
 
+  return items;
+}
+
+function toAccessEventPage(
+  request: MockRequest,
+  filtered: AccessEvent[],
+): {
+  items: AccessEvent[];
+  total: number;
+  page: number;
+  limit: number;
+} {
+  const { searchParams } = request;
+  const page = Math.max(Number(searchParams.get("page")) || 1, 1);
   const limitParam = Number(searchParams.get("limit"));
   const limit =
-    Number.isFinite(limitParam) && limitParam > 0 ? limitParam : items.length;
+    Number.isFinite(limitParam) && limitParam > 0
+      ? limitParam
+      : filtered.length || 1;
+  const start = (page - 1) * limit;
 
-  return items.slice(0, limit);
+  return {
+    items: filtered.slice(start, start + limit),
+    total: filtered.length,
+    page,
+    limit,
+  };
 }
 
 export function handleAccessRoute({
@@ -98,7 +121,17 @@ export function handleAccessRoute({
   }
 
   if (path === "/access-events") {
-    return { data: filterAccessEvents({ path, method, body: undefined, searchParams, scenario, state }) };
+    const request: MockRequest = {
+      path,
+      method,
+      body: undefined,
+      searchParams,
+      scenario,
+      state,
+    };
+    return {
+      data: toAccessEventPage(request, filterAccessEvents(request)),
+    };
   }
 
   const detailMatch = path.match(/^\/access-events\/([^/]+)$/);
