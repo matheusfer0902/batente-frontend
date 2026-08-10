@@ -1,6 +1,9 @@
 # Guia de módulos de feature
 
-Passo a passo para adicionar um domínio (ex.: `order`, `project`) replicando o molde `resource`.
+Passo a passo para adicionar um domínio replicando o molde `department` — o
+mais simples com CRUD completo, diálogo de formulário e tratamento de erro do
+banco. Para tela com formulário de página inteira, ver `employee`; para grade
+editável, `schedule`.
 
 ## Visão geral
 
@@ -96,7 +99,7 @@ import "@/redux/reducers/queries/orderApi";
 Adicionar tag em `baseApi.ts`:
 
 ```typescript
-tagTypes: ["Auth", "Resource", "Order"],
+tagTypes: ["Auth", "Department", "Order"],
 ```
 
 Estender `mockBaseQuery` com rotas `/orders` (dev) **e** handler MSW em `test/mocks/handlers/` (testes). Ver [testing.md](./testing.md).
@@ -145,7 +148,7 @@ Páginas apenas compõem componentes — sem lógica.
 Registrar namespace em `src/lib/i18n/settings.ts`:
 
 ```typescript
-export const namespaces = ["common", "auth", "resource", "order"] as const;
+export const namespaces = ["common", "auth", "department", "order"] as const;
 ```
 
 ## 9. Navegação
@@ -157,12 +160,12 @@ Adicionar item em `src/components/shared/Sidebar.tsx`.
 Estender `middleware.ts`:
 
 ```typescript
-const protectedPaths = ["/resources", "/orders"];
+const protectedPaths = ["/departamentos", "/orders"];
 ```
 
-## 11. Testes — molde `resource`
+## 11. Testes — molde `department`
 
-Para cada feature nova, replicar a cobertura do módulo `resource`. Documentação completa: [testing.md](./testing.md).
+Para cada feature nova, replicar a cobertura do módulo `department`. Documentação completa: [testing.md](./testing.md).
 
 | Camada | Arquivo | Obrigatório |
 |--------|---------|-------------|
@@ -189,7 +192,7 @@ renderWithProviders(<OrderList />, {
 });
 ```
 
-**Regras:** mockar rede (MSW), nunca `useOrder`. Store novo por teste. Referência: arquivos `*resource*` em `src/` e `test/`.
+**Regras:** mockar rede (MSW), nunca `useOrder`. Store novo por teste. Referência: arquivos `*department*` em `src/` e `test/`.
 
 ## Ownership (autorização)
 
@@ -209,17 +212,17 @@ export function canMutate<T extends { ownerId: string }>(
 
 ## Referência completa
 
-Use o módulo `resource` como implementação canônica:
+Use o módulo `department` como implementação canônica:
 
-- `src/types/resource.ts`
-- `src/lib/schemas/resourceSchema.ts`
-- `src/redux/reducers/queries/resourceApi.ts`
-- `src/services/ResourceService.ts`
-- `src/hooks/useResource.ts`
-- `src/components/resource/*`
-- `src/app/(dashboard)/resources/*`
-- `src/services/ResourceService.test.ts` — unit
-- `src/components/resource/ResourceCard.test.tsx` — component
-- `src/hooks/useResource.test.tsx` — hook
-- `test/integration/resource-list.test.tsx` — integration
+- `src/types/department.ts`
+- `src/lib/schemas/departmentSchema.ts`
+- `src/redux/reducers/queries/departmentApi.ts`
+- `src/services/DepartmentService.ts`
+- `src/hooks/useDepartment.ts`
+- `src/components/department/*`
+- `src/app/(dashboard)/departamentos/*`
+- `src/services/DepartmentService.test.ts` — unit
+- `src/components/department/DepartmentList.test.tsx` — component
+- `src/hooks/useDepartment.test.tsx` — hook
+- `test/integration/monitor-access.test.tsx` — integration
 - `test/contracts/api.contract.test.ts` — contract

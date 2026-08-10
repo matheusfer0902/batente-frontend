@@ -35,14 +35,14 @@ Cada mockup anota a rota ao lado do ID de tela — busque por padrões como `/co
 |---|---|---|---|
 | 1 — Entrada | `Bloco 1 - Entrada.dc.html` | `/login`, `/403` | **Implementado** |
 | 2 — Painel | `Bloco 2 - Painel.dc.html` | `/inicio`, `/monitor`, `/acessos/[id]` | **Implementado** — ver [panel.md](./panel.md) |
-| 3 — Pessoas | `Bloco 3 - Pessoas.dc.html` | `/colaboradores`, `/departamentos` | Placeholder |
-| 4 — Crachás | `Bloco 4 - Crachas.dc.html` | `/crachas` | Placeholder |
-| 5 — Escalas | `Bloco 5 - Escalas.dc.html` | `/escalas` | Placeholder |
+| 3 — Pessoas | `Bloco 3 - Pessoas.dc.html` | `/colaboradores`, `/departamentos` | **Implementado** — telas 6, 7, 3c e 15. Ficha com 6 abas (8–10) pendente |
+| 4 — Crachás | `Bloco 4 - Crachas.dc.html` | `/crachas` | Lista somente-leitura sobre mock |
+| 5 — Escalas | `Bloco 5 - Escalas.dc.html` | `/escalas` | **Implementado** — telas 19, 20 e 21 |
 | 6 — Ponto | `Bloco 6 - Ponto.dc.html` | `/pendencias`, `/espelho`, `/ajustes` | Placeholder |
 | 7 — Fechamento | `Bloco 7 - Fechamento e saldo.dc.html` | `/fechamento`, `/banco-de-horas` | Placeholder |
-| 8 — Ausências | `Bloco 8 - Ausencias.dc.html` | `/ausencias` | Placeholder |
-| 9 — Totem | `Bloco 9 - Totem.dc.html` | `/dispositivos` | Placeholder |
-| 10 — Histórico | `Bloco 10 - Consulta e historico.dc.html` | `/historico`, `/auditoria` | Placeholder |
+| 8 — Ausências | `Bloco 8 - Ausencias.dc.html` | `/ausencias` | Lista somente-leitura, backend real parcial |
+| 9 — Totem | `Bloco 9 - Totem.dc.html` | `/dispositivos` | **Implementado** — telas 37, 38 e 39 (aba Dados). Telemetria, lista de crachás e sincronizações (40–42) dependem da fila offline do firmware |
+| 10 — Histórico | `Bloco 10 - Consulta e historico.dc.html` | `/historico`, `/auditoria` | `/historico` no backend real; `/auditoria` no mock |
 | 11 — Sistema | `Bloco 11 - Sistema.dc.html` | `/relatorios`, `/usuarios`, `/configuracoes` | Placeholder |
 | 12 — Portaria | `Bloco 12 - Portaria.dc.html` | `/portaria` | Placeholder |
 | — | `uploads/batente-identidade-visual.html` | tokens, tipografia, cores | Referência de identidade |
@@ -60,7 +60,7 @@ Navegação canônica: [`src/lib/navigation.ts`](../src/lib/navigation.ts).
 4. Encontrar o ID de tela e os estados (ex.: 3a = listagem, tela 6)
 5. Verificar src/app/(dashboard)/colaboradores/page.tsx e components/ relacionados
 6. Decidir: evoluir implementação existente ou substituir ModulePlaceholder
-7. Implementar seguindo molde resource + design do zip
+7. Implementar seguindo molde `department` + design do zip
 ```
 
 ## Regras de implementação
@@ -68,7 +68,7 @@ Navegação canônica: [`src/lib/navigation.ts`](../src/lib/navigation.ts).
 | Situação | Ação |
 |---|---|
 | Tela **no zip** + código **existente** | Reutilizar componentes/hooks atuais; ajustar para bater com o design |
-| Tela **no zip** + **placeholder** | Substituir `ModulePlaceholder`, seguindo molde `resource` + design |
+| Tela **no zip** + **placeholder** | Substituir `ModulePlaceholder`, seguindo molde `department` + design |
 | Tela **no zip** + rota **inexistente** | Criar rota em `app/` alinhada ao que o HTML especifica |
 | Tela **ausente no zip** | Construir derivando de blocos vizinhos, [`globals.css`](../src/app/globals.css) e componentes shared |
 

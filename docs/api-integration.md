@@ -10,14 +10,21 @@ Contrato esperado entre frontend e backend. Em **dev**, rotas não listadas em
 | `NEXT_PUBLIC_API_URL` | Origem do backend (default `http://localhost:3000`) |
 | `NEXT_PUBLIC_REAL_API_PREFIXES` | Prefixos extras no backend real, separados por vírgula |
 
-Exemplo — painel + totem no backend real, cadastros ainda no mock:
+Configuração atual — painel, totem e cadastro no backend real:
 
 ```env
-NEXT_PUBLIC_API_URL=http://192.168.1.10:3000
-NEXT_PUBLIC_REAL_API_PREFIXES=/access-events,/devices,/timekeeping,/absences
+NEXT_PUBLIC_API_URL=http://192.168.1.10:3030
+NEXT_PUBLIC_REAL_API_PREFIXES=/access-events,/devices,/departments,/employees,/schedules,/absences
 ```
 
 `/auth` e `/users` **sempre** vão ao backend real. Ver [`auth.md`](./auth.md).
+
+> **`/timekeeping` saiu da lista.** O backend serve só `/timekeeping/mirror`;
+> `/timekeeping/pending` e `/timekeeping/adjustments`, que o `/inicio` consome,
+> não existem. Com o prefixo ligado — como estava — os blocos do Início
+> respondiam 404. O prefixo volta junto de `/pendencias` e `/ajustes`.
+
+Ainda no mock: `/badges`, `/audit-logs`, `/gate`, `/settings`, `/timekeeping`.
 
 ## Enums compartilhados
 
@@ -25,11 +32,33 @@ Alinhar nomes exatos com o backend. Definidos em `src/types/`.
 
 | Domínio | Arquivo | Valores |
 |---|---|---|
-| Acesso | `access.ts` | `GRANTED`, `DENIED` · `UNKNOWN_BADGE`, `BLOCKED_BADGE`, `OUT_OF_SCHEDULE` · `ONLINE`, `OFFLINE` |
-| Totem | `device.ts` | `ONLINE`, `OFFLINE` |
-| Colaborador | `employee.ts` | `ACTIVE`, `VACATION`, `INACTIVE` |
+| Acesso | `access.ts` | `GRANTED`, `DENIED` · `UNKNOWN_UID`, `CREDENTIAL_BLOCKED`, `CREDENTIAL_EXPIRED`, `EMPLOYEE_INACTIVE`, `OUTSIDE_WINDOW`, `DUPLICATE_READ`, `DEVICE_UNAUTHORIZED` · `ONLINE`, `OFFLINE`, `REMOTE` |
+| Totem — rede | `device.ts` | `ONLINE`, `OFFLINE` *(derivado do heartbeat, não é coluna)* |
+| Totem — cadastro | `device.ts` | `ACTIVE`, `MAINTENANCE`, `DISABLED` (`status_dispositivo`) |
+| Colaborador | `employee.ts` | `ACTIVE`, `ON_LEAVE`, `TERMINATED` (`status_colaborador`) |
+| Escala | `schedule.ts` | `FIXED`, `FLEXIBLE` (`tipo_escala`) |
 | Crachá | `badge.ts` | `ACTIVE`, `BLOCKED`, `UNASSIGNED` |
 | Ponto | `timekeeping.ts` | `ENTRY`, `EXIT` |
+
+Três destes estavam divergentes e foram alinhados ao banco: colaborador
+(`VACATION`/`INACTIVE` → `ON_LEAVE`/`TERMINATED`), escala (`ROTATING` →
+`FLEXIBLE`) e a situação cadastral do totem, que não existia no frontend.
+
+## Erros de negócio
+
+O backend responde `{ statusCode, message, code }`. **O contrato é o `code`** —
+a `message` é texto para humano e pode mudar de idioma. Use
+`apiErrorCode()` de `src/lib/apiError.ts`; o mock produz o mesmo formato.
+
+| `code` | HTTP | Origem no banco |
+|---|---|---|
+| `department_name_taken` · `registration_taken` · `cpf_taken` · `schedule_name_taken` · `device_name_taken` · `device_serial_taken` | 409 | `UNIQUE` |
+| `in_use` | 409 | FK `ON DELETE RESTRICT` — departamento com pessoas |
+| `schedule_required` | 409 | RN-5.3 · `trg_employees_escala_vigente` |
+| `schedule_overlap` · `schedule_already_open` | 409 | RN-5.2 `EXCLUDE` · RN-5.1 índice parcial |
+| `credential_not_reactivatable` | 409 | RN-2.5 |
+| `last_admin` | 409 | RN-1.3 |
+| `forbidden_by_role` | 403 | `42501` — o `GRANT` do papel não alcança |
 
 ## Autenticação
 

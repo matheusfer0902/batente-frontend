@@ -57,7 +57,7 @@ flowchart TD
     exists -->|Não| derive[Derivar de telas vizinhas + identidade]
     codeCheck --> impl{Já implementada?}
     impl -->|Sim| evolve[Evoluir alinhado ao design]
-    impl -->|Não| build[Implementar via molde resource]
+    impl -->|Não| build[Implementar via molde department]
     derive --> build
     evolve --> verify
     build --> verify[npm run typecheck + build + test]
@@ -93,7 +93,7 @@ services → types apenas (sem React, sem Redux)
 
 ## Novo módulo de feature
 
-Replicar molde `resource`: types → schema → *Api → *Service → use* → components → pages → locales → **testes** (passo 11).
+Replicar molde `department`: types → schema → *Api → *Service → use* → components → pages → locales → **testes** (passo 11).
 
 Ver [feature-module-guide.md](./feature-module-guide.md) — passo 0: consultar design.
 

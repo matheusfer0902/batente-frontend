@@ -10,17 +10,17 @@ Cada artefato tem **uma razão para mudar**.
 |----------|------------------------|
 | `app/*/page.tsx` | Compor a página (roteamento) |
 | `components/ui/Button` | Renderizar botão acessível com variantes |
-| `components/resource/ResourceList` | UI da listagem |
-| `hooks/useResource` | Orquestrar dados e ações de resource |
-| `services/ResourceService` | Transformações puras de resource |
-| `resourceApi.ts` | Contrato HTTP/cache de resource |
+| `components/department/DepartmentList` | UI da listagem |
+| `hooks/useDepartment` | Orquestrar dados e ações de departamento |
+| `services/DepartmentService` | Transformações puras de departamento |
+| `departmentApi.ts` | Contrato HTTP/cache de department |
 | `authSlice.ts` | Estado de sessão em memória |
 
 **Violação comum:** componente que busca API, valida form e formata data — dividir em hook + service + componente.
 
 ```tsx
 // ❌ Múltiplas responsabilidades
-function ResourceList() {
+function DepartmentList() {
   const [data, setData] = useState([]);
   useEffect(() => { fetch(…).then(setData); }, []);
   const sorted = data.sort(…);
@@ -28,8 +28,8 @@ function ResourceList() {
 }
 
 // ✅ Responsabilidades separadas
-function ResourceList() {
-  const { sortedResources } = useResource();
+function DepartmentList() {
+  const { sortedDepartments } = useDepartment();
   return (…);
 }
 ```
@@ -43,7 +43,7 @@ Aberto para **extensão**, fechado para **modificação** desnecessária.
 Novas features **estendem** `baseApi` sem alterar APIs existentes:
 
 ```typescript
-// Nova feature — não modifica resourceApi
+// Nova feature — não modifica departmentApi
 export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({ … }),
 });
@@ -59,7 +59,7 @@ Estender aparência via `variant`/`size`, não forkando componentes:
 
 ### Services — métodos estáticos adicionáveis
 
-Adicionar `toSelectOptions()` em `ResourceService` sem mudar `sortByUpdatedAt`.
+Adicionar `toSelectOptions()` em `DepartmentService` sem mudar `sortByUpdatedAt`.
 
 ## L — Liskov Substitution (Substituição de Liskov)
 
@@ -77,7 +77,7 @@ Trocar implementação não exige mudar hooks/componentes — apenas a origem do
 
 ### Tipos compartilhados
 
-`Resource` em `types/resource.ts` é o contrato para API, service, hooks e componentes. ViewModels (`ResourceCardViewModel`) estendem/adaptam sem quebrar o tipo base.
+`Department` em `types/department.ts` é o contrato para API, service, hooks e componentes. Tipos derivados (`EmployeeDetail extends EmployeeListItem`) estendem sem quebrar a base.
 
 ## I — Interface Segregation (Segregação de Interface)
 
@@ -85,10 +85,10 @@ Preferir **interfaces pequenas e focadas** — consumidores não dependem do que
 
 ```typescript
 // ✅ Hook expõe só o necessário por contexto
-function useResource(options?: { id?: string }) {
+function useDepartment(options?: { id?: string }) {
   return {
-    sortedResources,  // listagem
-    resource,         // detalhe (quando id presente)
+    sortedDepartments,  // listagem
+    department,         // detalhe (quando id presente)
     create, update, remove,
   };
 }
@@ -118,23 +118,23 @@ redux/queries → baseApi, types, mock
 services → components   ❌
 services → redux        ❌
 types → hooks           ❌
-ui/Button → resourceApi ❌
+ui/Button → departmentApi ❌
 ```
 
 ### Injeção na prática
 
-- **Hooks** invertem dependência: componentes dependem de `useResource()`, não de `mockDb` ou `fetch`
+- **Hooks** invertem dependência: componentes dependem de `useDepartment()`, não de `mockDb` ou `fetch`
 - **RTK Query** abstrai origem dos dados (mock vs HTTP)
 - **Services** abstraem transformação; hooks chamam service, não lógica inline
 
 ```typescript
 // Componente depende de abstração (hook)
-const { create } = useResource();
+const { create } = useDepartment();
 
 // Hook depende de abstrações (RTK + Service)
-const [createResource] = useCreateResourceMutation();
-await createResource(payload);
-ResourceService.sortByUpdatedAt(data);
+const [createDepartment] = useCreateDepartmentMutation();
+await createDepartment(payload);
+DepartmentService.sortByUpdatedAt(data);
 ```
 
 ## DRY vs duplicação aceitável
@@ -159,4 +159,4 @@ Documentação completa: [testing.md](./testing.md).
 
 **Regra central:** mockar a **rede** (MSW), nunca hooks orquestradores. Priorize testes em `services/` e regras de negócio pura — maior ROI.
 
-Referência canônica: módulo `resource` (Fase 0 ✅).
+Referência canônica: módulo `department` (Fase 0 ✅).

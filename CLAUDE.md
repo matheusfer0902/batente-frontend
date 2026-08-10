@@ -32,10 +32,10 @@ Next.js 16 (App Router) · TypeScript strict · Tailwind v4 · Radix/Shadcn · R
 ### Testes
 
 - **Plano B:** `mockBaseQuery` em dev; testes usam `fetchBaseQuery` + MSW
-- Mockar **rede** (MSW), nunca hooks orquestradores (`useResource`, `useAuth`)
+- Mockar **rede** (MSW), nunca hooks orquestradores (`useDepartment`, `useAuth`)
 - Colocation: `src/**/*.test.ts(x)` para unit/component/hook; `test/` para infra
 - `renderWithProviders` + store novo por teste
-- Referência canônica: módulo `resource` — ver [`docs/testing.md`](./docs/testing.md)
+- Referência canônica: módulo `department` — ver [`docs/testing.md`](./docs/testing.md)
 
 ### SOLID (obrigatório)
 
@@ -74,7 +74,7 @@ services → types
 
 ## Novo módulo de feature
 
-Replicar molde `resource`: types → schema → *Api → *Service → use* → components → pages → locales → **testes** (passo 11).
+Replicar molde `department`: types → schema → *Api → *Service → use* → components → pages → locales → **testes** (passo 11).
 
 Passo 0: consultar [`docs/screens.md`](./docs/screens.md) e o bloco correspondente no zip.
 

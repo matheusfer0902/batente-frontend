@@ -1,15 +1,17 @@
 # Documentação — BATENTE Frontend
 
-Índice da documentação técnica do boilerplate.
+Índice da documentação técnica.
 
 | Documento | Descrição |
 |-----------|-----------|
+| [**Ponto de retomada**](./CONTINUACAO.md) | **Estado atual, o que mudou na base e o que falta** |
+| [Integração com a API](./api-integration.md) | Cutover, enums compartilhados e códigos de erro |
 | [**Guia de agentes**](./agents.md) | Mapa Claude/Cursor/Codex, ordem de leitura e fluxo de trabalho |
 | [**Telas e design**](./screens.md) | Fonte de verdade visual (`Telas Batente.zip`), blocos e status |
 | [Arquitetura](./architecture.md) | Visão geral, camadas, stack, fluxo de dados e convenções |
 | [Princípios SOLID](./solid-principles.md) | Como SOLID se aplica a cada camada deste projeto |
-| [Guia de módulos de feature](./feature-module-guide.md) | Passo a passo para criar um novo domínio (molde `resource`) |
-| [Autenticação e autorização](./auth.md) | Fluxo de auth, middleware, ownership e guards |
+| [Guia de módulos de feature](./feature-module-guide.md) | Passo a passo para criar um novo domínio (molde `department`) |
+| [Autenticação e autorização](./auth.md) | Fluxo de auth, middleware, papéis e guards |
 | [O painel (Bloco 2)](./panel.md) | Casca, navegação, início, monitor e detalhe do acesso |
 | [**Testes automatizados**](./testing.md) | Vitest, MSW, RTL, Playwright, convenções e roadmap |
 

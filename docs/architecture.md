@@ -4,7 +4,7 @@ Este documento descreve a arquitetura do boilerplate: responsabilidades por cama
 
 ## Objetivo
 
-Entregar uma **base replicável** — não um domínio específico. Cada feature futura deve seguir o molde do módulo `resource`, respeitando separação de camadas e SOLID.
+Entregar uma **base replicável** — não um domínio específico. Cada feature futura deve seguir o molde do módulo `department`, respeitando separação de camadas e SOLID.
 
 ## Stack
 
@@ -81,7 +81,7 @@ flowchart TB
     end
 
     subgraph orchestration [Orquestração]
-        Hooks["hooks/ — useAuth, useResource…"]
+        Hooks["hooks/ — useAuth, useDepartment…"]
         Contexts["contexts/ — SearchContext…"]
     end
 
@@ -119,13 +119,13 @@ flowchart TB
 
 ```tsx
 // ✅ Correto — composição
-export default function ResourcesPage() {
-  return <ResourceList />;
+export default function DepartamentosPage() {
+  return <DepartmentList />;
 }
 
 // ❌ Proibido — fetch manual na página
-export default function ResourcesPage() {
-  useEffect(() => { fetch("/api/resources")… }, []);
+export default function DepartamentosPage() {
+  useEffect(() => { fetch("/api/departments")… }, []);
 }
 ```
 
@@ -138,7 +138,7 @@ export default function ResourcesPage() {
 
 ### `components/<feature>/` — UI de domínio
 
-- Consomem hooks orquestradores (`useResource`, `useAuth`)
+- Consomem hooks orquestradores (`useDepartment`, `useAuth`)
 - **Nunca** chamam RTK Query hooks diretamente se existir hook orquestrador
 - **Nunca** fazem `fetch` manual
 - Permissões via `useCanMutate` — não espalhar `if (user.id === ownerId)` nos JSX
@@ -195,27 +195,27 @@ Resumo:
 | Contract | `test/contracts/` | Vitest + Zod |
 | E2E | `test/e2e/*.spec.ts` | Playwright |
 
-**Regra central:** mockar a **rede** (MSW), nunca hooks orquestradores. Referência canônica: módulo `resource`.
+**Regra central:** mockar a **rede** (MSW), nunca hooks orquestradores. Referência canônica: módulo `department`.
 
-## Fluxo de dados (exemplo: listar resources)
+## Fluxo de dados (exemplo: listar departamentos)
 
 ```mermaid
 sequenceDiagram
-    participant Page as app/resources/page
-    participant List as ResourceList
-    participant Hook as useResource
-    participant RTK as resourceApi
+    participant Page as app/departamentos/page
+    participant List as DepartmentList
+    participant Hook as useDepartment
+    participant RTK as departmentApi
     participant Mock as mockBaseQuery
-    participant Svc as ResourceService
+    participant Svc as DepartmentService
 
     Page->>List: render
-    List->>Hook: useResource()
-    Hook->>RTK: useGetResourceListQuery()
-    RTK->>Mock: GET /resources
-    Mock-->>RTK: Resource[]
+    List->>Hook: useDepartment()
+    Hook->>RTK: useGetDepartmentListQuery()
+    RTK->>Mock: GET /departments
+    Mock-->>RTK: Department[]
     RTK-->>Hook: data
     Hook->>Svc: sortByUpdatedAt + filterBySearch
-    Svc-->>Hook: sortedResources
+    Svc-->>Hook: sortedDepartments
     Hook-->>List: cardViewModels
     List-->>Page: UI
 ```
@@ -236,7 +236,7 @@ Detalhes em [auth.md](./auth.md).
 ## Internacionalização
 
 - Textos **nunca** hardcoded na UI — usar `t()` com namespaces
-- Namespaces: `common`, `auth`, `resource`, `nav`, `dashboard`, `device`,
+- Namespaces: `common`, `auth`, `nav`, `dashboard`, `device`, `department`,
   `access` (+ novos por feature)
 - Arquivos: `src/locales/{pt,en}/<namespace>.json`
 - Services puros devolvem **chave + valores** (`TranslatableLabel`), nunca
@@ -255,20 +255,20 @@ Detalhes em [auth.md](./auth.md).
 
 | Artefato | Padrão | Exemplo |
 |----------|--------|---------|
-| Componente | PascalCase | `ResourceCard` |
-| Hook | `use` + PascalCase | `useResource` |
+| Componente | PascalCase | `DepartmentList` |
+| Hook | `use` + PascalCase | `useDepartment` |
 | Slice | `<feature>Slice` | `authSlice` |
-| API RTK | `<feature>Api` | `resourceApi` |
-| Service | `<Feature>Service` | `ResourceService` |
-| Tipo | PascalCase | `CreateResourcePayload` |
-| Endpoint | verbo + Feature | `getResourceList` |
+| API RTK | `<feature>Api` | `departmentApi` |
+| Service | `<Feature>Service` | `DepartmentService` |
+| Tipo | PascalCase | `CreateDepartmentPayload` |
+| Endpoint | verbo + Feature | `getDepartmentList` |
 
 ## Paths TypeScript
 
 Alias `@/*` → `src/*`. Sempre preferir imports absolutos:
 
 ```typescript
-import { useResource } from "@/hooks/useResource";
+import { useDepartment } from "@/hooks/useDepartment";
 ```
 
 ## Checklist antes de abrir PR
@@ -279,6 +279,6 @@ import { useResource } from "@/hooks/useResource";
 - [ ] Permissões via `useCanMutate` / helper `canMutate`
 - [ ] Zero `any`; tipos inferidos de Zod e RTK Query
 - [ ] Lógica complexa em `services/`, não em componentes
-- [ ] Testes para código novo (seguir molde `resource` — ver [testing.md](./testing.md))
+- [ ] Testes para código novo (seguir molde `department` — ver [testing.md](./testing.md))
 - [ ] `npm run typecheck` e `npm run build` passando
 - [ ] `npm run test` passando (unit + component no mínimo)

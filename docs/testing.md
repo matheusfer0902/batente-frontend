@@ -71,11 +71,11 @@ flowchart TB
 
 ```
 src/
-├── services/ResourceService.test.ts       # unit — colado ao código
-├── lib/schemas/resourceSchema.test.ts
+├── services/DepartmentService.test.ts       # unit — colado ao código
+├── lib/schemas/departmentSchema.test.ts
 ├── components/ui/Button.test.tsx
-├── components/resource/ResourceCard.test.tsx
-├── hooks/useResource.test.tsx
+├── components/department/DepartmentList.test.tsx
+├── hooks/useDepartment.test.tsx
 └── redux/reducers/queries/
     ├── createBaseApi.ts                   # factory Liskov
     ├── fetchBaseQuery.ts                  # HTTP + JWT (testes)
@@ -88,7 +88,7 @@ test/
 │   ├── msw.server.ts
 │   └── matchers/                          # a11y, labor data, LGPD
 ├── mocks/
-│   ├── handlers/                          # auth, resource, stubs
+│   ├── handlers/                          # auth, domínio, stubs
 │   ├── db.ts                              # estado in-memory (reset por teste)
 │   └── scenarios.ts                       # contaBloqueada, servidorIndisponivel…
 ├── helpers/
@@ -198,7 +198,7 @@ entre a consulta de boot e o login, que só existe quando essa consulta existe (
 import { renderWithProviders } from '../../test/helpers/render';
 import { authState } from '../../test/helpers/auth';
 
-const { user, store } = renderWithProviders(<ResourceList />, {
+const { user, store } = renderWithProviders(<DepartmentList />, {
   preloadedState: authState('RH'),
   locale: 'pt',
   theme: 'dark',
@@ -246,7 +246,7 @@ scenarios.reset(); // automático no afterEach
 ## Princípios inegociáveis
 
 1. **Testar pelo que o usuário percebe** — `getByRole`, `getByLabelText`. `data-testid` só quando não há alternativa semântica.
-2. **Nunca mockar hook orquestrador** em teste de integração — mockar a **rede** (MSW), não `useResource`.
+2. **Nunca mockar hook orquestrador** em teste de integração — mockar a **rede** (MSW), não `useDepartment`.
 3. **Zero espera arbitrária** — `findBy*`, `waitFor` com condição. Proibido `setTimeout` fixo.
 4. **Determinismo** — relógio congelado (`vi.setSystemTime`), `TZ=America/Recife`, locale fixo.
 5. **Acessibilidade obrigatória** — axe em `components/ui/` e páginas.
@@ -258,7 +258,7 @@ scenarios.reset(); // automático no afterEach
 
 ## Proibições
 
-- ❌ Mockar `useResource`, `useAuth` ou hook orquestrador em teste de página
+- ❌ Mockar `useDepartment`, `useAuth` ou hook orquestrador em teste de página
 - ❌ Mockar `fetch` global — interceptação é do MSW
 - ❌ Assertar string traduzida literal em teste de componente de feature
 - ❌ Snapshot de DOM inteiro
@@ -267,18 +267,18 @@ scenarios.reset(); // automático no afterEach
 - ❌ Rodar E2E contra `next dev`
 - ❌ Alterar código de produção para acomodar teste sem documentar
 
-## Referência viva — módulo `resource`
+## Referência viva — módulo `department`
 
 Implementação canônica de cada camada (Fase 0 ✅):
 
 | Camada | Arquivo | Casos |
 |---|---|---|
-| Unit | `ResourceService.test.ts` | sortByUpdatedAt, toCardViewModel, filterBySearch |
-| Unit | `resourceSchema.test.ts` | Zod min/max, expectTypeOf |
+| Unit | `DepartmentService.test.ts` | sortByUpdatedAt, toCardViewModel, filterBySearch |
+| Unit | `departmentSchema.test.ts` | Zod min/max, expectTypeOf |
 | Component | `Button.test.tsx` | variantes, disabled, axe |
-| Component | `ResourceCard.test.tsx` | ownership F3, axe |
-| Hook | `useResource.test.tsx` | listagem MSW, store real |
-| Integration | `test/integration/resource-list.test.tsx` | loading → dados → vazio → erro |
+| Component | `DepartmentList.test.tsx` | permissão por papel, axe |
+| Hook | `useDepartment.test.tsx` | listagem MSW, store real |
+| Integration | `test/integration/department-list.test.tsx` | loading → dados → vazio → erro |
 | Contract | `api.contract.test.ts` | handler × schema Zod |
 | Contract | `basequery.substitution.test.ts` | H1 LSP mock ↔ fetch |
 
@@ -296,7 +296,7 @@ Implementação canônica de cada camada (Fase 0 ✅):
 
 ## Escrever teste para nova feature
 
-Seguir o molde `resource` — ver [feature-module-guide.md](./feature-module-guide.md) passo 11.
+Seguir o molde `department` — ver [feature-module-guide.md](./feature-module-guide.md) passo 11.
 
 Ordem recomendada:
 
@@ -324,12 +324,12 @@ Excluídos: `app/**/layout.tsx`, `**/index.ts`, `locales/**`, `lib/mock/**`.
 
 | Fase | Escopo | Status |
 |---|---|---|
-| **0 · Fundação** | Runner, MSW, helpers, matchers, suíte `resource` | ✅ |
+| **0 · Fundação** | Runner, MSW, helpers, matchers, suíte `department` | ✅ |
 | **1 · Fronteiras** | `test:arch`, `test:i18n`, `test:types` | 🔜 |
 | **2 · Design system** | `components/ui/` completo — variantes, teclado, axe | 🔜 |
 | **3 · Auth** | Login: unit, hook, component, integration, contract, E2E real | ✅ |
 | **4 · Contrato** | H1–H8 — prepareHeaders, validação Zod completa | 🔜 |
-| **5 · Molde feature** | I1–I9 + G1–G9 para `resource` | 🔜 |
+| **5 · Molde feature** | I1–I9 + G1–G9 para `department` | 🔜 |
 | **6 · Domínio** | J1–J19 como `test.todo`; E2E N1–N3 | 🔜 |
 | **7 · Qualidade contínua** | Playwright, visual, size-limit, LHCI, CI | 🔜 |
 
@@ -368,7 +368,7 @@ describe('LoginForm', () => {
 
 ```bash
 npm run test:watch                    # re-run ao salvar
-npm run test:unit -- ResourceService  # filtrar por nome
+npm run test:unit -- DepartmentService  # filtrar por nome
 npm run test:e2e:ui                   # Playwright interativo
 npx playwright show-trace trace.zip   # trace on-first-retry
 ```

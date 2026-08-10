@@ -51,10 +51,10 @@ Antes de implementar ou alterar qualquer página:
 
 Regras:
 
-- Mockar **rede**, nunca `useResource` / `useAuth`
+- Mockar **rede**, nunca `useDepartment` / `useAuth`
 - `renderWithProviders` + `authState('RH')` + store novo por teste
 - Colocation: `src/**/*.test.ts(x)`; infra em `test/`
-- Referência: módulo `resource` — ver [`docs/testing.md`](./docs/testing.md)
+- Referência: módulo `department` — ver [`docs/testing.md`](./docs/testing.md)
 
 ## SOLID — sempre aplicar
 
@@ -76,7 +76,7 @@ Regras:
 
 ## Novo feature
 
-Seguir molde `resource` — ver `docs/feature-module-guide.md` (inclui passo 11: testes).
+Seguir molde `department` — ver `docs/feature-module-guide.md` (inclui passo 11: testes).
 
 ## Scripts de verificação
 
