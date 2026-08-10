@@ -2,6 +2,9 @@
   "title": "Crachás",
   "subtitle": "{{count}} cadastrados",
   "create": "Vincular crachá",
+  "createTitle": "Vincular crachá",
+  "createSubtitle": "Encoste o cartão no leitor para descobrir o código, ou digite-o.",
+  "detailTitle": "Crachá {{code}}",
   "filters": {
     "search": "Buscar pelo código do crachá",
     "status": "Situação"
@@ -12,6 +15,12 @@
     "BLOCKED": "Bloqueados",
     "UNASSIGNED": "Livres"
   },
+  "credentialStatus": {
+    "ACTIVE": "Ativo",
+    "BLOCKED": "Bloqueado",
+    "LOST": "Perdido",
+    "REVOKED": "Revogado"
+  },
   "table": {
     "code": "Código",
     "employee": "Vinculado a",
@@ -19,6 +28,50 @@
     "linkedAt": "Vinculado em",
     "passCount": "Passagens",
     "status": "Situação"
+  },
+  "detail": {
+    "employee": "Colaborador",
+    "label": "Identificação",
+    "validUntil": "Válido até",
+    "revokedReason": "Motivo",
+    "restricted": "Seu perfil não vê este dado",
+    "terminalNotice": "Este crachá não volta a ser usado. Para a pessoa voltar a entrar, emita uma segunda via — um cartão novo, vinculado ao mesmo colaborador."
+  },
+  "actions": {
+    "block": "Bloquear",
+    "unblock": "Desbloquear",
+    "loss": "Registrar perda",
+    "revoke": "Revogar",
+    "replacement": "Emitir segunda via"
+  },
+  "confirm": {
+    "block": "O crachá para de abrir a porta até ser desbloqueado. Diga por quê.",
+    "unblock": "O crachá volta a abrir a porta.",
+    "loss": "Perda é definitiva: este cartão não volta a valer, nem se for encontrado.",
+    "revoke": "Revogar é definitivo: este cartão não volta a valer.",
+    "replacement": "O crachá atual é revogado e um novo é emitido para a mesma pessoa, de uma só vez."
+  },
+  "form": {
+    "employee": "Colaborador",
+    "employeePlaceholder": "Selecione quem receberá o crachá",
+    "uid": "Código do crachá",
+    "newUid": "Código do novo crachá",
+    "uidHint": "Hexadecimal, 8 a 20 caracteres. Um cartão MIFARE de 4 bytes vira 8 caracteres, como 830D31DD.",
+    "label": "Identificação (opcional)",
+    "reason": "Motivo",
+    "reasonPlaceholder": "Cartão esquecido no vestiário, colaborador comunicou o RH",
+    "reasonHint": "Mínimo de {{min}} caracteres — o motivo fica no registro permanente do crachá.",
+    "normalizeNotice": "Minúsculas são convertidas para maiúsculas ao salvar.",
+    "submit": "Vincular",
+    "noCandidates": "Todos os colaboradores ativos já têm crachá. Só quem está sem um aparece aqui, porque cada pessoa tem no máximo um crachá ativo."
+  },
+  "errors": {
+    "employeeHasBadge": "Esta pessoa já tem um crachá ativo. Bloqueie ou revogue o atual antes de emitir outro.",
+    "uidTaken": "Este código já pertence a um crachá ativo.",
+    "uidFormat": "O código deve ser hexadecimal, com 8 a 20 caracteres.",
+    "validityBeforeIssue": "A validade tem de ser posterior a hoje.",
+    "notReactivatable": "Crachá perdido ou revogado não volta a ser ativo. Emita uma segunda via.",
+    "forbidden": "Seu perfil não tem permissão para esta operação."
   },
   "empty": "Nenhum crachá cadastrado.",
   "emptyFiltered": "Nenhum crachá corresponde aos filtros."

@@ -2,6 +2,9 @@
   "title": "Badges",
   "subtitle": "{{count}} on record",
   "create": "Link badge",
+  "createTitle": "Link badge",
+  "createSubtitle": "Tap the card on the reader to find its code, or type it in.",
+  "detailTitle": "Badge {{code}}",
   "filters": {
     "search": "Search by badge code",
     "status": "Status"
@@ -12,6 +15,12 @@
     "BLOCKED": "Blocked",
     "UNASSIGNED": "Unassigned"
   },
+  "credentialStatus": {
+    "ACTIVE": "Active",
+    "BLOCKED": "Blocked",
+    "LOST": "Lost",
+    "REVOKED": "Revoked"
+  },
   "table": {
     "code": "Code",
     "employee": "Linked to",
@@ -19,6 +28,50 @@
     "linkedAt": "Linked on",
     "passCount": "Passes",
     "status": "Status"
+  },
+  "detail": {
+    "employee": "Employee",
+    "label": "Label",
+    "validUntil": "Valid until",
+    "revokedReason": "Reason",
+    "restricted": "Your role cannot see this field",
+    "terminalNotice": "This badge will not be used again. To let the person back in, issue a replacement — a new card linked to the same employee."
+  },
+  "actions": {
+    "block": "Block",
+    "unblock": "Unblock",
+    "loss": "Report loss",
+    "revoke": "Revoke",
+    "replacement": "Issue replacement"
+  },
+  "confirm": {
+    "block": "The badge stops opening the door until it is unblocked. Say why.",
+    "unblock": "The badge opens the door again.",
+    "loss": "Loss is final: this card will not work again, even if it turns up.",
+    "revoke": "Revoking is final: this card will not work again.",
+    "replacement": "The current badge is revoked and a new one is issued to the same person, in one step."
+  },
+  "form": {
+    "employee": "Employee",
+    "employeePlaceholder": "Pick who gets the badge",
+    "uid": "Badge code",
+    "newUid": "New badge code",
+    "uidHint": "Hexadecimal, 8 to 20 characters. A 4-byte MIFARE card gives 8 characters, like 830D31DD.",
+    "label": "Label (optional)",
+    "reason": "Reason",
+    "reasonPlaceholder": "Card left in the locker room, employee told HR",
+    "reasonHint": "At least {{min}} characters — the reason stays on the badge's permanent record.",
+    "normalizeNotice": "Lowercase is converted to uppercase on save.",
+    "submit": "Link",
+    "noCandidates": "Every active employee already has a badge. Only those without one show up here, because each person has at most one active badge."
+  },
+  "errors": {
+    "employeeHasBadge": "This person already has an active badge. Block or revoke it before issuing another.",
+    "uidTaken": "This code already belongs to an active badge.",
+    "uidFormat": "The code must be hexadecimal, 8 to 20 characters.",
+    "validityBeforeIssue": "Validity must be later than today.",
+    "notReactivatable": "A lost or revoked badge cannot become active again. Issue a replacement.",
+    "forbidden": "Your role is not allowed to do this."
   },
   "empty": "No badges on record.",
   "emptyFiltered": "No badges match the filters."

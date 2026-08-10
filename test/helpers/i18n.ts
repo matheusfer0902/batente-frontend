@@ -1,19 +1,44 @@
-import i18n from "i18next";
+import i18n, { type Resource, type ResourceLanguage } from "i18next";
 import { initReactI18next } from "react-i18next";
-import type { Language } from "@/lib/i18n/settings";
-import ptCommon from "@/locales/pt/common.json";
-import ptAuth from "@/locales/pt/auth.json";
-import ptAccess from "@/locales/pt/access.json";
-import ptDevice from "@/locales/pt/device.json";
-import enCommon from "@/locales/en/common.json";
-import enAuth from "@/locales/en/auth.json";
-import enAccess from "@/locales/en/access.json";
-import enDevice from "@/locales/en/device.json";
+import { languages, namespaces, type Language } from "@/lib/i18n/settings";
 
-const resources = {
-  pt: { common: ptCommon, auth: ptAuth, access: ptAccess, device: ptDevice },
-  en: { common: enCommon, auth: enAuth, access: enAccess, device: enDevice },
-};
+/**
+ * Carrega **todos** os namespaces, derivando de `settings.ts`.
+ *
+ * Antes eram quatro importações à mão (`common`, `auth`, `access`, `device`), e
+ * a lista desatualizava a cada tela nova: o teste renderizava `actions.block`
+ * em vez do texto, e a falha aparecia como "o botão não existe" — longe da
+ * causa. Uma lista de namespaces mantida em dois lugares só fica igual por
+ * sorte.
+ *
+ * `import.meta.glob` com `eager` resolve em tempo de build, então continua
+ * síncrono como antes.
+ */
+const arquivos = import.meta.glob<ResourceLanguage>(
+  "../../src/locales/*/*.json",
+  { eager: true, import: "default" },
+);
+
+function recursosDe(lng: string): ResourceLanguage {
+  const entradas = namespaces.map((ns) => {
+    const conteudo = arquivos[`../../src/locales/${lng}/${ns}.json`];
+
+    if (!conteudo) {
+      throw new Error(
+        `Locale ausente: src/locales/${lng}/${ns}.json. ` +
+          "O namespace está em settings.ts mas o arquivo não existe.",
+      );
+    }
+
+    return [ns, conteudo] as const;
+  });
+
+  return Object.fromEntries(entradas);
+}
+
+const resources: Resource = Object.fromEntries(
+  languages.map((lng) => [lng, recursosDe(lng)]),
+);
 
 const testI18n = i18n.createInstance();
 
@@ -22,7 +47,7 @@ void testI18n.use(initReactI18next).init({
   fallbackLng: "pt",
   resources,
   defaultNS: "common",
-  ns: ["common", "auth", "access", "device"],
+  ns: [...namespaces],
   interpolation: { escapeValue: false },
 });
 

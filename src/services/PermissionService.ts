@@ -39,6 +39,21 @@ export class PermissionService {
     return PermissionService.canAccess(user, MUTABLE_RESOURCES[resource]);
   }
 
+  /**
+   * Emitir crachá e revogar são só de ADMIN e RH, embora OPERADOR escreva em
+   * `badges`.
+   *
+   * `MUTABLE_RESOURCES` não dá conta desta distinção, e não é falha dela: o
+   * GRANT do operador é `UPDATE (status, revoked_at, revoked_reason)` **sem**
+   * `INSERT`, e privilégio de coluna não sabe dizer *qual valor* de status ele
+   * pode escrever. A separação existe no banco como ausência de `INSERT`, e nas
+   * rotas de `/badges` como `@RequireRole`. Aqui é só a tela não oferecer o que
+   * as duas recusariam.
+   */
+  static canIssueBadge(user: User | null | undefined): boolean {
+    return PermissionService.canAccess(user, ["ADMIN", "RH"]);
+  }
+
   /** Sem lista de papéis, o recurso é aberto a qualquer sessão. */
   static canAccess(
     user: User | null | undefined,

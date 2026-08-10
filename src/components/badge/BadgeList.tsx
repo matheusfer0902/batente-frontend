@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { DataBoundary } from "@/components/shared/DataBoundary";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -7,7 +8,9 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SkeletonText } from "@/components/ui/skeleton";
+import { useAuth } from "@/hooks/useAuth";
 import { useBadgeList } from "@/hooks/useBadgeList";
+import { PermissionService } from "@/services/PermissionService";
 import { TimeService } from "@/services/TimeService";
 import { badgeStatuses } from "@/types/badge";
 import { cn } from "@/lib/utils";
@@ -17,6 +20,12 @@ const HEAD =
 
 export function BadgeList() {
   const { t } = useTranslation(["badge", "common"]);
+  const router = useRouter();
+  const { user } = useAuth();
+  // Não é `useCanMutate("badges")`: aquele inclui OPERADOR, que escreve neste
+  // domínio (bloqueia, reporta perda) mas não emite. O botão precisa do mesmo
+  // corte de `/crachas/novo`, senão apareceria para quem o RoleGuard barra.
+  const canCreate = PermissionService.canIssueBadge(user);
   const {
     badges,
     status,
@@ -36,9 +45,15 @@ export function BadgeList() {
         title={t("badge:title")}
         subtitle={t("badge:subtitle", { count: badges.length })}
         actions={
-          <Button variant="default" size="entry" disabled>
-            {t("badge:create")}
-          </Button>
+          canCreate ? (
+            <Button
+              variant="default"
+              size="entry"
+              onClick={() => router.push("/crachas/novo")}
+            >
+              {t("badge:create")}
+            </Button>
+          ) : null
         }
       />
 
@@ -100,7 +115,8 @@ export function BadgeList() {
               {badges.map((badge) => (
                 <tr
                   key={badge.id}
-                  className="border-b border-border last:border-b-0"
+                  onClick={() => router.push(`/crachas/${badge.id}`)}
+                  className="cursor-pointer border-b border-border last:border-b-0 hover:bg-n800/40"
                 >
                   <td className="px-5 py-3 font-mono text-linen">{badge.code}</td>
                   <td className="px-5 py-3 text-linen">
