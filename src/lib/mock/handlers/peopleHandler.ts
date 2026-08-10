@@ -83,7 +83,7 @@ function filterEmployees(request: MockRequest): EmployeeListItem[] {
 
   const departmentId = searchParams.get("departmentId");
   if (departmentId) {
-    items = items.filter((e) => e.department.id === departmentId);
+    items = items.filter((e) => e.department?.id === departmentId);
   }
 
   const filter = searchParams.get("filter");
@@ -170,8 +170,8 @@ export function handleEmployeeRoute(request: MockRequest): HandlerResult {
       status?: EmployeeListItem["status"];
     };
     const current = mockDb.employees[index]!;
-    if (payload.departmentId && payload.departmentId !== current.department.id) {
-      const oldDept = mockDb.departments.find((d) => d.id === current.department.id);
+    if (payload.departmentId && payload.departmentId !== current.department?.id) {
+      const oldDept = mockDb.departments.find((d) => d.id === current.department?.id);
       const newDept = mockDb.departments.find((d) => d.id === payload.departmentId);
       if (!newDept) return error(400, "Invalid department", "validation_error");
       if (oldDept) oldDept.employeeCount = Math.max(0, oldDept.employeeCount - 1);

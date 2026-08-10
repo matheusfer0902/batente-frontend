@@ -22,9 +22,11 @@
   },
   "status": {
     "ALL": "Todos",
-    "ACTIVE": "Ativos",
+    "ACTIVE": "Ativo",
     "VACATION": "Férias",
-    "INACTIVE": "Inativos"
+    "INACTIVE": "Inativos",
+    "ON_LEAVE": "Férias",
+    "TERMINATED": "Desligado"
   },
   "table": {
     "employee": "Colaborador",
@@ -41,5 +43,41 @@
     "missing": "SEM ESCALA"
   },
   "empty": "Nenhum colaborador encontrado.",
-  "emptyFiltered": "Nenhum resultado para os filtros atuais."
+  "emptyFiltered": "Nenhum resultado para os filtros atuais.",
+  "createTitle": "Cadastrar colaborador",
+  "createSubtitle": "Colaboradores → Novo",
+  "editTitle": "Editar colaborador",
+  "editSubtitle": "A escala e a data de admissão não se editam aqui.",
+  "showing": "Mostrando {{shown}} de {{total}}",
+  "pageOf": "{{page}} / {{pageCount}}",
+  "currentSchedule": "Escala atual: {{name}} · desde {{since}}",
+  "noSchedule": "Sem escala vigente",
+  "scheduleLocked": "A escala não se edita aqui. Trocar de escala encerra a atual e cria outra.",
+  "sections": {
+    "identification": "Identificação",
+    "bond": "Vínculo",
+    "schedule": "Escala de trabalho"
+  },
+  "form": {
+    "name": "Nome completo",
+    "registration": "Matrícula",
+    "cpf": "CPF",
+    "cpfHint": "Cifrado no banco. Só a máscara é exibida depois.",
+    "department": "Departamento",
+    "position": "Cargo",
+    "hireDate": "Data de admissão",
+    "schedule": "Escala de trabalho",
+    "required": "Obrigatório",
+    "select": "Selecione",
+    "selectSchedule": "Selecione a escala",
+    "scheduleHint": "Sem escala não há jornada esperada, e o ponto desta pessoa não pode ser calculado.",
+    "save": "Salvar colaborador",
+    "saveChanges": "Salvar alterações"
+  },
+  "errors": {
+    "registrationTaken": "Já existe colaborador com esta matrícula.",
+    "cpfTaken": "Já existe colaborador com este CPF.",
+    "cpfInvalid": "CPF inválido.",
+    "scheduleRequired": "Escolha uma escala — sem ela o cadastro é recusado."
+  }
 }

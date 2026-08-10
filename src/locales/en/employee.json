@@ -24,7 +24,9 @@
     "ALL": "All",
     "ACTIVE": "Active",
     "VACATION": "Vacation",
-    "INACTIVE": "Inactive"
+    "INACTIVE": "Inactive",
+    "ON_LEAVE": "On leave",
+    "TERMINATED": "Terminated"
   },
   "table": {
     "employee": "Employee",
@@ -41,5 +43,41 @@
     "missing": "NO SCHEDULE"
   },
   "empty": "No employees found.",
-  "emptyFiltered": "No results for current filters."
+  "emptyFiltered": "No results for current filters.",
+  "createTitle": "Register employee",
+  "createSubtitle": "Employees → New",
+  "editTitle": "Edit employee",
+  "editSubtitle": "Schedule and hire date are not edited here.",
+  "showing": "Showing {{shown}} of {{total}}",
+  "pageOf": "{{page}} / {{pageCount}}",
+  "currentSchedule": "Current schedule: {{name}} · since {{since}}",
+  "noSchedule": "No active schedule",
+  "scheduleLocked": "The schedule is not edited here. Switching ends the current one and creates another.",
+  "sections": {
+    "identification": "Identification",
+    "bond": "Employment",
+    "schedule": "Work schedule"
+  },
+  "form": {
+    "name": "Full name",
+    "registration": "Registration",
+    "cpf": "CPF",
+    "cpfHint": "Encrypted at rest. Only the mask is shown afterwards.",
+    "department": "Department",
+    "position": "Position",
+    "hireDate": "Hire date",
+    "schedule": "Work schedule",
+    "required": "Required",
+    "select": "Select",
+    "selectSchedule": "Select a schedule",
+    "scheduleHint": "Without a schedule there is no expected workday, and this person's time cannot be calculated.",
+    "save": "Save employee",
+    "saveChanges": "Save changes"
+  },
+  "errors": {
+    "registrationTaken": "An employee with this registration already exists.",
+    "cpfTaken": "An employee with this CPF already exists.",
+    "cpfInvalid": "Invalid CPF.",
+    "scheduleRequired": "Pick a schedule — without it the record is rejected."
+  }
 }

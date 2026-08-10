@@ -8,6 +8,8 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SkeletonText } from "@/components/ui/skeleton";
+import { Select } from "@/components/ui/select";
+import { useCanMutate } from "@/hooks/useCanMutate";
 import { useDepartment } from "@/hooks/useDepartment";
 import { useEmployeeList } from "@/hooks/useEmployeeList";
 import { EmployeeService } from "@/services/EmployeeService";
@@ -65,13 +67,18 @@ export function EmployeeList() {
     departmentId,
     setDepartmentId,
     alertFilter,
-    setAlertFilter,
+    toggleAlerta,
     search,
     setSearch,
+    page,
+    setPage,
+    pageCount,
+    total,
     isLoading,
     isError,
     retry,
   } = useEmployeeList();
+  const { canCreate } = useCanMutate("employees");
 
   return (
     <>
@@ -86,9 +93,11 @@ export function EmployeeList() {
             : undefined
         }
         actions={
-          <Button variant="default" size="entry" disabled>
-            {t("employee:create")}
-          </Button>
+          canCreate ? (
+            <Button asChild size="entryInline">
+              <Link href="/colaboradores/novo">{t("employee:create")}</Link>
+            </Button>
+          ) : null
         }
       />
 
@@ -100,11 +109,7 @@ export function EmployeeList() {
             bodyKey="alerts.missingBadge.body"
             filterKey="alerts.missingBadge.filter"
             active={alertFilter === "missing-badge"}
-            onFilter={() =>
-              setAlertFilter(
-                alertFilter === "missing-badge" ? undefined : "missing-badge",
-              )
-            }
+            onFilter={() => toggleAlerta("missing-badge")}
           />
           <AlertCard
             count={summary.missingSchedule}
@@ -112,13 +117,7 @@ export function EmployeeList() {
             bodyKey="alerts.missingSchedule.body"
             filterKey="alerts.missingSchedule.filter"
             active={alertFilter === "missing-schedule"}
-            onFilter={() =>
-              setAlertFilter(
-                alertFilter === "missing-schedule"
-                  ? undefined
-                  : "missing-schedule",
-              )
-            }
+            onFilter={() => toggleAlerta("missing-schedule")}
           />
         </div>
       ) : null}
@@ -135,12 +134,10 @@ export function EmployeeList() {
           <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-n400">
             {t("employee:filters.status")}
           </span>
-          <select
+          <Select
             value={status}
-            onChange={(e) =>
-              setStatus(e.target.value as typeof status)
-            }
-            className="bg-transparent text-[13.5px] text-linen outline-none"
+            onChange={(e) => setStatus(e.currentTarget.value as typeof status)}
+            className="h-auto w-auto border-0 bg-transparent p-0 pr-5 text-[13.5px]"
           >
             <option value="ALL">{t("employee:status.ALL")}</option>
             {employeeStatuses.map((s) => (
@@ -148,18 +145,16 @@ export function EmployeeList() {
                 {t(`employee:status.${s}`)}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
         <label className="flex items-center gap-2 rounded-sm border border-border bg-gun-950 px-3.5 py-2.5">
           <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-n400">
             {t("employee:filters.department")}
           </span>
-          <select
+          <Select
             value={departmentId ?? ""}
-            onChange={(e) =>
-              setDepartmentId(e.target.value || undefined)
-            }
-            className="bg-transparent text-[13.5px] text-linen outline-none"
+            onChange={(e) => setDepartmentId(e.currentTarget.value || undefined)}
+            className="h-auto w-auto border-0 bg-transparent p-0 pr-5 text-[13.5px]"
           >
             <option value="">{t("employee:filters.allDepartments")}</option>
             {departments.map((d) => (
@@ -167,7 +162,7 @@ export function EmployeeList() {
                 {d.name}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
       </div>
 
@@ -215,7 +210,7 @@ export function EmployeeList() {
                   >
                     <td className="px-5 py-3 text-linen">
                       <Link
-                        href={`/colaboradores/${employee.id}`}
+                        href={`/colaboradores/${employee.id}/editar`}
                         className="hover:text-chart"
                       >
                         {employee.name}
@@ -224,7 +219,9 @@ export function EmployeeList() {
                     <td className="px-5 py-3 font-mono text-n300">
                       {employee.registration}
                     </td>
-                    <td className="px-5 py-3 text-n300">{employee.department.name}</td>
+                    <td className="px-5 py-3 text-n300">
+                      {employee.department?.name ?? "—"}
+                    </td>
                     <td className="px-5 py-3">
                       {employee.badgeCode ? (
                         <span className="font-mono text-n300">{employee.badgeCode}</span>
@@ -247,8 +244,8 @@ export function EmployeeList() {
                       <span
                         className={cn(
                           tone === "active" && "text-chart",
-                          tone === "vacation" && "text-sun",
-                          tone === "inactive" && "text-n400",
+                          tone === "leave" && "text-sun",
+                          tone === "terminated" && "text-n400",
                         )}
                       >
                         ● {t(`employee:${EmployeeService.statusKey(employee.status)}`)}
@@ -259,6 +256,38 @@ export function EmployeeList() {
               })}
             </tbody>
           </table>
+        </div>
+
+        {/* "Mostrando 7 de 184" da tela 6. A paginação é do servidor: a busca
+            também é, então navegar entre páginas mantém o filtro. */}
+        <div className="mx-5 mb-6 flex items-center justify-between gap-3 md:mx-8">
+          <span className="font-mono text-[11px] text-n400">
+            {t("employee:showing", { shown: employees.length, total })}
+          </span>
+
+          {pageCount > 1 ? (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(Math.max(page - 1, 1))}
+                disabled={page <= 1}
+              >
+                {t("common:previous")}
+              </Button>
+              <span className="font-mono text-[11px] text-n300">
+                {t("employee:pageOf", { page, pageCount })}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(Math.min(page + 1, pageCount))}
+                disabled={page >= pageCount}
+              >
+                {t("common:next")}
+              </Button>
+            </div>
+          ) : null}
         </div>
       </DataBoundary>
     </>
