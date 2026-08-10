@@ -58,5 +58,11 @@
     "kicker": "Em construção",
     "title": "Esta tela ainda não existe",
     "description": "A rota já faz parte do sistema; o conteúdo chega em um próximo bloco."
-  }
+  },
+  "saving": "Salvando...",
+  "errors": {
+    "generic": "Não foi possível concluir. Tente de novo."
+  },
+  "previous": "Anterior",
+  "next": "Próxima"
 }

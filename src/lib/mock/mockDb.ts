@@ -1,4 +1,3 @@
-import type { Resource } from "@/types/resource";
 import type { User } from "@/types/auth";
 import { LOGIN_LOCKOUT_MINUTES, MAX_LOGIN_ATTEMPTS } from "@/types/auth";
 import type { AccessEvent, AccessStats } from "@/types/access";
@@ -7,7 +6,9 @@ import type { AdjustmentSummary, PendingSummary } from "@/types/timekeeping";
 import type { Department } from "@/types/department";
 import type { EmployeeListItem } from "@/types/employee";
 import type { BadgeListItem } from "@/types/badge";
-import type { ScheduleListItem } from "@/types/schedule";
+import type { ScheduleDay, ScheduleListItem } from "@/types/schedule";
+import { weekdays } from "@/types/schedule";
+import { ScheduleService } from "@/services/ScheduleService";
 import type { AbsenceListItem } from "@/types/absence";
 import type { AuditLogListItem } from "@/types/audit";
 import type { GateCredential, GateQueueEntry } from "@/types/gate";
@@ -28,7 +29,6 @@ export interface LoginAttemptRecord {
 
 interface MockDatabase {
   users: MockUserRecord[];
-  resources: Resource[];
   sessions: Record<string, string>;
   loginAttempts: Record<string, LoginAttemptRecord>;
   devices: Device[];
@@ -50,13 +50,66 @@ interface MockDatabase {
   adjustmentSummary: AdjustmentSummary;
 }
 
-const now = new Date().toISOString();
-
 /**
  * Base de tempo do dataset. Os acessos são fatos históricos: ficam presos a
  * este instante. Já o batimento do totem é recalculado a cada requisição.
  */
 const bootedAt = Date.now();
+
+/**
+ * Monta os sete dias de uma escala do mock.
+ *
+ * Segunda a sexta úteis, fim de semana folga — a jornada mais comum. Escrever
+ * os sete à mão em cada escala seria 21 linhas de ruído por registro.
+ */
+function buildSchedule(
+  id: string,
+  name: string,
+  employeeCount: number,
+  horario: {
+    entryTime: string;
+    breakStart: string | null;
+    breakEnd: string | null;
+    exitTime: string;
+  },
+): ScheduleListItem {
+  const days: ScheduleDay[] = weekdays.map((weekday) => {
+    if (weekday === 0 || weekday === 6) {
+      return {
+        weekday,
+        isWorkday: false,
+        entryTime: null,
+        breakStart: null,
+        breakEnd: null,
+        exitTime: null,
+        expectedMinutes: 0,
+      };
+    }
+
+    return {
+      weekday,
+      isWorkday: true,
+      ...horario,
+      expectedMinutes: ScheduleService.dayMinutes({
+        weekday,
+        isWorkday: true,
+        ...horario,
+      }),
+    };
+  });
+
+  return {
+    id,
+    name,
+    type: "FIXED",
+    toleranceMinutes: 10,
+    minBreakMinutes: horario.breakStart ? 60 : 0,
+    active: true,
+    weeklyMinutes: days.reduce((total, dia) => total + dia.expectedMinutes, 0),
+    employeeCount,
+    days,
+  };
+}
 
 function isoSecondsAgo(seconds: number, millisecondOffset = 0): string {
   return new Date(bootedAt - seconds * 1000 + millisecondOffset).toISOString();
@@ -260,32 +313,6 @@ export const mockDb: MockDatabase = {
       password: "password123",
     },
   ],
-  resources: [
-    {
-      id: "resource-1",
-      title: "Primeiro recurso",
-      description: "Recurso de exemplo pertencente ao owner.",
-      ownerId: "user-1",
-      createdAt: now,
-      updatedAt: now,
-    },
-    {
-      id: "resource-2",
-      title: "Segundo recurso",
-      description: "Outro recurso para demonstrar listagem e filtros.",
-      ownerId: "user-1",
-      createdAt: now,
-      updatedAt: now,
-    },
-    {
-      id: "resource-3",
-      title: "Recurso do viewer",
-      description: "Recurso de outro usuário para demo de ownership.",
-      ownerId: "user-2",
-      createdAt: now,
-      updatedAt: now,
-    },
-  ],
   sessions: {},
   loginAttempts: {},
   devices: [PRIMARY_DEVICE],
@@ -298,12 +325,14 @@ export const mockDb: MockDatabase = {
       lastContactAt: PRIMARY_DEVICE.lastContactAt,
       clockDriftMs: 18,
       pendingUploads: 0,
+      lifecycle: "ACTIVE",
       firmwareVersion: "v2.4.1",
       serialNumber: "BT-0001-0042",
-      doorOpenMs: 3000,
-      badgeListVersion: "1842",
-      badgeListSyncedAt: new Date().toISOString(),
-      recentEvents: [],
+      installedAt: "2024-01-18",
+      // `null` = herda a trava global, que é o caso comum.
+      doorOpenMs: null,
+      effectiveDoorOpenMs: 3000,
+      badgeListVersion: 1842,
     },
   },
   departments: [
@@ -362,7 +391,7 @@ export const mockDb: MockDatabase = {
       department: { id: "dept-admin", name: "Administrativo" },
       badgeCode: "04C3E8A1",
       scheduleName: "Administrativo 44h",
-      status: "VACATION",
+      status: "ON_LEAVE",
       flags: { missingBadge: false, missingSchedule: false },
     },
     {
@@ -382,7 +411,7 @@ export const mockDb: MockDatabase = {
       department: { id: "dept-ops", name: "Operações" },
       badgeCode: "04F2A1B8",
       scheduleName: "Administrativo 44h",
-      status: "INACTIVE",
+      status: "TERMINATED",
       flags: { missingBadge: false, missingSchedule: false },
     },
   ],
@@ -461,27 +490,24 @@ export const mockDb: MockDatabase = {
     },
   ],
   schedules: [
-    {
-      id: "schedule-1",
-      name: "Administrativo 44h",
-      weeklyHours: 44,
-      employeeCount: 4,
-      shiftType: "FIXED",
-    },
-    {
-      id: "schedule-2",
-      name: "Operacional 12x36",
-      weeklyHours: 36,
-      employeeCount: 1,
-      shiftType: "ROTATING",
-    },
-    {
-      id: "schedule-3",
-      name: "Portaria 12x36",
-      weeklyHours: 36,
-      employeeCount: 0,
-      shiftType: "ROTATING",
-    },
+    buildSchedule("schedule-1", "Administrativo 44h", 4, {
+      entryTime: "08:00",
+      breakStart: "12:00",
+      breakEnd: "13:00",
+      exitTime: "17:48",
+    }),
+    buildSchedule("schedule-2", "Operacional 12x36", 1, {
+      entryTime: "07:00",
+      breakStart: "12:00",
+      breakEnd: "13:00",
+      exitTime: "19:00",
+    }),
+    buildSchedule("schedule-3", "Portaria 12x36", 0, {
+      entryTime: "19:00",
+      breakStart: null,
+      breakEnd: null,
+      exitTime: "23:00",
+    }),
   ],
   absences: [
     {

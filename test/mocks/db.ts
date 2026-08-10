@@ -1,4 +1,3 @@
-import type { Resource } from "@/types/resource";
 import type { User } from "@/types/auth";
 import { LOGIN_LOCKOUT_MINUTES, MAX_LOGIN_ATTEMPTS } from "@/types/auth";
 
@@ -14,14 +13,11 @@ export interface LoginAttemptRecord {
 
 interface TestDatabase {
   users: MockUserRecord[];
-  resources: Resource[];
   sessions: Record<string, string>;
   loginAttempts: Record<string, LoginAttemptRecord>;
   /** Quando true, todos os endpoints retornam 503. */
   serverUnavailable: boolean;
 }
-
-const now = "2026-07-31T12:00:00.000Z";
 
 function createInitialDb(): TestDatabase {
   return {
@@ -46,32 +42,6 @@ function createInitialDb(): TestDatabase {
         name: "Marina Vale",
         role: "RH",
         password: "password123",
-      },
-    ],
-    resources: [
-      {
-        id: "resource-1",
-        title: "Primeiro recurso",
-        description: "Recurso de exemplo pertencente ao owner.",
-        ownerId: "user-1",
-        createdAt: now,
-        updatedAt: now,
-      },
-      {
-        id: "resource-2",
-        title: "Segundo recurso",
-        description: "Outro recurso para demonstrar listagem e filtros.",
-        ownerId: "user-1",
-        createdAt: now,
-        updatedAt: "2026-07-30T12:00:00.000Z",
-      },
-      {
-        id: "resource-3",
-        title: "Recurso do viewer",
-        description: "Recurso de outro usuário para demo de ownership.",
-        ownerId: "user-2",
-        createdAt: now,
-        updatedAt: now,
       },
     ],
     sessions: {},

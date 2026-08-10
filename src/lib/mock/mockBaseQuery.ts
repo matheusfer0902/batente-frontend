@@ -11,7 +11,6 @@ import {
   handleDepartmentRoute,
   handleEmployeeRoute,
 } from "@/lib/mock/handlers/peopleHandler";
-import { handleResourceRoute } from "@/lib/mock/handlers/resourceHandler";
 import { handleScheduleRoute } from "@/lib/mock/handlers/scheduleHandler";
 import { handleSettingsRoute } from "@/lib/mock/handlers/settingsHandler";
 import { handleTimekeepingRoute } from "@/lib/mock/handlers/timekeepingHandler";
@@ -34,8 +33,6 @@ type RouteHandler = (request: MockRequest) => HandlerResult;
 const ROUTES: ReadonlyArray<[string, RouteHandler]> = [
   // "/auth" não aparece aqui: a autenticação fala com o backend real
   // (ver redux/reducers/queries/authBaseApi.ts).
-  // Handler legado usado só pelo contract test H1 (substituição de base query).
-  ["/resources", handleResourceRoute],
   ["/access-events", handleAccessRoute],
   ["/devices", handleDeviceRoute],
   ["/timekeeping", handleTimekeepingRoute],

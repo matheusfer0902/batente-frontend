@@ -58,5 +58,11 @@
     "kicker": "Under construction",
     "title": "This screen does not exist yet",
     "description": "The route is already part of the system; the content arrives in a later block."
-  }
+  },
+  "saving": "Saving...",
+  "errors": {
+    "generic": "Could not complete. Try again."
+  },
+  "previous": "Previous",
+  "next": "Next"
 }

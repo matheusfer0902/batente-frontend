@@ -36,11 +36,15 @@ export const NAV_GROUPS: readonly NavGroup[] = [
   },
   {
     labelKey: "groups.people",
+    // Cadastro roda com papel `batente_rh` no banco (§2 de
+    // ARQUITETURA-MODULOS). OPERADOR não tem GRANT ali, então mostrar o item
+    // só levaria a um 403 — exceto crachás, onde a portaria bloqueia e reporta
+    // perda.
     items: [
-      { key: "colaboradores", href: "/colaboradores" },
-      { key: "departamentos", href: "/departamentos" },
+      { key: "colaboradores", href: "/colaboradores", roles: ["ADMIN", "RH"] },
+      { key: "departamentos", href: "/departamentos", roles: ["ADMIN", "RH"] },
       { key: "crachas", href: "/crachas" },
-      { key: "escalas", href: "/escalas" },
+      { key: "escalas", href: "/escalas", roles: ["ADMIN", "RH"] },
     ],
   },
   {

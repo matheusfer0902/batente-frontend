@@ -8,23 +8,31 @@
 /** Sempre no backend real (cookies + CSRF). */
 export const API_ROUTES_AUTH = ["/auth", "/users"] as const;
 
-/** Domínios com UI pronta — habilitar via `NEXT_PUBLIC_REAL_API_PREFIXES`. */
+/**
+ * Domínios com backend real pronto — habilitar via
+ * `NEXT_PUBLIC_REAL_API_PREFIXES`.
+ *
+ * `/timekeeping` **não entra**: o backend serve só `/timekeeping/mirror`,
+ * enquanto o `/inicio` chama `/timekeeping/pending` e
+ * `/timekeeping/adjustments`. Ligar o prefixo inteiro faria os blocos do
+ * Início responderem 404 — o prefixo volta quando os dois endpoints existirem.
+ */
 export const API_ROUTES_PANEL = [
   "/access-events",
   "/devices",
-  "/timekeeping",
+  "/departments",
+  "/employees",
+  "/schedules",
+  "/absences",
 ] as const;
 
 /** Cadastros e operação — mock até o backend expor o contrato. */
 export const API_ROUTES_DOMAIN = [
-  "/departments",
-  "/employees",
   "/badges",
-  "/schedules",
-  "/absences",
   "/audit-logs",
   "/gate",
   "/settings",
+  "/timekeeping",
 ] as const;
 
 export type ApiRoutePrefix =
