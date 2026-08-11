@@ -70,6 +70,16 @@ function AccessDetailContent({
               >
                 {t(AccessService.decisionLabelKey(event))}
               </span>
+              {/* A pill fica só com CONCEDIDO/BARRADO — é a leitura de um
+                  segundo, pela cor. O motivo vem ao lado, em texto, porque é a
+                  pergunta seguinte de quem abriu o detalhe. Antes ele chegava no
+                  payload e não era renderizado em lugar nenhum desta tela: a
+                  timeline apenas inferia "porta não abriu". */}
+              {!isGranted && event.denialReason ? (
+                <span className="font-mono text-[11px] tracking-[0.14em] text-cherry">
+                  {t(AccessService.decisionDetailKey(event))}
+                </span>
+              ) : null}
               <span className="font-mono text-[11px] text-n400">
                 {t("detail.eventId", { id: event.id })}
               </span>

@@ -151,13 +151,25 @@ export function AccessHistoryList() {
                     </Link>
                   </td>
                   <td className="px-5 py-3 font-mono text-n300">{event.badgeCode}</td>
+                  {/* `decisionDetailKey`, não `decisionLabelKey`: no histórico o
+                      que se procura é por que barrou. "BARRADO" obriga a ir ao
+                      psql ou ao curl para saber se foi crachá bloqueado, fora do
+                      horário ou UID desconhecido — e é justamente a pergunta que
+                      traz alguém a esta tela. As traduções já existiam.
+
+                      Prefixo `access:` explícito: este componente carrega
+                      ["history","access","common"], e `history` também tem uma
+                      chave `decision` — só que com as siglas em maiúsculas, para
+                      as opções do filtro. Sem o prefixo, a resolução depende de
+                      cair de um namespace para o outro por não encontrar a
+                      capitalização, o que é acidente, não desenho. */}
                   <td className="px-5 py-3 font-mono text-[11px]">
                     <span
                       className={cn(
                         event.decision === "GRANTED" ? "text-chart" : "text-cherry",
                       )}
                     >
-                      {t(AccessService.decisionLabelKey(event))}
+                      {t(`access:${AccessService.decisionDetailKey(event)}`)}
                     </span>
                   </td>
                   <td className="px-5 py-3 font-mono text-[11px] text-n400">
